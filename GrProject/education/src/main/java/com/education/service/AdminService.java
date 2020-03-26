@@ -4,6 +4,7 @@
  */
 package com.education.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import com.education.pojo.AdminExample;
 import com.education.pojo.AdminExample.Criteria;
 import com.education.pojo.Classes;
 import com.education.pojo.Student;
+import com.education.pojo.StudentExample;
 import com.education.pojo.Teacher;
 import com.education.pojo.User;
 import com.education.pojo.UserExample;
@@ -49,7 +51,53 @@ public class AdminService {
 	@Autowired
 	private ClassesMapper classesDao;
 
-	
+	// 分配学生【删除】
+	public String deleteStudentToClass(String deleteIds,String modifyName) {
+		List<Integer> idList = new ArrayList<Integer>();
+		String[] ids = deleteIds.split(",");
+
+		if (ids == null || ids.length == 0) {
+			return "没有需要删除的学生！！！";
+		}
+
+		for (String id : ids) {
+			idList.add(Integer.parseInt(id));
+		}
+		Student student = new Student();
+		student.setClassid(0);
+		student.setModifydate(new Date());
+		student.setModifyname(modifyName);
+		StudentExample example = new StudentExample();
+		StudentExample.Criteria criteria = example.createCriteria();
+		criteria.andIndexidIn(idList);
+		studentDao.updateByExampleSelective(student, example);
+		return "SUCCESS";
+	}
+
+	// 分配学生【新增】
+	public String addStudentToClass(String addIds, Integer classId,String modifyName) {
+		List<Integer> idList = new ArrayList<Integer>();
+		String[] ids = addIds.split(",");
+
+		if (ids == null || ids.length == 0) {
+			return "没有需要新增的学生！！！";
+		}
+
+		for (String id : ids) {
+			idList.add(Integer.parseInt(id));
+		}
+		Student student = new Student();
+		student.setClassid(classId);
+		student.setModifydate(new Date());
+		student.setModifyname(modifyName);
+		StudentExample example = new StudentExample();
+		StudentExample.Criteria criteria = example.createCriteria();
+		criteria.andIndexidIn(idList);
+		//批量修改
+		studentDao.updateByExampleSelective(student, example);
+		return "SUCCESS";
+	}
+
 	// 删除班级信息
 	public String deleteClasses(Integer indexid) {
 		int result = classesDao.deleteByPrimaryKey(indexid);
@@ -60,7 +108,7 @@ public class AdminService {
 	}
 
 	// 修改班级信息
-	public String updateClasses(Classes classes,String inputName) {
+	public String updateClasses(Classes classes, String inputName) {
 		classes.setModifydate(new Date());
 		classes.setModifyname(inputName);
 		int result = classesDao.updateByPrimaryKeySelective(classes);
@@ -71,18 +119,18 @@ public class AdminService {
 	}
 
 	// 新增班级
-	public String addClasses(Classes classes,String inputName) {
-		
+	public String addClasses(Classes classes, String inputName) {
+
 		classes.setInputname(inputName);
 		classes.setInputdate(new Date());
-		
+
 		int result = classesDao.insertSelective(classes);
 		if (result != 1) {
 			return "ERROR";
 		}
 		return "SUCCESS";
 	}
-	
+
 	// 删除学生信息
 	public String deleteStudent(Integer indexid) {
 		int result = studentDao.deleteByPrimaryKey(indexid);
@@ -93,7 +141,7 @@ public class AdminService {
 	}
 
 	// 修改学生信息
-	public String updateStudent(Student student,String inputName) {
+	public String updateStudent(Student student, String inputName) {
 		student.setModifydate(new Date());
 		student.setModifyname(inputName);
 		int result = studentDao.updateByPrimaryKeySelective(student);
@@ -104,12 +152,12 @@ public class AdminService {
 	}
 
 	// 新增学生
-	public String addStudent(Student student,String inputName) {
-		
+	public String addStudent(Student student, String inputName) {
+
 		student.setInputname(inputName);
 		student.setClassid(0);
 		student.setInputdate(new Date());
-		
+
 		int result = studentDao.insertSelective(student);
 		if (result != 1) {
 			return "ERROR";
@@ -127,7 +175,7 @@ public class AdminService {
 	}
 
 	// 修改教师信息
-	public String updateTeacher(Teacher teacher,String inputName) {
+	public String updateTeacher(Teacher teacher, String inputName) {
 		teacher.setModifydate(new Date());
 		teacher.setModifyname(inputName);
 		int result = teacherDao.updateByPrimaryKeySelective(teacher);
@@ -138,7 +186,7 @@ public class AdminService {
 	}
 
 	// 新增教师
-	public String addTeacher(Teacher teacher,String inputName) {
+	public String addTeacher(Teacher teacher, String inputName) {
 		teacher.setOnjob("1");
 		teacher.setInputdate(new Date());
 		teacher.setInputname(inputName);

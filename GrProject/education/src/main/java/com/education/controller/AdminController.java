@@ -34,6 +34,7 @@ import com.education.service.MessageService;
 import com.education.service.StudentService;
 import com.education.service.TeacherService;
 import com.education.service.UserService;
+import com.mysql.jdbc.StringUtils;
 
 /**
  * @author joy_zheng
@@ -63,9 +64,42 @@ public class AdminController {
 
 	@Autowired
 	private TeacherService teacherService;
-	
+
 	@Autowired
 	private ClassesService classesService;
+
+	// 安排学生
+	@RequestMapping(value = "/arrangeStudent", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject arrangeStudent(Integer classesId,String deleteIds,String addIds, HttpServletRequest request) {
+		JSONObject jsonObject = new JSONObject();
+		Admin admin = (Admin) request.getSession().getAttribute("admin");
+		if (admin == null) {
+			jsonObject.put("msg", "user no login!!!");
+			return jsonObject;
+		}
+		String msg = "";
+		if(!StringUtils.isEmptyOrWhitespaceOnly(addIds)) {
+			msg = adminService.addStudentToClass(addIds, classesId, admin.getName());
+		}
+		if(!StringUtils.isEmptyOrWhitespaceOnly(deleteIds)) {
+			msg = adminService.deleteStudentToClass(deleteIds, admin.getName());
+		}
+		jsonObject.put("msg", msg);
+		return jsonObject;
+	}
+
+	// 安排学生页面
+	@RequestMapping(value = "/arrangeStudent/{classesId}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView showArrangeStudent(@PathVariable Integer classesId) {
+		ModelAndView mv = new ModelAndView("admin/classes/arrangeStudent");
+		mv.addObject("classesInfo", classesService.getClassesById(classesId));
+		mv.addObject("studentList", studentService.getStudentByClassId(classesId));
+		mv.addObject("studentNoClassList", studentService.getAllStudentWithNoClass());
+		
+		return mv;
+	}
 
 	// 删除班级
 	@RequestMapping(value = "/deleteClasses", method = RequestMethod.POST)
@@ -345,8 +379,7 @@ public class AdminController {
 	// 书籍入库
 	@RequestMapping(value = "/addBook", method = RequestMethod.POST)
 	@ResponseBody
-	public JSONObject addBook(MultipartFile bookImage, MultipartFile bookDoc, Book book)
-			throws IllegalStateException, IOException {
+	public JSONObject addBook(MultipartFile bookImage, MultipartFile bookDoc, Book book) throws IllegalStateException, IOException {
 		JSONObject jsonObject = new JSONObject();
 
 		jsonObject.put("msg", bookService.addBook(bookImage, bookDoc, book));
@@ -461,7 +494,8 @@ public class AdminController {
 		Admin admin = (Admin) request.getSession().getAttribute("admin");
 		if (admin == null) {
 			msg = "用户未登录！";
-		} else {
+		}
+		else {
 			msg = adminService.changePass(admin, newPass, oldPass, request);
 		}
 		jsonObject.put("msg", msg);
@@ -491,7 +525,8 @@ public class AdminController {
 
 		if (request.getSession().getAttribute("admin") == null) {
 			return mv;
-		} else {
+		}
+		else {
 			if ("logout".equals(flag)) {
 				request.getSession().removeAttribute("admin");
 			}
@@ -514,46 +549,46 @@ public class AdminController {
 	int x = 8;
 
 	public static void main(String sss[]) throws FileNotFoundException {
-//		System.out.println(1);
-//		Stream.of(new MyCol("Mercury"),new MyCol("Venus"),
-//				new MyCol("Earth")).
-//		flatMap(i->i.indices.stream()).
-//		mapToInt(j->j).max().
-//		ifPresent(s->System.out.println(s));;
-//		System.out.println(Element.A.get);
-//		int x = 9;
+		// System.out.println(1);
+		// Stream.of(new MyCol("Mercury"),new MyCol("Venus"),
+		// new MyCol("Earth")).
+		// flatMap(i->i.indices.stream()).
+		// mapToInt(j->j).max().
+		// ifPresent(s->System.out.println(s));;
+		// System.out.println(Element.A.get);
+		// int x = 9;
 		AdminController adminController = new AdminController();
 		System.out.println(adminController.x);
-//		BufferedReader i = new BufferedReader(new InputStreamReader(""));
+		// BufferedReader i = new BufferedReader(new InputStreamReader(""));
 
-//		int c= 0;
-//		System.out.println((0==c++)?"t":"f");
-//		
-//
-//		Double d = null;
-//		System.out.println((d instanceof Double)?"t":"f");
-//		
-//		boolean b = false;
-//		System.out.println("(b = true)="+(b = true));
-//		System.out.println((b = true)?"t":"f");
-//		
-//		int a= 0;
-//		System.out.println((a!=0)?"t":"f");
-//		
-//		String eString = "1";
-//		System.out.println(("1"!=eString)?"t":"f");
-//		System.out.println((eString == "1"));
+		// int c= 0;
+		// System.out.println((0==c++)?"t":"f");
+		//
+		//
+		// Double d = null;
+		// System.out.println((d instanceof Double)?"t":"f");
+		//
+		// boolean b = false;
+		// System.out.println("(b = true)="+(b = true));
+		// System.out.println((b = true)?"t":"f");
+		//
+		// int a= 0;
+		// System.out.println((a!=0)?"t":"f");
+		//
+		// String eString = "1";
+		// System.out.println(("1"!=eString)?"t":"f");
+		// System.out.println((eString == "1"));
 
-//		String first = "first";
-//		String second = new String("first");
-//		"first".concat("second");
-//		System.out.println(first);
-//		System.out.println(second);
-//		
-//		System.out.println(first.equals(second));
-//		System.out.println(first==second);
-//		System.out.println(first.equals("firstsecond"));
-//		System.out.println(second == "first");
+		// String first = "first";
+		// String second = new String("first");
+		// "first".concat("second");
+		// System.out.println(first);
+		// System.out.println(second);
+		//
+		// System.out.println(first.equals(second));
+		// System.out.println(first==second);
+		// System.out.println(first.equals("firstsecond"));
+		// System.out.println(second == "first");
 
 	}
 
