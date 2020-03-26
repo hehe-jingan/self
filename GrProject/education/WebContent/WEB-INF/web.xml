@@ -24,16 +24,14 @@
   <listener>
     <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
   </listener>
-   <servlet>
+  <servlet>
     <servlet-name>ChartServlet</servlet-name>
     <servlet-class>javasj.servlet.ChartServlet</servlet-class>
   </servlet>
-
   <servlet-mapping>
     <servlet-name>ChartServlet</servlet-name>
     <url-pattern>/chart</url-pattern>
-  </servlet-mapping>	
-<!--   springmvc 拦截器 -->
+  </servlet-mapping>
   <servlet>
     <servlet-name>mvc</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -62,6 +60,13 @@
   <listener>
     <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
   </listener>
-   
-  
+  <servlet>
+    <servlet-name>Faces Servlet</servlet-name>
+    <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>Faces Servlet</servlet-name>
+    <url-pattern>/faces/*</url-pattern>
+  </servlet-mapping>
 </web-app>
