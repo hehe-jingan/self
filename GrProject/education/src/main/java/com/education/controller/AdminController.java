@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -94,9 +95,19 @@ public class AdminController {
 	@ResponseBody
 	public ModelAndView showArrangeStudent(@PathVariable Integer classesId) {
 		ModelAndView mv = new ModelAndView("admin/classes/arrangeStudent");
+		
+		List<Student> studentList = studentService.getStudentByClassId(classesId);
+		List<Student> studentNoClassList = studentService.getAllStudentWithNoClass();
+		
+		List<Integer> ids = studentList.stream().map(Student::getIndexid).collect(Collectors.toList());
+		List<Integer> noClassIds = studentNoClassList.stream().map(Student::getIndexid).collect(Collectors.toList());
+		
 		mv.addObject("classesInfo", classesService.getClassesById(classesId));
-		mv.addObject("studentList", studentService.getStudentByClassId(classesId));
-		mv.addObject("studentNoClassList", studentService.getAllStudentWithNoClass());
+		mv.addObject("studentList", studentList);
+		mv.addObject("studentNoClassList", studentNoClassList);
+		mv.addObject("ids", ids);
+		mv.addObject("noClassIds", noClassIds);
+		
 		
 		return mv;
 	}

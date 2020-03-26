@@ -27,6 +27,8 @@ String pageFlag = "false";
 Classes classes = new Classes();
 List<Student> noClassStudentList= new ArrayList<>();
 List<Student> inClassStudentList= new ArrayList<>();
+List<Integer> ids= new ArrayList<>();
+List<Integer> noClassIds= new ArrayList<>();
 if(request.getAttribute("classesInfo")!=null){
 	classes = (Classes)request.getAttribute("classesInfo");
 	 pageFlag = "true";
@@ -37,6 +39,12 @@ if(request.getAttribute("studentList")!=null){
 }
 if(request.getAttribute("studentNoClassList")!=null){
 	noClassStudentList = (List<Student>)request.getAttribute("studentNoClassList");
+}
+if(request.getAttribute("noClassIds")!=null){
+	noClassIds = (List<Integer>)request.getAttribute("noClassIds");
+}
+if(request.getAttribute("ids")!=null){
+	ids = (List<Integer>)request.getAttribute("ids");
 }
 
 %>
@@ -78,7 +86,7 @@ if(request.getAttribute("studentNoClassList")!=null){
 	 <% if(noClassStudentList!=null){
                   	for(int i = 0;i<noClassStudentList.size();i++){
                   %>
-                  <li><%=noClassStudentList.get(i).getName() %></li> 
+                  <li id="idsL<%=noClassStudentList.get(i).getIndexid() %>"><%=noClassStudentList.get(i).getName() %> <%=noClassStudentList.get(i).getSex() %> <%=noClassStudentList.get(i).getAge() %>岁 </li> 
                   <%}}
                   	%>
 	 
@@ -93,7 +101,7 @@ if(request.getAttribute("studentNoClassList")!=null){
 	 <% if(inClassStudentList!=null){
                   	for(int i = 0;i<inClassStudentList.size();i++){
                   %>
-                  <li><%=inClassStudentList.get(i).getName() %></li> 
+                  <li id="idsR<%=inClassStudentList.get(i).getIndexid() %>" value=""><%=inClassStudentList.get(i).getName() %> <%=inClassStudentList.get(i).getSex() %> <%=inClassStudentList.get(i).getAge() %>岁</li> 
                   <%}}
                   	%>
 	</div>
@@ -186,6 +194,23 @@ if(request.getAttribute("studentNoClassList")!=null){
 		<script>
 		
     $(document).ready(function() {
+    	var classId = "<%=classes.getIndexid() %>";
+    	var ids = <%=ids%>;
+    	var noClassIds = <%=noClassIds%>;
+    	
+    	console.log("ids="+ids);
+    	console.log("noClassIds="+noClassIds);
+    	
+    	let idsSet = new Set(ids);
+    	let noClassIdsSet = new Set(noClassIds);
+    	
+    	let deleteIds = new Set();
+    	let addIds = new Set();
+    	
+//     	console.log("set="+set);
+//     	console.log("noClassIdsSet="+noClassIdsSet);
+    	
+    	
     		$(".box").orso({
     			boxl:".box_l",//左边大盒子
     			boxr:".box_r",//右边大盒子
@@ -209,18 +234,98 @@ if(request.getAttribute("studentNoClassList")!=null){
     	}
     	
     	
+    	
+    	$("li[id^='ids']").bind("dblclick",function(){
+    		var className = $(this).parent().prop("class").substring(4);
+    		console.log("className="+className);
+    		var id = Number($(this).prop("id").substring(4));
+    		console.log("id="+id);
+    		//如果是右边双击
+    		if(className == "r"){
+    			console.log("right double click");
+    			$(this).prop("id","idsI"+id);
+    			//如果之前在未分配中
+    			console.log("noClassIdsSet.has(id)="+noClassIdsSet.has(id)); 
+    			if(noClassIdsSet.has(id)){
+    				console.log("之前已存在左边 所以不变更");
+    				addIds.delete(id);
+    			}else{
+    				console.log("之前不存在左边 所以变更");
+    				deleteIds.add(id);
+    			}
+    		//如果是左边双击
+    		}else{
+    			console.log("left double click");
+    			$(this).prop("id","idsR"+id);
+    			//如果之前在班级中
+    			if(idsSet.has(id)){
+    				console.log("之前已存在右边 所以不变更");
+    				deleteIds.delete(id);
+    			}else{ 
+    				console.log("之前已存在右边 所以不变更");
+    				addIds.add(id);
+    			}
+    		}
+    		 
+    		for (var x of addIds) { // 遍历Set
+    			console.log("addIds="+x);
+    		}
+    		for (var x of deleteIds) { // 遍历Set
+    			console.log("deleteIds="+x);
+    		}
+    	}); 
+    	
+    	 //向左按钮
+    	$("#left").click(function(){
+    		
+    		var id = Number($("li[class='on']").prop("id").substring(4));
+    		console.log("left click");
+    		
+    		if(noClassIdsSet.has(id)){
+				addIds.delete(id);
+			}else{
+				deleteIds.add(id);
+			}
+    		 
+    	});
+    	
+    	 //向右按钮
+		$("#right").click(function(){
+    		
+    		var id = Number($("li[class='on']").prop("id").substring(4));
+    		console.log("right click");
+    		if(idsSet.has(id)){
+				deleteIds.delete(id);
+			}else{ 
+				addIds.add(id);
+			} 
+    		
+    	});
+    	
    	 $("#makeSure").click(function(){
    		 var classesId = "<%=classes.getIndexid()%>";
    		var classesName = $("#classesName").val();
   		 
-   		 if(classesName==""){
-   			 alert("请输入班级姓名！");
+   		 if(deleteIds.size==0&&addIds.size==0){
+   			 alert("没有改动，无需保存！");
    		 }else{ 
    			 
    			 if(confirm("确认要保存该班级的改动吗？")){
-   			 var data = decodeURIComponent($("#form5").serialize(),true);
+   			 var addStr = "";
+   			 var deleteStr="";
+   			 
+   			 for (var x of addIds) { // 遍历Set
+   				addStr += x + ","
+    		}
+    		for (var x of deleteIds) { // 遍历Set
+    			deleteStr += x + ","
+    		}
+    		console.log("addStr="+addStr);
+    		console.log("deleteStr="+deleteStr);
+    		var data = "addIds="+addStr+"&deleteIds="+deleteStr+"&classesId="+classId;
+   			
    			 console.log("data= "+data);
-   			 var url = "<%=basePath%>admin/updateClasses";
+   			 var url = "<%=basePath%>admin/arrangeStudent";
    			 $.ajax({
    			       	type : "POST",
    			       	url : url,
@@ -228,8 +333,8 @@ if(request.getAttribute("studentNoClassList")!=null){
    			       	dataType : "json",
    			       	success : function(data){
    			       		if(data.msg=="SUCCESS"){
-   			       			alert("修改成功！！");
-   			       			window.location = "<%=basePath%>admin/classesList";
+   			       			alert("保存成功！！");
+   			       			window.location = "<%=basePath%>admin/arrangeStudent/"+classId;
    			       		}else{
    			       		 	alert(data.msg);
    			       		}
