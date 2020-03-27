@@ -26,7 +26,7 @@
 				<li><a href="<%=basePath%>admin/classesList"> <i
 						class="menu-icon   fa-archive"></i>班级管理
 				</a></li>
-				<li><a href="<%=basePath%>admin/addBook"> <i
+				<li><a href="<%=basePath%>admin/courseList"> <i
 						class="menu-icon  fa-mail-forward (alias)"></i>课程管理
 				</a></li>
 				<li><a href="<%=basePath%>admin/bookList"> <i

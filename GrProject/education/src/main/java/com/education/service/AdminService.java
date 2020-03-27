@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.education.dao.AdminMapper;
 import com.education.dao.ClassesMapper;
+import com.education.dao.CourseMapper;
 import com.education.dao.StudentMapper;
 import com.education.dao.TeacherMapper;
 import com.education.dao.UserMapper;
@@ -22,6 +23,7 @@ import com.education.pojo.Admin;
 import com.education.pojo.AdminExample;
 import com.education.pojo.AdminExample.Criteria;
 import com.education.pojo.Classes;
+import com.education.pojo.Course;
 import com.education.pojo.Student;
 import com.education.pojo.StudentExample;
 import com.education.pojo.Teacher;
@@ -51,8 +53,45 @@ public class AdminService {
 	@Autowired
 	private ClassesMapper classesDao;
 
+	@Autowired
+	private CourseMapper courseDao;
+	
+	// 删除课程信息
+	public String deleteCourse(Integer indexid) {
+		int result = courseDao.deleteByPrimaryKey(indexid);
+		if (result != 1) {
+			return "ERROR";
+		}
+		return "SUCCESS";
+	}
+
+	// 修改课程信息
+	public String updateCourse(Course course, String inputName) {
+		course.setModifydate(new Date());
+		course.setModifyname(inputName);
+		int result = courseDao.updateByPrimaryKeySelective(course);
+		if (result != 1) {
+			return "ERROR";
+		}
+		return "SUCCESS";
+	}
+
+	// 新增课程
+	public String addCourse(Course course, String inputName) {
+
+		course.setIsUse("1");
+		course.setInputname(inputName);
+		course.setInputdate(new Date());
+
+		int result = courseDao.insertSelective(course);
+		if (result != 1) {
+			return "ERROR";
+		}
+		return "SUCCESS";
+	}
+
 	// 分配学生【删除】
-	public String deleteStudentToClass(String deleteIds,String modifyName) {
+	public String deleteStudentToClass(String deleteIds, String modifyName) {
 		List<Integer> idList = new ArrayList<Integer>();
 		String[] ids = deleteIds.split(",");
 
@@ -75,7 +114,7 @@ public class AdminService {
 	}
 
 	// 分配学生【新增】
-	public String addStudentToClass(String addIds, Integer classId,String modifyName) {
+	public String addStudentToClass(String addIds, Integer classId, String modifyName) {
 		List<Integer> idList = new ArrayList<Integer>();
 		String[] ids = addIds.split(",");
 
@@ -93,7 +132,7 @@ public class AdminService {
 		StudentExample example = new StudentExample();
 		StudentExample.Criteria criteria = example.createCriteria();
 		criteria.andIndexidIn(idList);
-		//批量修改
+		// 批量修改
 		studentDao.updateByExampleSelective(student, example);
 		return "SUCCESS";
 	}

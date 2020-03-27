@@ -25,12 +25,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.education.pojo.Admin;
 import com.education.pojo.Book;
 import com.education.pojo.Classes;
+import com.education.pojo.Course;
 import com.education.pojo.Student;
 import com.education.pojo.Teacher;
 import com.education.service.AdminService;
 import com.education.service.BookService;
 import com.education.service.BorrowService;
 import com.education.service.ClassesService;
+import com.education.service.CourseArrangeService;
+import com.education.service.CourseService;
 import com.education.service.MessageService;
 import com.education.service.StudentService;
 import com.education.service.TeacherService;
@@ -68,7 +71,124 @@ public class AdminController {
 
 	@Autowired
 	private ClassesService classesService;
+	
+	@Autowired
+	private CourseService courseService;
 
+	@Autowired
+	private CourseArrangeService courseArrangeService;
+
+	
+	//课程安排教师
+	@RequestMapping(value = "/arrangeTeacher", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject arrangeTeacher(Integer courseId,String deleteIds,String addIds, HttpServletRequest request) {
+		JSONObject jsonObject = new JSONObject();
+		Admin admin = (Admin) request.getSession().getAttribute("admin");
+		if (admin == null) {
+			jsonObject.put("msg", "user no login!!!");
+			return jsonObject;
+		}
+		String msg = "";
+		
+		jsonObject.put("msg", msg);
+		return jsonObject;
+	}
+
+	//课程安排教师页面
+	@RequestMapping(value = "/arrangeTeacher/{courseId}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView showArrangeTeacher(@PathVariable Integer courseId) {
+		ModelAndView mv = new ModelAndView("admin/course/arrangeTeacher");
+		
+		List<Teacher> teacherList = teacherService.getTeachersByCourseId(courseId);
+		List<Teacher> teacherNoCourseList = teacherService.getNoTeachersByCourseId(courseId);
+		
+//		List<Integer> ids = teacherList.stream().map(Student::getIndexid).collect(Collectors.toList());
+//		List<Integer> noClassIds = teacherNoCourseList.stream().map(Student::getIndexid).collect(Collectors.toList());
+		
+		mv.addObject("courseInfo", courseService.getCourseById(courseId));
+//		courseArrangeService.getAllCourseArranges();
+		
+		mv.addObject("teacherList", teacherList);
+		mv.addObject("teacherNoCourseList", teacherNoCourseList);
+//		mv.addObject("ids", ids);
+//		mv.addObject("noClassIds", noClassIds);
+		
+		
+		return mv;
+	}
+
+	
+	
+	
+	
+	
+	
+	// 删除课程
+	@RequestMapping(value = "/deleteCourse", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject deleteCourse(Integer courseId) {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("msg", adminService.deleteCourse(courseId));
+		return jsonObject;
+	}
+
+	// 修改课程
+	@RequestMapping(value = "/updateCourse", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject updateCourse(Course Course, HttpServletRequest request) {
+		JSONObject jsonObject = new JSONObject();
+		Admin admin = (Admin) request.getSession().getAttribute("admin");
+		if (admin == null) {
+			jsonObject.put("msg", "user no login!!!");
+			return jsonObject;
+		}
+		jsonObject.put("msg", adminService.updateCourse(Course, admin.getName()));
+		return jsonObject;
+	}
+
+	// 修改课程页面
+	@RequestMapping(value = "/updateCourse/{courseId}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView editAddCourse(@PathVariable Integer courseId) {
+		ModelAndView mv = new ModelAndView("admin/course/editCourse");
+		mv.addObject("courseInfo", courseService.getCourseById(courseId));
+		return mv;
+	}
+
+	// 新增课程
+	@RequestMapping(value = "/addCourse", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject addCourse(Course course, HttpServletRequest request) {
+		JSONObject jsonObject = new JSONObject();
+		Admin admin = (Admin) request.getSession().getAttribute("admin");
+		if (admin == null) {
+			jsonObject.put("msg", "user no login!!!");
+			return jsonObject;
+		}
+		jsonObject.put("msg", adminService.addCourse(course, admin.getName()));
+		return jsonObject;
+	}
+
+	// 新增课程页面
+	@RequestMapping(value = "/addCourse", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView showAddCourse() {
+		ModelAndView mv = new ModelAndView("admin/course/addCourse");
+		return mv;
+	}
+
+	// 课程列表页面
+	@RequestMapping(value = "/courseList", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView showCourseList() {
+		ModelAndView mv = new ModelAndView("admin/course/courseList");
+		mv.addObject("courseList", courseService.getAllCourses());
+		return mv;
+	}
+	
+	
 	// 安排学生
 	@RequestMapping(value = "/arrangeStudent", method = RequestMethod.POST)
 	@ResponseBody
@@ -202,7 +322,7 @@ public class AdminController {
 	@RequestMapping(value = "/updateStudent/{studentId}", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView editAddStudent(@PathVariable Integer studentId) {
-		ModelAndView mv = new ModelAndView("admin/editStudent");
+		ModelAndView mv = new ModelAndView("admin/student/editStudent");
 		mv.addObject("studentInfo", studentService.getStudentById(studentId));
 		return mv;
 	}
@@ -225,7 +345,7 @@ public class AdminController {
 	@RequestMapping(value = "/addStudent", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView showAddStudent() {
-		ModelAndView mv = new ModelAndView("admin/addStudent");
+		ModelAndView mv = new ModelAndView("admin/student/addStudent");
 		return mv;
 	}
 
@@ -233,7 +353,7 @@ public class AdminController {
 	@RequestMapping(value = "/studentList", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView showStudentList() {
-		ModelAndView mv = new ModelAndView("admin/studentList");
+		ModelAndView mv = new ModelAndView("admin/student/studentList");
 		mv.addObject("studentList", studentService.getAllStudents());
 		return mv;
 	}
@@ -251,7 +371,7 @@ public class AdminController {
 	@RequestMapping(value = "/updateTeacher/{teacherId}", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView showUpdateTeacher(@PathVariable Integer teacherId) {
-		ModelAndView mv = new ModelAndView("admin/editTeacher");
+		ModelAndView mv = new ModelAndView("admin/teacher/editTeacher");
 		mv.addObject("teacherInfo", teacherService.getTeacherById(teacherId));
 		return mv;
 	}
@@ -288,7 +408,7 @@ public class AdminController {
 	@RequestMapping(value = "/teacherList", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView showTeacherList() {
-		ModelAndView mv = new ModelAndView("admin/teacherList");
+		ModelAndView mv = new ModelAndView("admin/teacher/teacherList");
 		mv.addObject("teacherList", teacherService.getAllTeachers());
 		return mv;
 	}
@@ -297,7 +417,7 @@ public class AdminController {
 	@RequestMapping(value = "/addTeacher", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView showAddTeacher() {
-		ModelAndView mv = new ModelAndView("admin/addTeacher");
+		ModelAndView mv = new ModelAndView("admin/teacher/addTeacher");
 		return mv;
 	}
 	// ----------------------------------------------

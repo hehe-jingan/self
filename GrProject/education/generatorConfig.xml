@@ -11,7 +11,7 @@
             <property name="suppressAllComments" value="true"/>    
         </commentGenerator>   
 <!--         数据库信息  -->
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/education" userId="root" password="menghan520+-">    
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/education" userId="root" password="menghan520">    
         </jdbcConnection>    
         <javaTypeResolver>    
             <property name="forceBigDecimals" value="false"/>    
@@ -31,7 +31,7 @@
         </javaClientGenerator>    
         
 <!--         表信息   开启select Example 可以自定义查询模板-->
-        <table tableName="classes" domainObjectName="Classes"
+        <table tableName="course_arrange" domainObjectName="CourseArrange"
          enableUpdateByExample="true" enableDeleteByExample="true" 
         enableCountByExample="true"   enableSelectByExample="true" selectByExampleQueryId="true"
         ></table>  

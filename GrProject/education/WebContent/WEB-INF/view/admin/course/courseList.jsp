@@ -1,4 +1,4 @@
-<%@page import="com.education.pojo.Teacher"%>
+<%@page import="com.education.pojo.Course"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -7,9 +7,9 @@
 <%@taglib uri="/WEB-INF/fmt.tld" prefix="fmt"%>
 <%@taglib uri="/WEB-INF/fn.tld" prefix="fn"%>
 <%
-List<Teacher> list = null;
-    if(request.getAttribute("teacherList")!=null){
-    	list = (List<Teacher>)request.getAttribute("teacherList");
+List<Course> list = null;
+    if(request.getAttribute("courseList")!=null){
+    	list = (List<Course>)request.getAttribute("courseList");
     }
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");%>
 <!doctype html>
@@ -23,17 +23,17 @@ List<Teacher> list = null;
     <title>教育后台管理</title>
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
- <%@include file="model/adminHeader.jsp" %>
+ <%@include file="../model/adminHeader.jsp" %>
 </head>
 
 <body>
     <!-- Left Panel -->
-   <%@include file="model/adminMenu.jsp" %>
+   <%@include file="../model/adminMenu.jsp" %>
     <!-- /#left-panel -->
     <!-- Right Panel -->
     <div id="right-panel" class="right-panel">
         <!-- Header-->
-        <%@include file="model/adminTitle.jsp" %>
+        <%@include file="../model/adminTitle.jsp" %>
         <!-- /#header -->
         <!-- Content -->
         <div class="content">
@@ -49,19 +49,17 @@ List<Teacher> list = null;
                    
                         <div class="card">
                             <div class="card-header">
-                                <strong class="card-title">教师列表</strong>
-                                  <span class="btn btn-lg btn-outline-secondary float-right" id="addTeacherBtn">新增教师</span> 
+                                <strong class="card-title">课程列表</strong>
+                                  <span class="btn btn-lg btn-outline-secondary float-right" id="addCourseBtn">新增课程</span> 
                             </div>
                             <div class="card-body">
                                 <table id="bootstrap-data-table" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
                                             <th>编号</th>
-                                            <th>姓名</th>
-                                            <th>性别</th>
-                                            <th>年龄</th>
-                                            <th>邮箱</th>
-                                            <th>是否在职</th>
+                                            <th>课程名称</th>
+                                            <th>是否开设中</th>
+                                            <th>课程人数</th>
                                             <th>操作</th>
                                         </tr>
                                     </thead>
@@ -72,15 +70,14 @@ List<Teacher> list = null;
                                         <tr>
                                             <td><%=i+1 %></td>
                                             <td><%=list.get(i).getName() %></td>
-                                             <td><%=list.get(i).getSex() %></td>
-                                             <td><%=list.get(i).getAge() %></td>
-                                             <td><%=list.get(i).getEmail() %></td>
-                                             <td><%=("1".equals(list.get(i).getOnjob()))?"在职":"离职" %></td>
-                                            
+                                             <td><%="0".equals(list.get(i).getIsUse())?"不开设":"开设中" %></td>
+                                             	<td>0</td>
+<%--                                              <td><%=("1".equals(list.get(i).getOnjob()))?"在职":"离职" %></td> --%>
 <%--                                             <td><%=list.get(i).getLastlogindate()==null?"暂未登录":sdf.format(list.get(i).getLastlogindate()) %></td> --%>
                                              <td>
-                                              <a href="<%=basePath%>admin/updateTeacher/<%=list.get(i).getIndexid()%>" >编辑</a>
-                                             <a href="#" id="deleteTeacherBtn<%=list.get(i).getIndexid() %>" data-am-modal="{closeOnConfirm	: false,target: '#deleteAd', closeViaDimmer: 0, width: 400, height: 125}">删除</a>
+                                              <a href="<%=basePath%>admin/updateCourse/<%=list.get(i).getIndexid()%>" >编辑</a>
+                                              <a href="<%=basePath%>admin/arrangeTeacher/<%=list.get(i).getIndexid()%>" >教师安排</a>
+                                             <a href="#" id="deleteCourseBtn<%=list.get(i).getIndexid() %>" data-am-modal="{closeOnConfirm	: false,target: '#deleteAd', closeViaDimmer: 0, width: 400, height: 125}">删除</a>
                                         </tr>
                                         <%}
                   	} %>
@@ -120,7 +117,7 @@ List<Teacher> list = null;
         </footer>
         <div class="am-modal am-modal-prompt " tabindex="-1" id="deleteAd"
 	style="margin-top: 300px;">
-	<div class="am-modal-dialog">确认删除该教师？
+	<div class="am-modal-dialog">确认删除该课程？
 		<div class="am-modal-hd"></div>
 		<div class="am-modal-footer">
 			<span class="am-modal-btn" id="makeSure">确认</span> 
@@ -162,19 +159,19 @@ List<Teacher> list = null;
 //     	 $("#menu3").addClass("active");
     	 var updataMessId = "";
     	 
-    	 $("#addTeacherBtn").click(function(){
-    		 window.location.href = "<%=basePath%>admin/addTeacher";
+    	 $("#addCourseBtn").click(function(){
+    		 window.location.href = "<%=basePath%>admin/addCourse";
     	 });
     	 
-    	 $("a[id^='deleteTeacherBtn']").click(function(){
+    	 $("a[id^='deleteCourseBtn']").click(function(){
     		var id = $(this).prop("id").substring(16);
-    		data = "teacherId="+id;
+    		data = "courseId="+id;
     		console.log("data="+data);
     	 });
     	 
     	 $("#makeSure").click(function(){
     		
-    		 var url = "<%=basePath%>admin/deleteTeacher";
+    		 var url = "<%=basePath%>admin/deleteCourse";
     		 $.ajax({
     		       	type : "POST",
     		       	url : url,
@@ -183,7 +180,7 @@ List<Teacher> list = null;
     		       	success : function(data){
     		       		if(data.msg=="SUCCESS"){
     		       			alert("删除成功！！");
-    		       			window.location = "<%=basePath%>admin/teacherList";
+    		       			window.location = "<%=basePath%>admin/courseList";
     		       		}else{
     		       			alert(data.msg);
     		       		}

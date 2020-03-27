@@ -16,17 +16,17 @@
 <title>教育后台管理</title>
 <meta name="description" content="Ela Admin - HTML5 Admin Template">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<%@include file="model/adminHeader.jsp"%>
+<%@include file="../model/adminHeader.jsp"%>
 </head>
 
 <body>
 	<!-- Left Panel -->
-	<%@include file="model/adminMenu.jsp"%>
+	<%@include file="../model/adminMenu.jsp"%>
 	<!-- /#left-panel -->
 	<!-- Right Panel -->
 	<div id="right-panel" class="right-panel">
 		<!-- Header-->
-		<%@include file="model/adminTitle.jsp"%>
+		<%@include file="../model/adminTitle.jsp"%>
 		<!-- /#header -->
 		<!-- Content -->
 		<div class="content">
@@ -35,7 +35,7 @@
 				<div class="col-md-12">
 					<div class="card">
 						<div class="card-header">
-							<strong class="card-title">新增学生</strong>
+							<strong class="card-title">新增教师</strong>
 						</div>
 						<div class="card-body">
 							<!-- Credit Card -->
@@ -46,13 +46,13 @@
 										<div class="form-group text-center"></div>
 										<div class="form-group">
 											<label for="cc-payment" class="control-label mb-1">姓名</label>
-											<input type="text" id="studentName" name="name"
+											<input type="text" id="teacherName" name="name"
 												class="form-control" aria-required="true"
 												aria-invalid="false" value="">
 										</div>
 										<div class="form-group has-success">
 											<label for="cc-age" class="control-label mb-1">年龄</label> <input
-												type="number" id="studentAge" name="age"
+												type="number" id="teacherAge" name="age"
 												class="form-control cc-name valid" data-val="true"
 												data-val-required="Please enter the name on card"
 												autocomplete="cc-name" aria-required="true"
@@ -63,15 +63,21 @@
 										<div class="form-group">
 											<label for="cc-sex" class="control-label mb-1">性别</label> 
 											<br/> 
-											<select data-placeholder="Choose a Sex..." id="studentSex"
+											<select data-placeholder="Choose a Sex..." id="teacherSex"
 												name="sex" class="form-control" tabindex="1">
 												<option value="男">男</option>
 												<option value="女">女</option>
 											</select>
 										</div>
+										<div class="form-group">
+											<label for="cc-email" class="control-label mb-1">邮箱</label>
+											<input type="text" id="teacherEmail" name="email"
+												class="form-control" aria-required="true"
+												aria-invalid="false" value="">
+										</div>
 										<div class="form-group has-success">
 											<label for="cc-pass" class="control-label mb-1">登录密码</label>
-											<input type="password" id="studentPass" name="pass"
+											<input type="password" id="teacherPass" name="pass"
 												class="form-control cc-name valid" data-val="true"
 												data-val-required="Please enter the name on card"
 												autocomplete="cc-name" aria-required="true"
@@ -139,28 +145,33 @@
     $(document).ready(function() {
    	  
    	 $("#makeSure").click(function(){
-   		var studentName = $("#studentName").val();
-   		 var studentAge = $("#studentAge").val();
-   		 var studentSex = $("#studentSex").val();
-  		 var studentPass = $("#studentPass").val();
+   		var teacherName = $("#teacherName").val();
+   		 var teacherAge = $("#teacherAge").val();
+   		var teacherEmail = $("#teacherEmail").val();
+   		 var teacherSex = $("#teacherSex").val();
+  		 var teacherPass = $("#teacherPass").val();
   		 var confirm = $("#confirmPass").val();
   		 
-   		 if(studentName==""){
-   			 alert("请输入学生姓名！");
-   		 }else if(studentAge==""){
-   			 alert("请输入学生年龄！");
-   		 }else if((studentAge<1||studentAge>120)){
+   		 if(teacherName==""){
+   			 alert("请输入教师姓名！");
+   		 }else if(teacherAge==""){
+   			 alert("请输入教师年龄！");
+   		 }else if((teacherAge<1||teacherAge>120)){
    				 alert("请输入正确的年龄！！！");
-   		 }else if(studentPass==""){
+   		 }else if(teacherEmail == ""){
+   			alert("请输入邮箱！！！");
+   		 }else if(!/^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/.test(teacherEmail)){
+   			alert("请输入正确的邮箱格式！！！");
+   		 }else if(teacherPass==""){
    			 alert("请输入密码！");
    		 }else if(confirm==""){
    			 alert("请输入确认密码！");
-   		 }else if(confirm!=studentPass){
+   		 }else if(confirm!=teacherPass){
    			 alert("输入密码与确认密码不一致！");
    		 }else{ 
    			 var data = decodeURIComponent($("#form5").serialize(),true);
    			 console.log("data= "+data);
-   			 var url = "<%=basePath%>admin/addStudent";
+   			 var url = "<%=basePath%>admin/addTeacher";
    			 $.ajax({
    			       	type : "POST",
    			       	url : url,
@@ -169,7 +180,7 @@
    			       	success : function(data){
    			       		if(data.msg=="SUCCESS"){
    			       			alert("新增成功！！");
-   			       			window.location = "<%=basePath%>admin/studentList";
+   			       			window.location = "<%=basePath%>admin/teacherList";
    			       		}else{
    			       			alert(data.msg);
    			       		}

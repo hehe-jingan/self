@@ -1,4 +1,4 @@
-<%@page import="com.education.pojo.Student"%>
+<%@page import="com.education.pojo.Course"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="/WEB-INF/c.tld" prefix="c"%>
@@ -17,26 +17,26 @@
 <title>教育后台管理</title>
 <meta name="description" content="Ela Admin - HTML5 Admin Template">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<%@include file="model/adminHeader.jsp"%>
+<%@include file="../model/adminHeader.jsp"%>
 </head>
 <% 
 String pageFlag = "false";
-Student student = new Student();
+Course course = new Course();
 
-if(request.getAttribute("studentInfo")!=null){
-	student = (Student)request.getAttribute("studentInfo");
+if(request.getAttribute("courseInfo")!=null){
+	course = (Course)request.getAttribute("courseInfo");
 	 pageFlag = "true";
 }
 
 %>
 <body>
 	<!-- Left Panel -->
-	<%@include file="model/adminMenu.jsp"%>
+	<%@include file="../model/adminMenu.jsp"%>
 	<!-- /#left-panel -->
 	<!-- Right Panel -->
 	<div id="right-panel" class="right-panel">
 		<!-- Header-->
-		<%@include file="model/adminTitle.jsp"%>
+		<%@include file="../model/adminTitle.jsp"%>
 		<!-- /#header -->
 		<!-- Content -->
 		<div class="content">
@@ -45,7 +45,7 @@ if(request.getAttribute("studentInfo")!=null){
 				<div class="col-md-12">
 					<div class="card">
 						<div class="card-header">
-							<strong class="card-title">修改学生信息</strong>
+							<strong class="card-title">修改课程信息</strong>
 						</div>
 						<div class="card-body">
 							<!-- Credit Card -->
@@ -55,49 +55,19 @@ if(request.getAttribute("studentInfo")!=null){
 										id="form5">
 										<div class="form-group text-center"></div>
 										<div class="form-group">
-											<label for="cc-payment" class="control-label mb-1">姓名</label>
-											<input type="text" id="studentName" name="name"
+											<label for="cc-payment" class="control-label mb-1">课程名称</label>
+											<input type="text" id="courseName" name="name"
 												class="form-control" aria-required="true"
-												aria-invalid="false" value="<%=student.getName()%>">
-										</div>
-										<div class="form-group has-success">
-											<label for="cc-age" class="control-label mb-1">年龄</label> <input
-												type="number" id="studentAge" name="age" value="<%=student.getAge()%>"
-												class="form-control cc-name valid" data-val="true"
-												data-val-required="Please enter the name on card"
-												autocomplete="cc-name" aria-required="true"
-												aria-invalid="false" aria-describedby="cc-name"> <span
-												class="help-block field-validation-valid"
-												data-valmsg-for="cc-age" data-valmsg-replace="true"></span>
+												aria-invalid="false" value="<%=course.getName()%>">
 										</div>
 										<div class="form-group">
-											<label for="cc-sex" class="control-label mb-1">性别</label> 
+											<label for="cc-sex" class="control-label mb-1">是否开设</label> 
 											<br/> 
-											<select data-placeholder="Choose a Sex..." id="studentSex"
-												name="sex" class="form-control" tabindex="1">
-												<option value="男" <%="男".equals(student.getSex())?"selected":"" %>>男</option>
-												<option value="女" <%="女".equals(student.getSex())?"selected":"" %>>女</option>
+											<select data-placeholder="Choose a Sex..." id="courseUse"
+												name="isUse" class="form-control" tabindex="1">
+												<option value="1" <%="1".equals(course.getIsUse())?"selected":"" %>>开设中</option>
+												<option value="0" <%="0".equals(course.getIsUse())?"selected":"" %>>不开设</option>
 											</select>
-										</div>
-										<div class="form-group has-success">
-											<label for="cc-pass" class="control-label mb-1">登录密码</label>
-											<input type="password" id="studentPass" name="pass"
-												class="form-control cc-name valid" data-val="true"
-												data-val-required="Please enter the name on card"
-												autocomplete="cc-name" aria-required="true"
-												aria-invalid="false" aria-describedby="cc-name"> <span
-												class="help-block field-validation-valid"
-												data-valmsg-for="cc-pass" data-valmsg-replace="true"></span>
-										</div>
-										<div class="form-group">
-											<label for="cc-conPass" class="control-label mb-1">确认密码</label>
-											<input type="password" id="confirmPass" name="confirmPass"
-												class="form-control cc-number identified visa" value=""
-												data-val="true"
-												data-val-required="Please enter the card number"
-												data-val-cc-number="Please enter a valid card number">
-											<span class="help-block" data-valmsg-for="cc-conPass"
-												data-valmsg-replace="true"></span>
 										</div>
 										<br />
 										<div>
@@ -154,46 +124,32 @@ if(request.getAttribute("studentInfo")!=null){
     	var pageFlag = "<%=pageFlag%>";
     	
     	if(pageFlag == "false"){
-    		alert("暂无此学生！！！");
+    		alert("暂无此课程！！！");
     		window.history.go(-1);
     	}
     	
     	
    	 $("#makeSure").click(function(){
-   		 var studentId = "<%=student.getIndexid()%>";
-   		var studentName = $("#studentName").val();
-   		 var studentAge = $("#studentAge").val();
-   		 var studentSex = $("#studentSex").val();
-  		 var studentPass = $("#studentPass").val();
-  		 var confirmPass = $("#confirmPass").val();
+   		 var courseId = "<%=course.getIndexid()%>";
+   		var courseName = $("#courseName").val();
   		 
-   		 if(studentName==""){
-   			 alert("请输入学生姓名！");
-   		 }else if(studentAge==""){
-   			 alert("请输入学生年龄！");
-   		 }else if((studentAge<1||studentAge>120)){
-   				 alert("请输入正确的年龄！！！");
-   		 }else if(studentPass==""){
-   			 alert("请输入密码！");
-   		 }else if(confirmPass==""){
-   			 alert("请输入确认密码！");
-   		 }else if(confirmPass!=studentPass){
-   			 alert("输入密码与确认密码不一致！");
+   		 if(courseName==""){
+   			 alert("请输入课程姓名！");
    		 }else{ 
    			 
-   			 if(confirm("确认要修改该学生信息吗？")){
+   			 if(confirm("确认要修改该课程信息吗？")){
    			 var data = decodeURIComponent($("#form5").serialize(),true);
    			 console.log("data= "+data);
-   			 var url = "<%=basePath%>admin/updateStudent";
+   			 var url = "<%=basePath%>admin/updateCourse";
    			 $.ajax({
    			       	type : "POST",
    			       	url : url,
-   			       	data : data+"&indexid="+studentId,
+   			       	data : data+"&indexid="+courseId,
    			       	dataType : "json",
    			       	success : function(data){
    			       		if(data.msg=="SUCCESS"){
    			       			alert("修改成功！！");
-   			       			window.location = "<%=basePath%>admin/studentList";
+   			       			window.location = "<%=basePath%>admin/courseList";
    			       		}else{
    			       		 	alert(data.msg);
    			       		}
@@ -206,10 +162,9 @@ if(request.getAttribute("studentInfo")!=null){
    		 
    	 });
    	 
-   	 
    	 //返回
    	 $("#returnBack").click(function(){
-   		window.location = "<%=basePath%>admin/studentList";
+   		window.location = "<%=basePath%>admin/courseList";
    	 });
     });
     </script>

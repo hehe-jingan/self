@@ -34,7 +34,7 @@
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
     <link href="<%=basePath %>static/back/assets/weather/css/weather-icons.css" rel="stylesheet" />
 <link href="<%=basePath %>static/back/assets/calendar/fullcalendar.css" rel="stylesheet" />
-
+s
 <link href="<%=basePath %>static/back/assets/css/charts/chartist.min.css" rel="stylesheet">
 <link href="<%=basePath %>static/back/assets/css/lib/vector-map/jqvmap.min.css" rel="stylesheet">
    <link rel="stylesheet" href="<%=basePath %>static/assets/css/amazeui.min.css"/>
