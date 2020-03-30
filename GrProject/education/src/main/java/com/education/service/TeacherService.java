@@ -3,6 +3,8 @@ package com.education.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import com.education.pojo.CourseArrangeExample;
 import com.education.pojo.Teacher;
 import com.education.pojo.TeacherExample;
 import com.education.pojo.TeacherExample.Criteria;
+import com.mysql.jdbc.StringUtils;
 
 @Service
 public class TeacherService {
@@ -74,6 +77,49 @@ public class TeacherService {
 		criteria.andIndexidNotIn(tidList);
 		List<Teacher> teachers = teaDao.selectByExample(teacherExample);
 		return teachers;
+	}
+
+	// 修改密码
+	public String changePass(Teacher user, String newPass, String oldPass, HttpServletRequest request) {
+
+		if (!oldPass.equals(user.getPass())) {
+			return "旧密码错误，请重试！";
+		}
+
+		user.setPass(newPass);
+		int result = teaDao.updateByPrimaryKeySelective(user);
+
+		if (result == 1) {
+			request.getSession().setAttribute("teacher", teaDao.selectByPrimaryKey(user.getIndexid()));
+			return "success";
+		}
+		return "修改密码失败，请重试";
+
+	}
+
+	// 教师登录
+	public String login(String loginAccount, String loginPass, HttpServletRequest request) {
+		if (StringUtils.isNullOrEmpty(loginAccount)) {
+			return "用户名不能为空！";
+		}
+		if (StringUtils.isNullOrEmpty(loginPass)) {
+			return "密码不能为空！！";
+		}
+		TeacherExample example = new TeacherExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andNameEqualTo(loginAccount);
+		List<Teacher> teas = teaDao.selectByExample(example);
+		System.out.println("studentSize=" + teas.size());
+		if (teas.size() != 1) {
+			return "用户名错误！！！";
+		}
+
+		if (!teas.get(0).getPass().equals(loginPass)) {
+			return "密码错误！！！！";
+		}
+		Teacher t = teas.get(0);
+		request.getSession().setAttribute("teacher", t);
+		return "SUCCESS";
 	}
 
 }

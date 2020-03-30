@@ -11,7 +11,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>图书馆后台管理</title>
+    <title>教育后台管理</title>
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
  <%@include file="model/adminHeader.jsp" %>
@@ -92,9 +92,9 @@
             <div class="footer-inner bg-white">
                 <div class="row">
                     <div class="col-sm-6">
-                        Copyright &copy; 2019 Library. </a>
+                        Copyright &copy; 2020 Education. </a>
                     </div>
-                    <div class="col-sm-6 text-right"> Designed by Hualing
+                    <div class="col-sm-6 text-right"> Designed by ZhiYong
                     </div>
                 </div>
             </div>

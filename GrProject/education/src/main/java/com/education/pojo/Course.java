@@ -20,6 +20,8 @@ public class Course {
     private String spare1;
 
     private String spare2;
+    
+    private Integer tCount;
 
     public Integer getIndexid() {
         return indexid;
@@ -92,4 +94,12 @@ public class Course {
     public void setSpare2(String spare2) {
         this.spare2 = spare2 == null ? null : spare2.trim();
     }
+
+	public Integer gettCount() {
+		return tCount;
+	}
+
+	public void settCount(Integer tCount) {
+		this.tCount = tCount;
+	}
 }

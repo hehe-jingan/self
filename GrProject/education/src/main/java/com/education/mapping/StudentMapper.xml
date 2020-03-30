@@ -17,8 +17,8 @@
 			jdbcType="TIMESTAMP" />
 		<result column="modifyName" property="modifyname"
 			jdbcType="VARCHAR" />
-		<result column="spare1" property="spare1" jdbcType="VARCHAR" />
-		<result column="spare2" property="spare2" jdbcType="VARCHAR" />
+		<result column="sspare1" property="spare1" jdbcType="VARCHAR" />
+		<result column="sspare2" property="spare2" jdbcType="VARCHAR" />
 		<association property="classes" column="indexId"
 			javaType="com.education.pojo.Classes">
 			<id property="indexid" column="cid" />
@@ -32,7 +32,7 @@
 				jdbcType="TIMESTAMP" />
 			<result column="modifyName" property="modifyname"
 				jdbcType="VARCHAR" />
-			<result column="spare1" property="spare1" jdbcType="TIMESTAMP" />
+			<result column="spare1" property="spare1" jdbcType="VARCHAR" />
 			<result column="spare2" property="spare2" jdbcType="VARCHAR" />
 
 		</association>
@@ -48,17 +48,17 @@
 						<foreach collection="criteria.criteria" item="criterion">
 							<choose>
 								<when test="criterion.noValue">
-									and ${criterion.condition}
+									and student.${criterion.condition}
 								</when>
 								<when test="criterion.singleValue">
-									and ${criterion.condition} #{criterion.value}
+									and student.${criterion.condition} #{criterion.value}
 								</when>
 								<when test="criterion.betweenValue">
-									and ${criterion.condition} #{criterion.value} and
+									and student.${criterion.condition} #{criterion.value} and
 									#{criterion.secondValue}
 								</when>
 								<when test="criterion.listValue">
-									and ${criterion.condition}
+									and student.${criterion.condition}
 									<foreach collection="criterion.value" item="listItem"
 										open="(" close=")" separator=",">
 										#{listItem}
@@ -106,7 +106,7 @@
 	<sql id="Base_Column_List">
 		student.indexId, student.name, sex, age, pass, classId, student.inputDate,
 		student.inputName, student.modifyDate, student.modifyName,
-		student.spare1, student.spare2 ,classes.indexId as cid, classes.name as cname,classes.isUse,classes.inputDate,
+		student.spare1 as sspare1, student.spare2 as sspare2 ,classes.indexId as cid, classes.name as cname,classes.isUse,classes.inputDate,
 		classes.inputName, classes.modifyDate, classes.modifyName,
 		classes.spare1, classes.spare2
 		

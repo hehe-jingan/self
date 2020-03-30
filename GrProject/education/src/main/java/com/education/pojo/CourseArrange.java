@@ -29,6 +29,10 @@ public class CourseArrange {
     
     private Teacher teacher;
 
+    private Integer clcount;
+    
+    private Integer siseva;
+    
     public Integer getIndexid() {
         return indexid;
     }
@@ -143,5 +147,21 @@ public class CourseArrange {
 	 */
 	public void setTeacher(Teacher teacher) {
 		this.teacher = teacher;
+	}
+
+	public Integer getClcount() {
+		return clcount;
+	}
+
+	public void setClcount(Integer clCount) {
+		this.clcount = clCount;
+	}
+
+	public Integer getSiseva() {
+		return siseva;
+	}
+
+	public void setSiseva(Integer siseva) {
+		this.siseva = siseva;
 	}
 }

@@ -4,9 +4,6 @@
  */
 package com.education.controller;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,24 +15,24 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.education.pojo.Admin;
-import com.education.pojo.Book;
 import com.education.pojo.Classes;
 import com.education.pojo.Course;
+import com.education.pojo.CourseArrange;
+import com.education.pojo.Evaluation;
 import com.education.pojo.Student;
 import com.education.pojo.Teacher;
 import com.education.service.AdminService;
-import com.education.service.BookService;
-import com.education.service.BorrowService;
+import com.education.service.ClassesCourseArrangeService;
 import com.education.service.ClassesService;
 import com.education.service.CourseArrangeService;
 import com.education.service.CourseService;
-import com.education.service.MessageService;
+import com.education.service.EvaluationService;
 import com.education.service.StudentService;
+import com.education.service.SupervisorService;
 import com.education.service.TeacherService;
 import com.education.service.UserService;
 import com.mysql.jdbc.StringUtils;
@@ -55,15 +52,6 @@ public class AdminController {
 	private AdminService adminService;
 
 	@Autowired
-	private MessageService messageService;
-
-	@Autowired
-	private BookService bookService;
-
-	@Autowired
-	private BorrowService borrowService;
-
-	@Autowired
 	private StudentService studentService;
 
 	@Autowired
@@ -71,60 +59,167 @@ public class AdminController {
 
 	@Autowired
 	private ClassesService classesService;
-	
+
 	@Autowired
 	private CourseService courseService;
+	
+	@Autowired
+	private  SupervisorService supervisorService;
 
 	@Autowired
 	private CourseArrangeService courseArrangeService;
 
-	
-	//课程安排教师
-	@RequestMapping(value = "/arrangeTeacher", method = RequestMethod.POST)
+	@Autowired
+	private ClassesCourseArrangeService classArrangeService;
+
+	@Autowired
+	private EvaluationService elService;
+
+	// 评价删除
+	@RequestMapping(value = "deleteEvaluation/{evId}", method = RequestMethod.POST)
 	@ResponseBody
-	public JSONObject arrangeTeacher(Integer courseId,String deleteIds,String addIds, HttpServletRequest request) {
+	public JSONObject deleteEvaluation(@PathVariable Integer evId) {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("msg", elService.deleteEvaluation(evId));
+		return jsonObject;
+
+	}
+
+	// 课程评价列表页面
+	@RequestMapping(value = "/evaluationList", method = RequestMethod.GET)
+	public ModelAndView showEvaluationList(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("admin/evaluate/evaluateList");
+		List<Evaluation> evLists = elService.getAllEvalations();
+		mv.addObject("evLists", evLists);
+
+		return mv;
+	}
+
+	// 课程评价
+	@RequestMapping(value = "/adminEvaluate", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject studentEvaluate(Evaluation evaluation, HttpServletRequest request) {
+		JSONObject jsonObject = new JSONObject();
+		if (request.getSession().getAttribute("admin") == null) {
+			jsonObject.put("msg", "登录已过期，请重新登录！！");
+			return jsonObject;
+		}
+		Admin admin = (Admin) request.getSession().getAttribute("admin");
+		jsonObject.put("msg", elService.editEvaluation(evaluation, admin.getName()));
+		return jsonObject;
+	}
+
+	// 课程评价页面
+	@RequestMapping(value = "/adminEvaluate/{evId}", method = RequestMethod.GET)
+	public ModelAndView showEvaluate(@PathVariable Integer evId) {
+		ModelAndView mv = new ModelAndView("admin/evaluate/adminEvaluate");
+		mv.addObject("evaluation", elService.getEvaluationByEvId(evId));
+		return mv;
+
+	}
+
+	// 课程分配班级
+	@RequestMapping(value = "/arrangeClasses", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject arrangeClasses(Integer coaId, String[] cid, HttpServletRequest request) {
 		JSONObject jsonObject = new JSONObject();
 		Admin admin = (Admin) request.getSession().getAttribute("admin");
 		if (admin == null) {
 			jsonObject.put("msg", "user no login!!!");
 			return jsonObject;
 		}
-		String msg = "";
-		
+		String msg = classArrangeService.addClassArrange(cid, coaId, admin.getName());
 		jsonObject.put("msg", msg);
 		return jsonObject;
 	}
 
-	//课程安排教师页面
+	// 课程分配班级页面
+	@RequestMapping(value = "/arrangeClasses/{courseArrangeId}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView showArrangeClasses(@PathVariable Integer courseArrangeId) {
+		ModelAndView mv = new ModelAndView("admin/courseArrange/arrangeClasses");
+
+		List<Classes> classList = classesService.getClassesBycoaId(courseArrangeId);
+		List<Classes> classNoList = classesService.getNoClassesBycoaId(courseArrangeId);
+		mv.addObject("courseArrangeInfo", courseArrangeService.getCourseArrangeById(courseArrangeId));
+		mv.addObject("classList", classList);
+		mv.addObject("classNoList", classNoList);
+
+		return mv;
+	}
+
+	// 删除课程安排
+	@RequestMapping(value = "/deleteCourseArrange", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject deleteCourseArrange(Integer courseArrangeId) {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("msg", adminService.deleteCourseArrange(courseArrangeId));
+		return jsonObject;
+	}
+
+	// 编辑课程安排
+	@RequestMapping(value = "/editCourseArrange", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject editCourseArragne(CourseArrange courseArrange, HttpServletRequest request) {
+		JSONObject jsonObject = new JSONObject();
+		Admin admin = (Admin) request.getSession().getAttribute("admin");
+		if (admin == null) {
+			jsonObject.put("msg", "user no login!!!");
+			return jsonObject;
+		}
+		String msg = courseArrangeService.editCourseArrange(courseArrange, admin.getName());
+		jsonObject.put("msg", msg);
+		return jsonObject;
+	}
+
+	// 课程安排教师编辑页面
+	@RequestMapping(value = "/editCourseArrange/{indexId}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView showEditCourseArrange(@PathVariable Integer indexId) {
+		ModelAndView mv = new ModelAndView("admin/courseArrange/editCourseArrange");
+		mv.addObject("courseArrange", courseArrangeService.getCourseArrangeById(indexId));
+		return mv;
+	}
+
+	// 课程安排教师页面
+	@RequestMapping(value = "/courseArrangeList", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView showcourseArrangeList() {
+		ModelAndView mv = new ModelAndView("admin/courseArrange/courseArrangeList");
+		mv.addObject("courseArrangeList", courseArrangeService.getAllCourseArranges());
+		return mv;
+	}
+
+	// 课程安排教师
+	@RequestMapping(value = "/arrangeTeacher", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject arrangeTeacher(CourseArrange courseArrange, HttpServletRequest request) {
+		JSONObject jsonObject = new JSONObject();
+		Admin admin = (Admin) request.getSession().getAttribute("admin");
+		if (admin == null) {
+			jsonObject.put("msg", "user no login!!!");
+			return jsonObject;
+		}
+		String msg = courseArrangeService.addCourseTeacher(courseArrange, admin.getName());
+		jsonObject.put("msg", msg);
+		return jsonObject;
+	}
+
+	// 课程安排教师页面
 	@RequestMapping(value = "/arrangeTeacher/{courseId}", method = RequestMethod.GET)
 	@ResponseBody
 	public ModelAndView showArrangeTeacher(@PathVariable Integer courseId) {
 		ModelAndView mv = new ModelAndView("admin/course/arrangeTeacher");
-		
+
 		List<Teacher> teacherList = teacherService.getTeachersByCourseId(courseId);
 		List<Teacher> teacherNoCourseList = teacherService.getNoTeachersByCourseId(courseId);
-		
-//		List<Integer> ids = teacherList.stream().map(Student::getIndexid).collect(Collectors.toList());
-//		List<Integer> noClassIds = teacherNoCourseList.stream().map(Student::getIndexid).collect(Collectors.toList());
-		
 		mv.addObject("courseInfo", courseService.getCourseById(courseId));
-//		courseArrangeService.getAllCourseArranges();
-		
 		mv.addObject("teacherList", teacherList);
 		mv.addObject("teacherNoCourseList", teacherNoCourseList);
-//		mv.addObject("ids", ids);
-//		mv.addObject("noClassIds", noClassIds);
-		
-		
+
 		return mv;
 	}
 
-	
-	
-	
-	
-	
-	
 	// 删除课程
 	@RequestMapping(value = "/deleteCourse", method = RequestMethod.POST)
 	@ResponseBody
@@ -185,14 +280,14 @@ public class AdminController {
 	public ModelAndView showCourseList() {
 		ModelAndView mv = new ModelAndView("admin/course/courseList");
 		mv.addObject("courseList", courseService.getAllCourses());
+//		classArrangeService.getAllCourseArranges();
 		return mv;
 	}
-	
-	
+
 	// 安排学生
 	@RequestMapping(value = "/arrangeStudent", method = RequestMethod.POST)
 	@ResponseBody
-	public JSONObject arrangeStudent(Integer classesId,String deleteIds,String addIds, HttpServletRequest request) {
+	public JSONObject arrangeStudent(Integer classesId, String deleteIds, String addIds, HttpServletRequest request) {
 		JSONObject jsonObject = new JSONObject();
 		Admin admin = (Admin) request.getSession().getAttribute("admin");
 		if (admin == null) {
@@ -200,10 +295,10 @@ public class AdminController {
 			return jsonObject;
 		}
 		String msg = "";
-		if(!StringUtils.isEmptyOrWhitespaceOnly(addIds)) {
+		if (!StringUtils.isEmptyOrWhitespaceOnly(addIds)) {
 			msg = adminService.addStudentToClass(addIds, classesId, admin.getName());
 		}
-		if(!StringUtils.isEmptyOrWhitespaceOnly(deleteIds)) {
+		if (!StringUtils.isEmptyOrWhitespaceOnly(deleteIds)) {
 			msg = adminService.deleteStudentToClass(deleteIds, admin.getName());
 		}
 		jsonObject.put("msg", msg);
@@ -215,20 +310,19 @@ public class AdminController {
 	@ResponseBody
 	public ModelAndView showArrangeStudent(@PathVariable Integer classesId) {
 		ModelAndView mv = new ModelAndView("admin/classes/arrangeStudent");
-		
+
 		List<Student> studentList = studentService.getStudentByClassId(classesId);
 		List<Student> studentNoClassList = studentService.getAllStudentWithNoClass();
-		
+
 		List<Integer> ids = studentList.stream().map(Student::getIndexid).collect(Collectors.toList());
 		List<Integer> noClassIds = studentNoClassList.stream().map(Student::getIndexid).collect(Collectors.toList());
-		
+
 		mv.addObject("classesInfo", classesService.getClassesById(classesId));
 		mv.addObject("studentList", studentList);
 		mv.addObject("studentNoClassList", studentNoClassList);
 		mv.addObject("ids", ids);
 		mv.addObject("noClassIds", noClassIds);
-		
-		
+
 		return mv;
 	}
 
@@ -422,108 +516,6 @@ public class AdminController {
 	}
 	// ----------------------------------------------
 
-	// 还书
-	@RequestMapping(value = "/returnBook", method = RequestMethod.POST)
-	@ResponseBody
-	public JSONObject returnBook(Integer borrowId) {
-
-		JSONObject jsonObject = new JSONObject();
-
-		jsonObject.put("msg", borrowService.returnBook(borrowId));
-
-		return jsonObject;
-
-	}
-
-	// 获取所有预借图书
-	@RequestMapping(value = "/onlineBookList", method = RequestMethod.GET)
-	public ModelAndView showAllOnlineBook(HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView("admin/allOnlineList");
-		List<HashMap<String, Object>> lists = borrowService.getAllBorrowBook(null, "预借中");
-		mv.addObject("borrowList", lists);
-		return mv;
-	}
-
-	// 获取所有需要归还图书
-	@RequestMapping(value = "/returnBookList", method = RequestMethod.GET)
-	public ModelAndView showAllReturnBook(HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView("admin/allReturnList");
-		List<HashMap<String, Object>> list1 = borrowService.getAllBorrowBook(null, "租借中");
-		List<HashMap<String, Object>> list2 = borrowService.getAllBorrowBook(null, "续借中");
-		list1.addAll(list2);
-		mv.addObject("borrowList", list1);
-
-		return mv;
-	}
-
-	// 书籍借阅
-	@RequestMapping(value = "/bookBorrow", method = RequestMethod.POST)
-	@ResponseBody
-	public JSONObject borrowBook(Integer bookId, String certNo, Integer day) {
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("msg", borrowService.borrowBook(certNo, day, bookId));
-		return jsonObject;
-	}
-
-	// 书籍入库
-	@RequestMapping(value = "/editBook", method = RequestMethod.POST)
-	@ResponseBody
-	public JSONObject editBook(MultipartFile bookImage, Book book) throws IllegalStateException, IOException {
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("msg", bookService.editBook(bookImage, book));
-		return jsonObject;
-	}
-
-	// 编辑书籍页面
-	@RequestMapping(value = "/editBook/{bookId}", method = RequestMethod.GET)
-	public ModelAndView showEditBook(@PathVariable Integer bookId) {
-		ModelAndView mv = new ModelAndView("admin/editBook");
-		mv.addObject("book", bookService.getBookById(bookId));
-		return mv;
-	}
-
-	// 借阅页面
-	@RequestMapping(value = "/borrowBook/{bookId}", method = RequestMethod.GET)
-	public ModelAndView showOnline(@PathVariable Integer bookId) {
-		ModelAndView mv = new ModelAndView("admin/borrowBook");
-		mv.addObject("userLists", adminService.getAllUser());
-		mv.addObject("book", bookService.getBookById(bookId));
-		return mv;
-	}
-
-	// 可借阅管理页面
-	@RequestMapping(value = "/borrowBookList", method = RequestMethod.GET)
-	public ModelAndView showCanBorrow() {
-		ModelAndView mv = new ModelAndView("admin/canBorrowList");
-		mv.addObject("bookList", bookService.getCanBorrowBook());
-		return mv;
-	}
-
-	// 书籍管理页面
-	@RequestMapping(value = "/bookList", method = RequestMethod.GET)
-	public ModelAndView showAllBook() {
-		ModelAndView mv = new ModelAndView("admin/bookList");
-		mv.addObject("bookList", bookService.getAllBook());
-		return mv;
-	}
-
-	// 书籍入库
-	@RequestMapping(value = "/addBook", method = RequestMethod.POST)
-	@ResponseBody
-	public JSONObject addBook(MultipartFile bookImage, MultipartFile bookDoc, Book book) throws IllegalStateException, IOException {
-		JSONObject jsonObject = new JSONObject();
-
-		jsonObject.put("msg", bookService.addBook(bookImage, bookDoc, book));
-		return jsonObject;
-	}
-
-	// 新增书籍
-	@RequestMapping(value = "/addBook", method = RequestMethod.GET)
-	public ModelAndView showAddBook() {
-		ModelAndView mv = new ModelAndView("admin/addBook");
-		return mv;
-	}
-
 	// 获取最新卡号
 	@RequestMapping(value = "/getNewCertNo", method = RequestMethod.GET)
 	@ResponseBody
@@ -534,13 +526,47 @@ public class AdminController {
 		return jsonObject;
 	}
 
+	// 删除督导
+	@RequestMapping(value = "/deleteSupervisor", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject deleteSupervisor(Integer supervisorId, String supervisorType) {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("msg", supervisorService.deleteSupervisor(supervisorId));
+
+		return jsonObject;
+
+	}
+
+	// 新增督导
+	@RequestMapping(value = "/addSupervisor", method = RequestMethod.POST)
+	@ResponseBody
+	public JSONObject addSupervisor(String supervisorName, String supervisorPass, String supervisorType) {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("msg", supervisorService.addSupervisor(supervisorName, supervisorPass));
+		return jsonObject;
+	}
+
+	// 新增督导页面
+	@RequestMapping(value = "/addSupervisor", method = RequestMethod.GET)
+	public ModelAndView showAddSupervisor() {
+		ModelAndView mv = new ModelAndView("admin/supervisor/addSupervisor");
+		return mv;
+	}
+
+	// 编辑督导页面
+	@RequestMapping(value = "/supervisorList", method = RequestMethod.GET)
+	public ModelAndView showSupervisorList() {
+		ModelAndView mv = new ModelAndView("admin/supervisor/supervisorList");
+		mv.addObject("supervisorList", supervisorService.getAllSupervisor());
+		return mv;
+	}
+
 	// 删除管理员
 	@RequestMapping(value = "/deleteAdmin", method = RequestMethod.POST)
 	@ResponseBody
-	public JSONObject deleteAdmin(Integer adminId, String adminType) {
+	public JSONObject deleteAdmin(Integer adminId, String supervisorType) {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("msg", adminService.deleteAdmin(adminId));
-
 		return jsonObject;
 
 	}
@@ -567,17 +593,6 @@ public class AdminController {
 		ModelAndView mv = new ModelAndView("admin/adminList");
 		mv.addObject("adminList", adminService.getAllAdmin());
 		return mv;
-	}
-
-	// 获取通知数量
-	@RequestMapping(value = "/getMessageCount", method = RequestMethod.POST)
-	@ResponseBody
-	public JSONObject getMessageCount(Integer adminId) {
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("msg", "success");
-		jsonObject.put("data", messageService.countMessage(adminId, "管理员"));
-
-		return jsonObject;
 	}
 
 	// 新增用户页面
@@ -625,8 +640,7 @@ public class AdminController {
 		Admin admin = (Admin) request.getSession().getAttribute("admin");
 		if (admin == null) {
 			msg = "用户未登录！";
-		}
-		else {
+		} else {
 			msg = adminService.changePass(admin, newPass, oldPass, request);
 		}
 		jsonObject.put("msg", msg);
@@ -656,13 +670,11 @@ public class AdminController {
 
 		if (request.getSession().getAttribute("admin") == null) {
 			return mv;
-		}
-		else {
+		} else {
 			if ("logout".equals(flag)) {
 				request.getSession().removeAttribute("admin");
 			}
 		}
-
 		return mv;
 	}
 
@@ -674,53 +686,6 @@ public class AdminController {
 		String str = adminService.login(name, pass, request);
 		jsonObject.put("msg", str);
 		return jsonObject;
-
-	}
-
-	int x = 8;
-
-	public static void main(String sss[]) throws FileNotFoundException {
-		// System.out.println(1);
-		// Stream.of(new MyCol("Mercury"),new MyCol("Venus"),
-		// new MyCol("Earth")).
-		// flatMap(i->i.indices.stream()).
-		// mapToInt(j->j).max().
-		// ifPresent(s->System.out.println(s));;
-		// System.out.println(Element.A.get);
-		// int x = 9;
-		AdminController adminController = new AdminController();
-		System.out.println(adminController.x);
-		// BufferedReader i = new BufferedReader(new InputStreamReader(""));
-
-		// int c= 0;
-		// System.out.println((0==c++)?"t":"f");
-		//
-		//
-		// Double d = null;
-		// System.out.println((d instanceof Double)?"t":"f");
-		//
-		// boolean b = false;
-		// System.out.println("(b = true)="+(b = true));
-		// System.out.println((b = true)?"t":"f");
-		//
-		// int a= 0;
-		// System.out.println((a!=0)?"t":"f");
-		//
-		// String eString = "1";
-		// System.out.println(("1"!=eString)?"t":"f");
-		// System.out.println((eString == "1"));
-
-		// String first = "first";
-		// String second = new String("first");
-		// "first".concat("second");
-		// System.out.println(first);
-		// System.out.println(second);
-		//
-		// System.out.println(first.equals(second));
-		// System.out.println(first==second);
-		// System.out.println(first.equals("firstsecond"));
-		// System.out.println(second == "first");
-
 	}
 
 }

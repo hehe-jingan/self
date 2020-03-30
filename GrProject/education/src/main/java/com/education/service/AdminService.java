@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import com.education.dao.AdminMapper;
 import com.education.dao.ClassesMapper;
+import com.education.dao.CourseArrangeMapper;
 import com.education.dao.CourseMapper;
 import com.education.dao.StudentMapper;
 import com.education.dao.TeacherMapper;
@@ -56,13 +57,17 @@ public class AdminService {
 	@Autowired
 	private CourseMapper courseDao;
 	
+	@Autowired
+	private CourseArrangeMapper courseArrangeDao;
+
+	// 删除课程安排信息
+	public String deleteCourseArrange(Integer indexid) {
+		return courseArrangeDao.deleteByPrimaryKey(indexid)==1?"SUCCESS":"ERROR";
+	}
+
 	// 删除课程信息
 	public String deleteCourse(Integer indexid) {
-		int result = courseDao.deleteByPrimaryKey(indexid);
-		if (result != 1) {
-			return "ERROR";
-		}
-		return "SUCCESS";
+		return courseDao.deleteByPrimaryKey(indexid)==1?"SUCCESS":"ERROR";
 	}
 
 	// 修改课程信息

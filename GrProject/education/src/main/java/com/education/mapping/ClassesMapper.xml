@@ -31,7 +31,7 @@
                   and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
                 </when>
                 <when test="criterion.listValue" >
-                  and ${criterion.condition}
+                  and c.${criterion.condition}
                   <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
                     #{listItem}
                   </foreach>

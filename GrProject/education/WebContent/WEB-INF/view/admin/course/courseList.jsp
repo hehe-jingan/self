@@ -59,7 +59,7 @@ List<Course> list = null;
                                             <th>编号</th>
                                             <th>课程名称</th>
                                             <th>是否开设中</th>
-                                            <th>课程人数</th>
+                                            <th>已分配教师人数</th>
                                             <th>操作</th>
                                         </tr>
                                     </thead>
@@ -71,7 +71,7 @@ List<Course> list = null;
                                             <td><%=i+1 %></td>
                                             <td><%=list.get(i).getName() %></td>
                                              <td><%="0".equals(list.get(i).getIsUse())?"不开设":"开设中" %></td>
-                                             	<td>0</td>
+                                             	<td><%=list.get(i).gettCount() %></td>
 <%--                                              <td><%=("1".equals(list.get(i).getOnjob()))?"在职":"离职" %></td> --%>
 <%--                                             <td><%=list.get(i).getLastlogindate()==null?"暂未登录":sdf.format(list.get(i).getLastlogindate()) %></td> --%>
                                              <td>
@@ -164,7 +164,7 @@ List<Course> list = null;
     	 });
     	 
     	 $("a[id^='deleteCourseBtn']").click(function(){
-    		var id = $(this).prop("id").substring(16);
+    		var id = $(this).prop("id").substring(15);
     		data = "courseId="+id;
     		console.log("data="+data);
     	 });
@@ -191,11 +191,6 @@ List<Course> list = null;
     	 });
     	 
      });
-  </script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-          
-      } );
   </script>
 </body>
 </html>

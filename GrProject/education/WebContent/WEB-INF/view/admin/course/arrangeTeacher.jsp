@@ -204,25 +204,25 @@ if(request.getAttribute("teacherNoCourseList")!=null){
    			alert("请填写正确的开课年度！范围1970~2100");
    		 }else{ 
    			 if(confirm("确认要安排课程给该教师吗？")){
-   			 var data = decodeURIComponent($("#form5").serialize(),true);
-   			 data = data + "&c"
+//    			 var data = decodeURIComponent($("#form5").serialize(),true);
+   			 data = "tid="+tid + "&cid="+courseId+"&year="+year+term;
    			 console.log("data= "+data);
-<%--    			 var url = "<%=basePath%>admin/updateCourse"; --%>
-//    			 $.ajax({
-//    			       	type : "POST",
-//    			       	url : url,
-//    			       	data : data+"&indexid="+courseId,
-//    			       	dataType : "json",
-//    			       	success : function(data){
-//    			       		if(data.msg=="SUCCESS"){
-//    			       			alert("修改成功！！");
-<%--    			       			window.location = "<%=basePath%>admin/courseList"; --%>
-//    			       		}else{
-//    			       		 	alert(data.msg);
-//    			       		}
-//    			      	}
+   			 var url = "<%=basePath%>admin/arrangeTeacher";
+   			jQuery .ajax({
+   			       	type : "POST",
+   			       	url : url,
+   			       	data : data,
+   			       	dataType : "json",
+   			       	success : function(data){
+   			       		if(data.msg=="SUCCESS"){
+   			       			alert("安排成功！！");
+   			       			window.location = "<%=basePath%>admin/courseList";
+   			       		}else{
+   			       		 	alert(data.msg);
+   			       		}
+   			      	}
    			     			
-//    			 });
+   			 });
    			 
    			 }
    		 }

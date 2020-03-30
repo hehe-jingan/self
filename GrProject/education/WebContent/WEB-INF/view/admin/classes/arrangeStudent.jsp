@@ -64,7 +64,7 @@ if(request.getAttribute("ids")!=null){
 				<div class="col-md-12">
 					<div class="card">
 						<div class="card-header">
-							<strong class="card-title">学生安排</strong>
+							<strong class="card-title">学生安排（<%=classes.getName() %>）</strong>
 						</div>
 						<div class="card-body">
 							<!-- Credit Card -->

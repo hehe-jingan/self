@@ -20,6 +20,9 @@
 				<li><a href="<%=basePath%>admin/studentList"> <i
 						class="menu-icon fa fa-users"></i>学生管理
 				</a></li>
+				<li><a href="<%=basePath%>admin/supervisorList"> <i
+						class="menu-icon fa fa-users"></i>督导管理
+				</a></li>
 				<li class="menu-title">课程模块</li>
 				<!-- /.menu-title -->
 
@@ -29,11 +32,11 @@
 				<li><a href="<%=basePath%>admin/courseList"> <i
 						class="menu-icon  fa-mail-forward (alias)"></i>课程管理
 				</a></li>
-				<li><a href="<%=basePath%>admin/bookList"> <i
+				<li><a href="<%=basePath%>admin/courseArrangeList"> <i
 						class="menu-icon fa-book"></i>课程编排
 				</a></li>
 				<li class="menu-title">评价模块</li>
-				<li><a href="<%=basePath%>content/contentList"> <i
+				<li><a href="<%=basePath%>admin/evaluationList"> <i
 						class="menu-icon fa-comments"></i>评价管理
 				</a></li>
 				<li class="menu-title">个人模块</li>

@@ -6,8 +6,6 @@ package com.education.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,10 +21,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
 import com.education.pojo.User;
-import com.education.service.BookContentService;
-import com.education.service.BookService;
-import com.education.service.BorrowService;
-import com.education.service.MessageService;
 import com.education.service.UserService;
 import com.education.utils.CommandMethods;
 
@@ -41,121 +35,7 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@Autowired
-	private MessageService messageService;
 
-	@Autowired
-	private BookService bookService;
-
-	@Autowired
-	private BorrowService borrowSerice;
-	
-	@Autowired
-	private BookContentService bookContentService;
-
-	// 获取所有续借图书
-		@RequestMapping(value = "/allOnlineBook", method = RequestMethod.GET)
-		public ModelAndView showAllOnlineBook(HttpServletRequest request) {
-			ModelAndView mv = new ModelAndView("user/allOnlineList");
-			List<HashMap<String, Object>> lists = borrowSerice.getAllBorrowBook(request,"预借中");
-			mv.addObject("borrowList", lists);
-
-			return mv;
-		}
-	
-	//在线续借
-	@RequestMapping(value="/reNewBook",method= RequestMethod.POST)
-	@ResponseBody
-	public JSONObject reNewBook(HttpServletRequest request,Integer borrowId){
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("msg", borrowSerice.reNewBook(borrowId));
-		return jsonObject;
-	}
-	
-	// 获取所有续借图书
-	@RequestMapping(value = "/allReNewBook", method = RequestMethod.GET)
-	public ModelAndView showAllReNewBook(HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView("user/allReNewList");
-		List<HashMap<String, Object>> lists = borrowSerice.getAllBorrowBook(request,"续借中");
-		mv.addObject("borrowList", lists);
-
-		return mv;
-	}
-
-	// 获取所有租借图书
-	@RequestMapping(value = "/allBorrowBook", method = RequestMethod.GET)
-	public ModelAndView showAllBorrowBook(HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView("user/allBorrowList");
-
-		List<HashMap<String, Object>> lists = borrowSerice.getAllBorrowBook(request,"租借中");
-		mv.addObject("borrowList", lists);
-
-		return mv;
-	}
-
-	// 在线预借
-	@RequestMapping(value = "/preBorrowBook", method = RequestMethod.POST)
-	@ResponseBody
-	public JSONObject preBorrowBook(HttpServletRequest request, Integer bookId) {
-		JSONObject jsonObject = new JSONObject();
-
-		User user = null;
-		if (request.getSession().getAttribute("user") == null) {
-			jsonObject.put("msg", "用户未登录！！");
-			return jsonObject;
-		}
-		user = (User) request.getSession().getAttribute("user");
-		jsonObject.put("msg", borrowSerice.preBorrowBook(bookId, user.getCertno()));
-		return jsonObject;
-	}
-	
-	//书籍评论删除
-		@RequestMapping(value="/deleteBookContent",method=RequestMethod.POST)
-		@ResponseBody
-		public JSONObject deleteBookContent(Integer bookContentId){
-			JSONObject jsonObject = new JSONObject();
-			jsonObject.put("msg", bookContentService.deleteContent(bookContentId));
-			return jsonObject;
-		}
-	
-	
-	//书籍评论
-	@RequestMapping(value="/addBookContent",method=RequestMethod.POST)
-	@ResponseBody
-	public JSONObject addBookContent(Integer userId,Integer bookId,String val){
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("msg", bookContentService.addContent(bookId, userId, val));
-		return jsonObject;
-	}
-	
-
-	// 书籍详情页面
-	@RequestMapping(value = "/bookDetail/{bookId}", method = RequestMethod.GET)
-	public ModelAndView showOnline(@PathVariable Integer bookId) {
-		ModelAndView mv = new ModelAndView("user/bookDetail");
-		mv.addObject("bookContentList",bookContentService.getAllBookContent());
-		mv.addObject("book", bookService.getBookById(bookId));
-		return mv;
-	}
-
-	// 书籍管理页面
-	@RequestMapping(value = "/bookList", method = RequestMethod.GET)
-	public ModelAndView showAllBook() {
-		ModelAndView mv = new ModelAndView("user/bookList");
-		mv.addObject("bookList", bookService.getAllBook());
-		return mv;
-	}
-
-	// 获取通知数量
-	@RequestMapping(value = "/getMessageCount", method = RequestMethod.POST)
-	@ResponseBody
-	public JSONObject getMessageCount(Integer userId) {
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("msg", "success");
-		jsonObject.put("data", messageService.countMessage(userId, "用户"));
-
-		return jsonObject;
-	}
 
 	// 主页
 	@RequestMapping(value = "/index", method = RequestMethod.GET)
