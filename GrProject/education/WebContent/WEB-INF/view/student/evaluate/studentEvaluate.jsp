@@ -1,3 +1,4 @@
+<%@page import="com.education.pojo.EvaItem"%>
 <%@page import="com.education.pojo.CourseArrange"%>
 <%@page import="com.education.pojo.Teacher"%>
 <%@page import="java.util.ArrayList"%>
@@ -23,17 +24,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <%@include file="../model/stuHeader.jsp"%>
 </head>
-<% 
-String pageFlag = "false";
-CourseArrange courseArrange = new CourseArrange();
+<%
+	String pageFlag = "false";
+	CourseArrange courseArrange = new CourseArrange();
+	List<EvaItem> evaItem = new ArrayList<EvaItem>();
+	if (request.getAttribute("evaItemLists") != null) {
+		evaItem = (List<EvaItem>) request.getAttribute("evaItemLists");
+	}
 
-
-if(request.getAttribute("courseArrange")!=null){
-	courseArrange = (CourseArrange)request.getAttribute("courseArrange");
-	 pageFlag = "true";
-}
-
-
+	if (request.getAttribute("courseArrange") != null) {
+		courseArrange = (CourseArrange) request.getAttribute("courseArrange");
+		pageFlag = "true";
+	}
 %>
 <body>
 	<!-- Left Panel -->
@@ -56,58 +58,53 @@ if(request.getAttribute("courseArrange")!=null){
 						<div class="card-body">
 							<!-- Credit Card -->
 							<div id="pay-invoice">
-								<div class="card-body col-md-3">
-									<form action="#" method="post" novalidate="novalidate"
-										id="form5">
+
+								<form action="#" method="post" novalidate="novalidate"
+									id="form5">
+									<div class="card-body col-md-3">
 										<div class="form-group text-center"></div>
 										<div class="form-group">
 											<label for="cc-payment" class="control-label mb-1">课程名称</label>
 											<input type="text" id="" name="" disabled
 												class="form-control" aria-required="true"
-												aria-invalid="false" value="<%=courseArrange.getCourse().getName()%>">
+												aria-invalid="false"
+												value="<%=courseArrange.getCourse().getName()%>">
 										</div>
 										<div class="form-group">
 											<label for="cc-payment" class="control-label mb-1">教师名字</label>
 											<input type="text" id="" name="" disabled
 												class="form-control" aria-required="true"
-												aria-invalid="false" value="<%=courseArrange.getTeacher().getName()%>">
+												aria-invalid="false"
+												value="<%=courseArrange.getTeacher().getName()%>">
 										</div>
 										<div class="form-group">
 											<label for="cc-payment" class="control-label mb-1">年度</label>
-											<input type="text" id="" name=""  disabled
+											<input type="text" id="" name="" disabled
 												class="form-control" aria-required="true"
-												aria-invalid="false" value="<%=courseArrange.getYear().substring(0,4)+"年度第"+courseArrange.getYear().substring(4,6)+"学期" %>">
-												
+												aria-invalid="false"
+												value="<%=courseArrange.getYear().substring(0, 4) + "年度第" + courseArrange.getYear().substring(4, 6) + "学期"%>">
+
 										</div>
 										<div class="form-group">
-											<label for="cc-sex" class="control-label mb-1">是否开设</label> 
-											<br/> 
-											<select data-placeholder="请选择是否开设" id="" disabled
-												name="" class="form-control" tabindex="1">
-												<option value="1" <%="1".equals(courseArrange.getIsuse())?"selected":"" %>>开设中</option>
-												<option value="0" <%="0".equals(courseArrange.getIsuse())?"selected":"" %>>不开设</option>
+											<label for="cc-sex" class="control-label mb-1">是否开设</label> <br />
+											<select data-placeholder="请选择是否开设" id="" disabled name=""
+												class="form-control" tabindex="1">
+												<option value="1"
+													<%="1".equals(courseArrange.getIsuse()) ? "selected" : ""%>>开设中</option>
+												<option value="0"
+													<%="0".equals(courseArrange.getIsuse()) ? "selected" : ""%>>不开设</option>
 											</select>
 										</div>
 										<div class="form-group">
-											<label for="cc-sex" class="control-label mb-1">评分</label> 
-											<br/> 
-											<select data-placeholder="请选择评分" id="score" 
-												name="score" class="form-control" tabindex="1">
-												<option value="10">10</option>
-												<option value="9">9</option>
-												<option value="8">8</option>
-												<option value="7">7</option>
-												<option value="6">6</option>
-												<option value="5">5</option>
-												<option value="4">4</option>
-												<option value="3">3</option>
-												<option value="2">2</option>
-												<option value="1">1</option>
-											</select>
+											<label for="cc-sex" class="control-label mb-1">总评分（满分100）</label>
+											<input type="text" id="score" name="" class="form-control"
+												aria-required="true" aria-invalid="false" value=""
+												disabled="disabled"> <input id="scorehid"
+												name="score" value="" type="hidden" />
 										</div>
 										<div class="form-group">
 											<label for="cc-payment" class="control-label mb-1">评价</label>
-											<input type="text" id="content" name="content" 
+											<input type="text" id="content" name="content"
 												class="form-control" aria-required="true"
 												aria-invalid="false" value="">
 										</div>
@@ -118,12 +115,56 @@ if(request.getAttribute("courseArrange")!=null){
 												<i class="fa fa-lock fa-lg"></i>&nbsp; <span
 													id="payment-button-amount">提交</span>
 											</button>
-											 <button  type="button" id="returnBack" class="btn btn-lg btn-info ">
-                                                    <span id="payment-button-amount" >返回</span>
-                                                </button>
+											<button type="button" id="returnBack"
+												class="btn btn-lg btn-info ">
+												<span id="payment-button-amount">返回</span>
+											</button>
 										</div>
-									</form>
-								</div>
+
+									</div>
+									<div class="card-body col-md-4">
+										<div class="form-group">
+											<label for="cc-payment" class="control-label mb-1">分项评分</label>
+
+											<%
+												for (int i = 0; i < 10; i++) {
+											%>
+											<div class="form-group input-group">
+												<!-- 											<label for="cc-payment" class="control-label mb-1 col-md-2" > -->
+												<input type="text" id="" name=""
+													class="form-control col-md-1" aria-required="true"
+													aria-invalid="false" value="<%=(i + 1)%>" disabled="disabled"></label>
+												<%-- 												<input name="ids" value="<%=(i+1)%>" type="hidden"/> --%>
+												<input type="text" id="" name="content" class="form-control"
+													aria-required="true" aria-invalid="false"
+													value="<%=evaItem.get(i).getIname()%>" disabled="disabled">
+												<div class="form-group">
+													<!-- 											<label for="cc-sex" class="control-label mb-1">评分</label>  -->
+													<!-- 											<br/>  -->
+													<select data-placeholder="请选择评分"
+														id="scores<%=evaItem.get(i).getIndexid()%>" name="scores"
+														class="form-control" tabindex="1">
+														<option value="-1">请评分</option>
+														<option value="0">10</option>
+														<option value="9">9</option>
+														<option value="8">8</option>
+														<option value="7">7</option>
+														<option value="6">6</option>
+														<option value="5">5</option>
+														<option value="4">4</option>
+														<option value="3">3</option>
+														<option value="2">2</option>
+														<option value="1">1</option>
+													</select>
+												</div>
+											</div>
+											<%
+												}
+											%>
+										</div>
+									</div>
+								</form>
+
 							</div>
 
 						</div>
@@ -158,14 +199,14 @@ if(request.getAttribute("courseArrange")!=null){
 			<!-- /.site-footer -->
 		</div>
 		<!-- /#right-panel -->
-</div>
-		<!--Local Stuff-->
-		 
-		 
-		<script>
+	</div>
+	<!--Local Stuff-->
+
+
+	<script>
 		
 		$(document).ready(function() {
-   	  
+   	  var totalScore = 0;
     	var pageFlag = "<%=pageFlag%>";
     	
     	if(pageFlag == "false"){
@@ -173,23 +214,51 @@ if(request.getAttribute("courseArrange")!=null){
     		window.history.go(-1);
     	}
     	
+    	
+    	$("select[id^='scores']").on("change",function(){
+    		var id = $(this).prop("id").substring(6);
+    		var val = Number($(this).val());
+    		totalScore = totalScore + val;
+    		calculate();
+    		
+    		});
+    	//检查是否还有未评分项目
+    	function checkCal(){
+    		var flag = true;
+    		$("select[id^='scores']").each(function(index,element){
+    			var val = Number(element.value);
+    			if(val == -1){ 
+    				flag = false;
+    			}
+    		});
+    		return flag;
+    	}
+    	
+    	//合集总分
+    	function calculate(){
+    		totalScore = 0;
+    		$("select[id^='scores']").each(function(index,element){
+    			var val = Number(element.value);
+    			if(val == -1){ 
+    				totalScore = totalScore + 0;
+    			}else if(val == 0){
+    				totalScore = totalScore + 10;
+    			}else{
+    				totalScore = totalScore + val;
+    			}
+    			
+    		});
+    		$("#score").val(totalScore);
+			$("#scorehid").val(totalScore);
+    		}
+    	
     	$("#makeSure").click(function(){
    		 var courseId = "<%=courseArrange.getIndexid()%>";
    		 var year =  "<%=courseArrange.getYear()%>";
-//    		var content = jQuery("#content").val();
-
-//   		console.log("content="+content);
-  		
-//   		if(content==""){
-//    			 alert("请选择任课老师！");
-//    		 }else if(year==""){
-//    			alert("请填写开课年度！");
-//    		 }else if(year<=1970||year>=2100){
-//    			alert("请填写正确的开课年度！范围1970~2100");
-//    		 }else{ 
-   			 if(confirm("确认要评价吗？")){
+   			 if(!checkCal()){
+   				alert("还有评分未完成，请评分！");
+   			 }else if(confirm("确认要评价吗？")){
    			 var data = decodeURIComponent($("#form5").serialize(),true);
-//    			 data = "tid="+tid + "&cid="+courseId+"&year="+year+term;
 				data = data+"&caid= "+courseId+"&year="+year;
    			 console.log("data= "+data);
    			 var url = "<%=basePath%>student/studentEvaluate";
@@ -198,6 +267,7 @@ if(request.getAttribute("courseArrange")!=null){
    			       	url : url,
    			       	data : data,
    			       	dataType : "json",
+   			     traditional:true,
    			       	success : function(data){
    			       		if(data.msg=="SUCCESS"){
    			       			alert("评价成功！！");
@@ -216,8 +286,8 @@ if(request.getAttribute("courseArrange")!=null){
    	 //返回
    	 $("#returnBack").click(function(){
    		window.location = "<%=basePath%>student/courseList";
-   	 });
-    });
-    </script>
+		});
+						});
+	</script>
 </body>
 </html>

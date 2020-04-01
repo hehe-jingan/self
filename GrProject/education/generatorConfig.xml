@@ -32,7 +32,7 @@
         </javaClientGenerator>    
         
 <!--         表信息   开启select Example 可以自定义查询模板-->
-        <table tableName="supervisor" domainObjectName="Supervisor"
+        <table tableName="eva_item" domainObjectName="EvaItem"
          enableUpdateByExample="true" enableDeleteByExample="true" 
         enableCountByExample="true"   enableSelectByExample="true" selectByExampleQueryId="true"
         ></table>  

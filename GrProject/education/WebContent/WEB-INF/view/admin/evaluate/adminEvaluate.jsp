@@ -1,3 +1,4 @@
+<%@page import="com.education.pojo.EvaItem"%>
 <%@page import="com.education.pojo.Evaluation"%>
 <%@page import="com.education.pojo.CourseArrange"%>
 <%@page import="com.education.pojo.Teacher"%>
@@ -33,7 +34,10 @@ if(request.getAttribute("evaluation")!=null){
 	ev = (Evaluation)request.getAttribute("evaluation");
 	 pageFlag = "true";
 }
-
+List<EvaItem> evaItem = new ArrayList<EvaItem>();
+if (request.getAttribute("evaItemLists") != null) {
+	evaItem = (List<EvaItem>) request.getAttribute("evaItemLists");
+}
 
 %>
 <body>
@@ -57,9 +61,9 @@ if(request.getAttribute("evaluation")!=null){
 						<div class="card-body">
 							<!-- Credit Card -->
 							<div id="pay-invoice">
+							<form action="#" method="post" novalidate="novalidate" id="form5">
 								<div class="card-body col-md-3">
-									<form action="#" method="post" novalidate="novalidate"
-										id="form5">
+									
 										<div class="form-group text-center"></div>
 										<div class="form-group">
 											<label for="cc-payment" class="control-label mb-1">课程名称</label>
@@ -89,23 +93,29 @@ if(request.getAttribute("evaluation")!=null){
 												<option value="0" <%="0".equals(ev.getIsDelete())?"selected":"" %>>不开设</option>
 											</select>
 										</div>
-										<div class="form-group">
-											<label for="cc-sex" class="control-label mb-1">评分</label> 
-											<br/> 
-											<select data-placeholder="请选择评分" id="score" 
-												name="score" class="form-control" tabindex="1">
+<!-- 										<div class="form-group"> -->
+<!-- 											<label for="cc-sex" class="control-label mb-1">评分</label>  -->
+<!-- 											<br/>  -->
+<!-- 											<select data-placeholder="请选择评分" id="score"  -->
+<!-- 												name="score" class="form-control" tabindex="1"> -->
 												
-												<option value="10.0">10</option>
-												<option value="9.0">9</option>
-												<option value="8.0">8</option>
-												<option value="7.0">7</option>
-												<option value="6.0">6</option>
-												<option value="5.0">5</option>
-												<option value="4.0">4</option>
-												<option value="3.0">3</option>
-												<option value="2.0">2</option>
-												<option value="1.0">1</option>
-											</select>
+<!-- 												<option value="10.0">10</option> -->
+<!-- 												<option value="9.0">9</option> -->
+<!-- 												<option value="8.0">8</option> -->
+<!-- 												<option value="7.0">7</option> -->
+<!-- 												<option value="6.0">6</option> -->
+<!-- 												<option value="5.0">5</option> -->
+<!-- 												<option value="4.0">4</option> -->
+<!-- 												<option value="3.0">3</option> -->
+<!-- 												<option value="2.0">2</option> -->
+<!-- 												<option value="1.0">1</option> -->
+<!-- 											</select> -->
+<!-- 										</div> -->
+										<div class="form-group">
+											<label for="cc-sex" class="control-label mb-1">总评分（满分100）</label>
+											<input type="text" id="score" name="" class="form-control"
+												aria-required="true" aria-invalid="false" value="<%=ev.getScore() %>"
+												disabled="disabled"> 
 										</div>
 										<div class="form-group">
 											<label for="cc-payment" class="control-label mb-1">评价</label>
@@ -125,8 +135,48 @@ if(request.getAttribute("evaluation")!=null){
                                                     <span id="payment-button-amount" >返回</span>
                                                 </button>
 										</div>
-									</form>
+									
 								</div>
+								<div class="card-body col-md-4">
+										<div class="form-group">
+											<label for="cc-payment" class="control-label mb-1">分项评分</label>
+
+											<%
+												for (int i = 0; i < 10; i++) {
+											%>
+											<div class="form-group input-group">
+												<!-- 											<label for="cc-payment" class="control-label mb-1 col-md-2" > -->
+												<input type="text" id="" name=""
+													class="form-control col-md-1" aria-required="true"
+													aria-invalid="false" value="<%=(i + 1)%>" disabled="disabled"></label>
+												<%-- 												<input name="ids" value="<%=(i+1)%>" type="hidden"/> --%>
+												<input type="text" id="" name="content" class="form-control"
+													aria-required="true" aria-invalid="false"
+													value="<%=evaItem.get(i).getIname()%>" disabled="disabled">
+												<div class="form-group">
+													<!-- 											<label for="cc-sex" class="control-label mb-1">评分</label>  -->
+													<!-- 											<br/>  -->
+													<select data-placeholder="请选择评分" disabled="disabled"
+														id="scores<%=evaItem.get(i).getIndexid()%>" name="scores" class="form-control" tabindex="1">
+														<% for(int j = 10 ; j>=1; j--){
+															int x = Integer.parseInt(ev.getSpare1().charAt(i)+"");
+															x = (x==0?10:x);
+															if(x==j){
+															%>
+															<option value="<%=j==10?0:j%>" selected="selected"><%=j%></option>
+															
+														<%}else{ %>
+														<option value="<%=j==10?0:j%>"><%=j%></option>
+														<%}} %>
+													</select>
+												</div>
+											</div>
+											<%
+												}
+											%>
+										</div>
+									</div>
+								</form>
 							</div>
 
 						</div>

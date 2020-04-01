@@ -30,6 +30,7 @@ import com.education.service.ClassesCourseArrangeService;
 import com.education.service.ClassesService;
 import com.education.service.CourseArrangeService;
 import com.education.service.CourseService;
+import com.education.service.EvaItemService;
 import com.education.service.EvaluationService;
 import com.education.service.StudentService;
 import com.education.service.SupervisorService;
@@ -74,9 +75,29 @@ public class AdminController {
 
 	@Autowired
 	private EvaluationService elService;
-
+	
+	@Autowired
+	private EvaItemService evaItemService;
+	
+	//评价分项保存
+	@RequestMapping(value="/evaItem",method=RequestMethod.POST)
+	@ResponseBody
+	public JSONObject editEvaItem(String[] ids,String[] content) {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("msg", evaItemService.editEvaItem(ids, content));
+		return jsonObject;
+	}
+	
+	//评价分项页面
+	@RequestMapping(value="/evaItem",method=RequestMethod.GET)
+	public ModelAndView showEvaItem() {
+		ModelAndView mv = new ModelAndView("admin/evaluate/editEvaItem");
+		mv.addObject("evaItem", evaItemService.getAllEvaItem());
+		return mv;
+	}
+	
 	// 评价删除
-	@RequestMapping(value = "deleteEvaluation/{evId}", method = RequestMethod.POST)
+	@RequestMapping(value = "/deleteEvaluation/{evId}", method = RequestMethod.POST)
 	@ResponseBody
 	public JSONObject deleteEvaluation(@PathVariable Integer evId) {
 		JSONObject jsonObject = new JSONObject();
@@ -91,7 +112,7 @@ public class AdminController {
 		ModelAndView mv = new ModelAndView("admin/evaluate/evaluateList");
 		List<Evaluation> evLists = elService.getAllEvalations();
 		mv.addObject("evLists", evLists);
-
+		
 		return mv;
 	}
 
@@ -113,6 +134,7 @@ public class AdminController {
 	@RequestMapping(value = "/adminEvaluate/{evId}", method = RequestMethod.GET)
 	public ModelAndView showEvaluate(@PathVariable Integer evId) {
 		ModelAndView mv = new ModelAndView("admin/evaluate/adminEvaluate");
+		mv.addObject("evaItemLists", evaItemService.getAllEvaItem());
 		mv.addObject("evaluation", elService.getEvaluationByEvId(evId));
 		return mv;
 

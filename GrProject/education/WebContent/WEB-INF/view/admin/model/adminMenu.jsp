@@ -39,6 +39,9 @@
 				<li><a href="<%=basePath%>admin/evaluationList"> <i
 						class="menu-icon fa-comments"></i>评价管理
 				</a></li>
+				<li><a href="<%=basePath%>admin/evaItem"> <i
+						class="menu-icon fa-comments"></i>评价分项
+				</a></li>
 				<li class="menu-title">个人模块</li>
 				<li><a href="<%=basePath%>admin/changePass"> <i
 						class="menu-icon fa-book"></i>修改密码
