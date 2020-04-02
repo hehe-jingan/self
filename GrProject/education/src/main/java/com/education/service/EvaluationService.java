@@ -24,6 +24,10 @@ public class EvaluationService {
 	@Autowired
 	private CourseArrangeMapper coaDao;
 	
+	public List<Evaluation> getAllEvaByGroupBy(List<String> val){
+		List<Evaluation> list = dao.selectAllEvaGroupBy(val);
+		return list;
+	}
 	
 	
 	//删除评价

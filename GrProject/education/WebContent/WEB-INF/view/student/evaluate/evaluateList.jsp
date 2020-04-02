@@ -72,6 +72,7 @@ if (request.getAttribute("evaItem") != null) {
 												<th>课程名称</th>
 												<th>任课教师</th>
 												<th>学年学期</th>
+												<th>班级</th>
 												<th>评分</th>
 												<th>评价内容</th>
 <!-- 												<th>操作</th> -->
@@ -88,6 +89,7 @@ if (request.getAttribute("evaItem") != null) {
 												<td><%=list.get(i).getCourse().getName()%></td>
 												<td><%=list.get(i).getTeacher().getName()%></td>
 												<td><%=year.substring(0, 4) + "年度第" + year.substring(4, 6) + "学期"%></td>
+												<td><%=list.get(i).getClName() %></td>
 												<td><a  href="#" id="spare<%=list.get(i).getSpare1() %>" data-am-modal="{closeOnConfirm	: false,target: '#showEvaItem', closeViaDimmer: 0, width: 400, height: 125}"><%=list.get(i).getScore()%> </a></td>
 												<td><%=list.get(i).getContent()%></td>
 <%-- 												<td><%=list.get(i).getSiseva()==0?"未评价":"已评价"%></td> --%>

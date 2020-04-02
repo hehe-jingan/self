@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
-import com.education.pojo.EvaItem;
 import com.education.pojo.Evaluation;
 import com.education.pojo.Teacher;
 import com.education.service.ClassesCourseArrangeService;

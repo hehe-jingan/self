@@ -1,369 +1,455 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.education.dao.EvaluationMapper" >
-  <resultMap id="BaseResultMap" type="com.education.pojo.Evaluation" >
-    <id column="indexId" property="indexid" jdbcType="INTEGER" />
-    <result column="sid" property="sid" jdbcType="INTEGER" />
-    <result column="caid" property="caid" jdbcType="INTEGER" />
-    <result column="score" property="score" jdbcType="DECIMAL" />
-    <result column="content" property="content" jdbcType="VARCHAR" />
-    <result column="year" property="year" jdbcType="VARCHAR" />
-    <result column="is_delete" property="isDelete" jdbcType="VARCHAR" />
-    <result column="inputDate" property="inputdate" jdbcType="TIMESTAMP" />
-    <result column="inputName" property="inputname" jdbcType="VARCHAR" />
-    <result column="modifyDate" property="modifydate" jdbcType="TIMESTAMP" />
-    <result column="modifyName" property="modifyname" jdbcType="VARCHAR" />
-    <result column="spare1" property="spare1" jdbcType="VARCHAR" />
-    <result column="spare2" property="spare2" jdbcType="VARCHAR" />
-    <association property="course" column="cid"
+<mapper namespace="com.education.dao.EvaluationMapper">
+	<resultMap id="BaseResultMap"
+		type="com.education.pojo.Evaluation">
+		<id column="indexId" property="indexid" jdbcType="INTEGER" />
+		<result column="sid" property="sid" jdbcType="INTEGER" />
+		<result column="caid" property="caid" jdbcType="INTEGER" />
+		<result column="score" property="score" jdbcType="DECIMAL" />
+		<result column="evaTotal" property="evatotal" jdbcType="DECIMAL" />
+		<result column="evaCount" property="evacount" jdbcType="INTEGER" />
+		<result column="evaAvg" property="evaavg" jdbcType="DECIMAL" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="clName" property="clName" jdbcType="VARCHAR" />
+		<result column="year" property="year" jdbcType="VARCHAR" />
+		<result column="is_delete" property="isDelete"
+			jdbcType="VARCHAR" />
+		<result column="inputDate" property="inputdate"
+			jdbcType="TIMESTAMP" />
+		<result column="inputName" property="inputname"
+			jdbcType="VARCHAR" />
+		<result column="modifyDate" property="modifydate"
+			jdbcType="TIMESTAMP" />
+		<result column="modifyName" property="modifyname"
+			jdbcType="VARCHAR" />
+		<result column="spare1" property="spare1" jdbcType="VARCHAR" />
+		<result column="spare2" property="spare2" jdbcType="VARCHAR" />
+		<association property="course" column="cid"
 			javaType="com.education.pojo.Course">
 			<id property="indexid" column="cid" />
 			<result column="cName" property="name" jdbcType="VARCHAR" />
 			<result column="cIsUse" property="isUse" jdbcType="VARCHAR" />
-			<result column="cspare1" property="spare1" jdbcType="TIMESTAMP" />
+			<result column="cspare1" property="spare1"
+				jdbcType="TIMESTAMP" />
 			<result column="cspare2" property="spare2" jdbcType="VARCHAR" />
 		</association>
-		 <association property="student" column="sid"
+		<association property="student" column="sid"
 			javaType="com.education.pojo.Student">
 			<id property="indexid" column="sid" />
 			<result column="stuName" property="name" jdbcType="VARCHAR" />
 		</association>
-		<association property="teacher" column="tid" javaType="com.education.pojo.Teacher">
+		<association property="teacher" column="tid"
+			javaType="com.education.pojo.Teacher">
 			<id property="indexid" column="tid" />
 			<result column="tName" property="name" jdbcType="VARCHAR" />
 			<result column="age" property="age" jdbcType="VARCHAR" />
 			<result column="sex" property="sex" jdbcType="VARCHAR" />
-			<result column="tspare1" property="spare1" jdbcType="TIMESTAMP" />
+			<result column="tspare1" property="spare1"
+				jdbcType="TIMESTAMP" />
 			<result column="tspare2" property="spare2" jdbcType="VARCHAR" />
 		</association>
-  </resultMap>
-  <sql id="Example_Where_Clause" >
-    <where >
-      <foreach collection="oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and e.${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and e.${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and e.${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and e.${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Update_By_Example_Where_Clause" >
-    <where >
-      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
-        <if test="criteria.valid" >
-          <trim prefix="(" suffix=")" prefixOverrides="and" >
-            <foreach collection="criteria.criteria" item="criterion" >
-              <choose >
-                <when test="criterion.noValue" >
-                  and ${criterion.condition}
-                </when>
-                <when test="criterion.singleValue" >
-                  and ${criterion.condition} #{criterion.value}
-                </when>
-                <when test="criterion.betweenValue" >
-                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
-                </when>
-                <when test="criterion.listValue" >
-                  and ${criterion.condition}
-                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
-                    #{listItem}
-                  </foreach>
-                </when>
-              </choose>
-            </foreach>
-          </trim>
-        </if>
-      </foreach>
-    </where>
-  </sql>
-  <sql id="Base_Column_List" >
-    e.indexId, e.sid, e.caid, e.score, e.content, e.year, e.is_delete, e.inputDate, e.inputName, e.modifyDate, 
-    e.modifyName, e.spare1, e.spare2,t.name as tName,t.email,t.sex,t.age,t.onjob,c.name as cName,c.is_use as cIsUse,
-		c.spare1 as cspare,c.spare2 as cspare2,s.name as stuName 
-  </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.education.pojo.EvaluationExample" >
-    select
-    <if test="distinct" >
-      distinct
-    </if>
-    'true' as QUERYID,
-    <include refid="Base_Column_List" />
-    from evaluation e
-    left join course_arrange ca on ca.indexId = e.caid
-	left join course c on c.indexId = ca.cid
-	left join teacher t on t.indexId = ca.tid
-	left join student s on s.indexId = e.sid
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null" >
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from evaluation e
-    left join course_arrange ca on ca.indexId = e.caid
-	left join course c on c.indexId = ca.cid
-	left join teacher t on t.indexId = ca.tid
-	left join student s on s.indexId = e.sid
-    where e.indexId = #{indexid,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from evaluation
-    where indexId = #{indexid,jdbcType=INTEGER}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.education.pojo.EvaluationExample" >
-    delete from evaluation
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.education.pojo.Evaluation" >
-    insert into evaluation (indexId, sid, caid, 
-      score, content, year, 
-      is_delete, inputDate, inputName, 
-      modifyDate, modifyName, spare1, 
-      spare2)
-    values (#{indexid,jdbcType=INTEGER}, #{sid,jdbcType=INTEGER}, #{caid,jdbcType=INTEGER}, 
-      #{score,jdbcType=DECIMAL}, #{content,jdbcType=VARCHAR}, #{year,jdbcType=VARCHAR}, 
-      #{isDelete,jdbcType=VARCHAR}, #{inputdate,jdbcType=TIMESTAMP}, #{inputname,jdbcType=VARCHAR}, 
-      #{modifydate,jdbcType=TIMESTAMP}, #{modifyname,jdbcType=VARCHAR}, #{spare1,jdbcType=VARCHAR}, 
-      #{spare2,jdbcType=VARCHAR})
-  </insert>
-  <insert id="insertSelective" parameterType="com.education.pojo.Evaluation" >
-    insert into evaluation
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="indexid != null" >
-        indexId,
-      </if>
-      <if test="sid != null" >
-        sid,
-      </if>
-      <if test="caid != null" >
-        caid,
-      </if>
-      <if test="score != null" >
-        score,
-      </if>
-      <if test="content != null" >
-        content,
-      </if>
-      <if test="year != null" >
-        year,
-      </if>
-      <if test="isDelete != null" >
-        is_delete,
-      </if>
-      <if test="inputdate != null" >
-        inputDate,
-      </if>
-      <if test="inputname != null" >
-        inputName,
-      </if>
-      <if test="modifydate != null" >
-        modifyDate,
-      </if>
-      <if test="modifyname != null" >
-        modifyName,
-      </if>
-      <if test="spare1 != null" >
-        spare1,
-      </if>
-      <if test="spare2 != null" >
-        spare2,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="indexid != null" >
-        #{indexid,jdbcType=INTEGER},
-      </if>
-      <if test="sid != null" >
-        #{sid,jdbcType=INTEGER},
-      </if>
-      <if test="caid != null" >
-        #{caid,jdbcType=INTEGER},
-      </if>
-      <if test="score != null" >
-        #{score,jdbcType=DECIMAL},
-      </if>
-      <if test="content != null" >
-        #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="year != null" >
-        #{year,jdbcType=VARCHAR},
-      </if>
-      <if test="isDelete != null" >
-        #{isDelete,jdbcType=VARCHAR},
-      </if>
-      <if test="inputdate != null" >
-        #{inputdate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="inputname != null" >
-        #{inputname,jdbcType=VARCHAR},
-      </if>
-      <if test="modifydate != null" >
-        #{modifydate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifyname != null" >
-        #{modifyname,jdbcType=VARCHAR},
-      </if>
-      <if test="spare1 != null" >
-        #{spare1,jdbcType=VARCHAR},
-      </if>
-      <if test="spare2 != null" >
-        #{spare2,jdbcType=VARCHAR},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.education.pojo.EvaluationExample" resultType="java.lang.Integer" >
-    select count(*) from evaluation
-    <if test="_parameter != null" >
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map" >
-    update evaluation
-    <set >
-      <if test="record.indexid != null" >
-        indexId = #{record.indexid,jdbcType=INTEGER},
-      </if>
-      <if test="record.sid != null" >
-        sid = #{record.sid,jdbcType=INTEGER},
-      </if>
-      <if test="record.caid != null" >
-        caid = #{record.caid,jdbcType=INTEGER},
-      </if>
-      <if test="record.score != null" >
-        score = #{record.score,jdbcType=DECIMAL},
-      </if>
-      <if test="record.content != null" >
-        content = #{record.content,jdbcType=VARCHAR},
-      </if>
-      <if test="record.year != null" >
-        year = #{record.year,jdbcType=VARCHAR},
-      </if>
-      <if test="record.isDelete != null" >
-        is_delete = #{record.isDelete,jdbcType=VARCHAR},
-      </if>
-      <if test="record.inputdate != null" >
-        inputDate = #{record.inputdate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.inputname != null" >
-        inputName = #{record.inputname,jdbcType=VARCHAR},
-      </if>
-      <if test="record.modifydate != null" >
-        modifyDate = #{record.modifydate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.modifyname != null" >
-        modifyName = #{record.modifyname,jdbcType=VARCHAR},
-      </if>
-      <if test="record.spare1 != null" >
-        spare1 = #{record.spare1,jdbcType=VARCHAR},
-      </if>
-      <if test="record.spare2 != null" >
-        spare2 = #{record.spare2,jdbcType=VARCHAR},
-      </if>
-    </set>
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map" >
-    update evaluation
-    set indexId = #{record.indexid,jdbcType=INTEGER},
-      sid = #{record.sid,jdbcType=INTEGER},
-      caid = #{record.caid,jdbcType=INTEGER},
-      score = #{record.score,jdbcType=DECIMAL},
-      content = #{record.content,jdbcType=VARCHAR},
-      year = #{record.year,jdbcType=VARCHAR},
-      is_delete = #{record.isDelete,jdbcType=VARCHAR},
-      inputDate = #{record.inputdate,jdbcType=TIMESTAMP},
-      inputName = #{record.inputname,jdbcType=VARCHAR},
-      modifyDate = #{record.modifydate,jdbcType=TIMESTAMP},
-      modifyName = #{record.modifyname,jdbcType=VARCHAR},
-      spare1 = #{record.spare1,jdbcType=VARCHAR},
-      spare2 = #{record.spare2,jdbcType=VARCHAR}
-    <if test="_parameter != null" >
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.education.pojo.Evaluation" >
-    update evaluation
-    <set >
-      <if test="sid != null" >
-        sid = #{sid,jdbcType=INTEGER},
-      </if>
-      <if test="caid != null" >
-        caid = #{caid,jdbcType=INTEGER},
-      </if>
-      <if test="score != null" >
-        score = #{score,jdbcType=DECIMAL},
-      </if>
-      <if test="content != null" >
-        content = #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="year != null" >
-        year = #{year,jdbcType=VARCHAR},
-      </if>
-      <if test="isDelete != null" >
-        is_delete = #{isDelete,jdbcType=VARCHAR},
-      </if>
-      <if test="inputdate != null" >
-        inputDate = #{inputdate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="inputname != null" >
-        inputName = #{inputname,jdbcType=VARCHAR},
-      </if>
-      <if test="modifydate != null" >
-        modifyDate = #{modifydate,jdbcType=TIMESTAMP},
-      </if>
-      <if test="modifyname != null" >
-        modifyName = #{modifyname,jdbcType=VARCHAR},
-      </if>
-      <if test="spare1 != null" >
-        spare1 = #{spare1,jdbcType=VARCHAR},
-      </if>
-      <if test="spare2 != null" >
-        spare2 = #{spare2,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where indexId = #{indexid,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.education.pojo.Evaluation" >
-    update evaluation
-    set sid = #{sid,jdbcType=INTEGER},
-      caid = #{caid,jdbcType=INTEGER},
-      score = #{score,jdbcType=DECIMAL},
-      content = #{content,jdbcType=VARCHAR},
-      year = #{year,jdbcType=VARCHAR},
-      is_delete = #{isDelete,jdbcType=VARCHAR},
-      inputDate = #{inputdate,jdbcType=TIMESTAMP},
-      inputName = #{inputname,jdbcType=VARCHAR},
-      modifyDate = #{modifydate,jdbcType=TIMESTAMP},
-      modifyName = #{modifyname,jdbcType=VARCHAR},
-      spare1 = #{spare1,jdbcType=VARCHAR},
-      spare2 = #{spare2,jdbcType=VARCHAR}
-    where indexId = #{indexid,jdbcType=INTEGER}
-  </update>
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and e.${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and e.${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and e.${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and e.${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		e.indexId, e.sid, e.caid, e.score, e.content, e.year, e.is_delete, e.inputDate,
+		e.inputName, e.modifyDate,
+		e.modifyName, e.spare1, e.spare2,t.name as tName,t.email,t.sex,t.age,t.onjob,c.name
+		as cName,c.is_use as cIsUse,
+		c.spare1 as cspare,c.spare2 as
+		cspare2,s.name as stuName,cl.name as clName
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.education.pojo.EvaluationExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from evaluation e
+		left join course_arrange ca on ca.indexId = e.caid
+		left join course c on c.indexId = ca.cid
+		left join teacher t on t.indexId = ca.tid
+		left join student s on s.indexId = e.sid
+		left join classes cl on cl.indexId = s.classId
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from evaluation e
+		left join course_arrange ca on ca.indexId = e.caid
+		left join course c on c.indexId = ca.cid
+		left join teacher t on t.indexId = ca.tid
+		left join student s on s.indexId = e.sid
+		left join classes cl on cl.indexId = s.classId
+		where e.indexId = #{indexid,jdbcType=INTEGER}
+	</select>
+
+<select id="selectAllEvaGroupByWithTid" resultMap="BaseResultMap" >
+		select
+		e.indexId, e.sid, e.caid, e.score, e.content, e.year, e.is_delete, e.inputDate,
+		e.inputName, e.modifyDate,
+		e.modifyName, e.spare1, e.spare2,t.name as tName,t.email,t.sex,t.age,t.onjob,co.name
+		as cName,co.is_use as cIsUse,
+		co.spare1 as cspare,co.spare2 as
+		cspare2,s.name as stuName,sum(e.score) as evaTotal,count(e.score)as evaCount,
+		round(sum(e.score)/count(e.score),2) as evaAvg,cl.name as clName
+		from evaluation e
+		left join course_arrange coa on coa.indexId = e.caid
+		left join course co on coa.cid = co.indexId
+		left join teacher t on t.indexId = coa.tid
+		left join student s on s.indexId = e.sid
+		left join classes cl on cl.indexId = s.classId
+		where t.indexId = #{tid,jdbcType=INTEGER}
+		group by 
+		<foreach collection="list" item="listItem"
+									 separator=",">
+									 ${listItem}
+									</foreach>
+		
+	</select>
+
+
+	<select id="selectAllEvaGroupBy" resultMap="BaseResultMap">
+		select
+		e.indexId, e.sid, e.caid, e.score, e.content, e.year, e.is_delete, e.inputDate,
+		e.inputName, e.modifyDate,
+		e.modifyName, e.spare1, e.spare2,t.name as tName,t.email,t.sex,t.age,t.onjob,co.name
+		as cName,co.is_use as cIsUse,
+		co.spare1 as cspare,co.spare2 as
+		cspare2,s.name as stuName,sum(e.score) as evaTotal,count(e.score)as evaCount,
+		round(sum(e.score)/count(e.score),2) as evaAvg,cl.name as clName
+		from evaluation e
+		left join course_arrange coa on coa.indexId = e.caid
+		left join course co on coa.cid = co.indexId
+		left join teacher t on t.indexId = coa.tid
+		left join student s on s.indexId = e.sid
+		left join classes cl on cl.indexId = s.classId
+<!-- 		group by ${0,jdbcType=VARCHAR},${1,jdbcType=VARCHAR} -->
+		group by 
+<!-- 		group by #{0,jdbcType=VARCHAR},#{1,jdbcType=VARCHAR} -->
+<!-- 		t.indexId,cl.indexId -->
+		<foreach collection="list" item="listItem" separator=",">
+									 ${listItem}
+									</foreach>
+	</select>
+
+	<delete id="deleteByPrimaryKey"
+		parameterType="java.lang.Integer">
+		delete from evaluation
+		where indexId = #{indexid,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.education.pojo.EvaluationExample">
+		delete from evaluation
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert"
+		parameterType="com.education.pojo.Evaluation">
+		insert into evaluation (indexId, sid, caid,
+		score, content, year,
+		is_delete, inputDate, inputName,
+		modifyDate, modifyName, spare1,
+		spare2)
+		values (#{indexid,jdbcType=INTEGER}, #{sid,jdbcType=INTEGER},
+		#{caid,jdbcType=INTEGER},
+		#{score,jdbcType=DECIMAL}, #{content,jdbcType=VARCHAR}, #{year,jdbcType=VARCHAR},
+		#{isDelete,jdbcType=VARCHAR}, #{inputdate,jdbcType=TIMESTAMP},
+		#{inputname,jdbcType=VARCHAR},
+		#{modifydate,jdbcType=TIMESTAMP}, #{modifyname,jdbcType=VARCHAR}, #{spare1,jdbcType=VARCHAR},
+		#{spare2,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.education.pojo.Evaluation">
+		insert into evaluation
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="indexid != null">
+				indexId,
+			</if>
+			<if test="sid != null">
+				sid,
+			</if>
+			<if test="caid != null">
+				caid,
+			</if>
+			<if test="score != null">
+				score,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+			<if test="year != null">
+				year,
+			</if>
+			<if test="isDelete != null">
+				is_delete,
+			</if>
+			<if test="inputdate != null">
+				inputDate,
+			</if>
+			<if test="inputname != null">
+				inputName,
+			</if>
+			<if test="modifydate != null">
+				modifyDate,
+			</if>
+			<if test="modifyname != null">
+				modifyName,
+			</if>
+			<if test="spare1 != null">
+				spare1,
+			</if>
+			<if test="spare2 != null">
+				spare2,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="indexid != null">
+				#{indexid,jdbcType=INTEGER},
+			</if>
+			<if test="sid != null">
+				#{sid,jdbcType=INTEGER},
+			</if>
+			<if test="caid != null">
+				#{caid,jdbcType=INTEGER},
+			</if>
+			<if test="score != null">
+				#{score,jdbcType=DECIMAL},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=VARCHAR},
+			</if>
+			<if test="year != null">
+				#{year,jdbcType=VARCHAR},
+			</if>
+			<if test="isDelete != null">
+				#{isDelete,jdbcType=VARCHAR},
+			</if>
+			<if test="inputdate != null">
+				#{inputdate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="inputname != null">
+				#{inputname,jdbcType=VARCHAR},
+			</if>
+			<if test="modifydate != null">
+				#{modifydate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyname != null">
+				#{modifyname,jdbcType=VARCHAR},
+			</if>
+			<if test="spare1 != null">
+				#{spare1,jdbcType=VARCHAR},
+			</if>
+			<if test="spare2 != null">
+				#{spare2,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.education.pojo.EvaluationExample"
+		resultType="java.lang.Integer">
+		select count(*) from evaluation
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update evaluation
+		<set>
+			<if test="record.indexid != null">
+				indexId = #{record.indexid,jdbcType=INTEGER},
+			</if>
+			<if test="record.sid != null">
+				sid = #{record.sid,jdbcType=INTEGER},
+			</if>
+			<if test="record.caid != null">
+				caid = #{record.caid,jdbcType=INTEGER},
+			</if>
+			<if test="record.score != null">
+				score = #{record.score,jdbcType=DECIMAL},
+			</if>
+			<if test="record.content != null">
+				content = #{record.content,jdbcType=VARCHAR},
+			</if>
+			<if test="record.year != null">
+				year = #{record.year,jdbcType=VARCHAR},
+			</if>
+			<if test="record.isDelete != null">
+				is_delete = #{record.isDelete,jdbcType=VARCHAR},
+			</if>
+			<if test="record.inputdate != null">
+				inputDate = #{record.inputdate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.inputname != null">
+				inputName = #{record.inputname,jdbcType=VARCHAR},
+			</if>
+			<if test="record.modifydate != null">
+				modifyDate = #{record.modifydate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.modifyname != null">
+				modifyName = #{record.modifyname,jdbcType=VARCHAR},
+			</if>
+			<if test="record.spare1 != null">
+				spare1 = #{record.spare1,jdbcType=VARCHAR},
+			</if>
+			<if test="record.spare2 != null">
+				spare2 = #{record.spare2,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update evaluation
+		set indexId = #{record.indexid,jdbcType=INTEGER},
+		sid = #{record.sid,jdbcType=INTEGER},
+		caid = #{record.caid,jdbcType=INTEGER},
+		score = #{record.score,jdbcType=DECIMAL},
+		content = #{record.content,jdbcType=VARCHAR},
+		year = #{record.year,jdbcType=VARCHAR},
+		is_delete = #{record.isDelete,jdbcType=VARCHAR},
+		inputDate = #{record.inputdate,jdbcType=TIMESTAMP},
+		inputName = #{record.inputname,jdbcType=VARCHAR},
+		modifyDate = #{record.modifydate,jdbcType=TIMESTAMP},
+		modifyName = #{record.modifyname,jdbcType=VARCHAR},
+		spare1 = #{record.spare1,jdbcType=VARCHAR},
+		spare2 = #{record.spare2,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.education.pojo.Evaluation">
+		update evaluation
+		<set>
+			<if test="sid != null">
+				sid = #{sid,jdbcType=INTEGER},
+			</if>
+			<if test="caid != null">
+				caid = #{caid,jdbcType=INTEGER},
+			</if>
+			<if test="score != null">
+				score = #{score,jdbcType=DECIMAL},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=VARCHAR},
+			</if>
+			<if test="year != null">
+				year = #{year,jdbcType=VARCHAR},
+			</if>
+			<if test="isDelete != null">
+				is_delete = #{isDelete,jdbcType=VARCHAR},
+			</if>
+			<if test="inputdate != null">
+				inputDate = #{inputdate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="inputname != null">
+				inputName = #{inputname,jdbcType=VARCHAR},
+			</if>
+			<if test="modifydate != null">
+				modifyDate = #{modifydate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="modifyname != null">
+				modifyName = #{modifyname,jdbcType=VARCHAR},
+			</if>
+			<if test="spare1 != null">
+				spare1 = #{spare1,jdbcType=VARCHAR},
+			</if>
+			<if test="spare2 != null">
+				spare2 = #{spare2,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where indexId = #{indexid,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.education.pojo.Evaluation">
+		update evaluation
+		set sid = #{sid,jdbcType=INTEGER},
+		caid = #{caid,jdbcType=INTEGER},
+		score = #{score,jdbcType=DECIMAL},
+		content = #{content,jdbcType=VARCHAR},
+		year = #{year,jdbcType=VARCHAR},
+		is_delete = #{isDelete,jdbcType=VARCHAR},
+		inputDate = #{inputdate,jdbcType=TIMESTAMP},
+		inputName = #{inputname,jdbcType=VARCHAR},
+		modifyDate = #{modifydate,jdbcType=TIMESTAMP},
+		modifyName = #{modifyname,jdbcType=VARCHAR},
+		spare1 = #{spare1,jdbcType=VARCHAR},
+		spare2 = #{spare2,jdbcType=VARCHAR}
+		where indexId = #{indexid,jdbcType=INTEGER}
+	</update>
 </mapper>

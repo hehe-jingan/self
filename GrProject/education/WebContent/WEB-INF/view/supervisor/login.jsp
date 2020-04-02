@@ -47,7 +47,7 @@
                     <form id="studentLoginForm">
                         <div class="form-group">
                             <label>督导账号</label>
-                            <input type="text" class="form-control" placeholder="请输入账号" name="name" id="name"  value="1">
+                            <input type="text" class="form-control" placeholder="请输入账号" name="name" id="name"  value="supervisor">
                         </div>
                         <div class="form-group">
                             <label>密码</label>

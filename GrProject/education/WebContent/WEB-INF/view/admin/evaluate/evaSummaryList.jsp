@@ -12,14 +12,7 @@
 <%@taglib uri="/WEB-INF/fn.tld" prefix="fn"%>
 <%
 
-List<EvaItem> evaItem = new ArrayList<EvaItem>();
-if (request.getAttribute("evaItem") != null) {
-	evaItem = (List<EvaItem>) request.getAttribute("evaItem");
-}
-	List<Evaluation> list = null;
-	if (request.getAttribute("evLists") != null) {
-		list = (List<Evaluation>) request.getAttribute("evLists");
-	}
+	
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 %>
 <!doctype html>
@@ -58,56 +51,42 @@ if (request.getAttribute("evaItem") != null) {
 					<div class="row">
 
 						<div class="col-md-12">
-
+				
 							<div class="card">
 								<div class="card-header">
-									<strong class="card-title">评价列表</strong>
+									<strong class="card-title">评价统计</strong>
 									<!--                                   <span class="btn btn-lg btn-outline-secondary float-right" id="addCourseBtn">新增课程</span>  -->
 								</div>
 								<div class="card-body">
-									<table id="bootstrap-data-table"
-										class="table table-striped table-bordered">
-										<thead>
-											<tr>
-												<th>编号</th>
-												<th>课程名称</th>
-												<th>任课教师</th>
-												<th>学年学期</th>
-												<th>班级</th>
-												<th>评价学生</th>
-												<th>评分</th>
-												<th>评价内容</th>
-												<th>操作</th>
-											</tr>
-										</thead>
-										<tbody>
-											<%
-												if (list != null) {
-													for (int i = 0; i < list.size(); i++) {
-														String year = list.get(i).getYear();
-											%>
-											<tr>
-												<td><%=i + 1%></td>
-												<td><%=list.get(i).getCourse().getName()%></td>
-												<td><%=list.get(i).getTeacher().getName()%></td>
-												<td><%=year.substring(0, 4) + "年度第" + year.substring(4, 6) + "学期"%></td>
-												<td><%=list.get(i).getClName() %></td>
-												<td><%=list.get(i).getStudent().getName()%></td>
-												<td><a  href="#" id="spare<%=list.get(i).getSpare1() %>" data-am-modal="{closeOnConfirm	: false,target: '#showEvaItem', closeViaDimmer: 0, width: 400, height: 125}"><%=list.get(i).getScore()%> </a></td>
-												<td><%=list.get(i).getContent()%></td>
-												<td><a href="<%=basePath%>admin/adminEvaluate/<%=list.get(i).getIndexid()%>" >编辑</a>
-												<a href="#" id="deleteEvaluationBtn<%=list.get(i).getIndexid() %>" data-am-modal="{closeOnConfirm	: false,target: '#deleteAd', closeViaDimmer: 0, width: 400, height: 125}">删除</a>
-												</td>
-<%-- 													<a href="#" id="deleteCourseBtn<%=list.get(i).getIndexid()%>" --%>
-<!-- 													data-am-modal="{closeOnConfirm	: false,target: '#deleteAd', closeViaDimmer: 0, width: 400, height: 125}">删除</a> -->
-											</tr>
-											<%
-												}
-												}
-											%>
-										</tbody>
-									</table>
-								</div>
+                                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">
+                                        按教师-课程</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">
+                                        按教师-班级</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">
+                                        按教师</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content" id="pills-tabContent">
+                                    <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+<!--                                         <h3>Home</h3> -->
+                                        <%@include file="summary/groupByTeaAndCourse.jsp"%>
+                                     </div>
+                                    <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+<!--                                         <h3>Profile</h3> -->
+									<%@include file="summary/groupByTeaAndClass.jsp"%>
+                                    </div>
+                                    <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+<!--                                         <h3>Cotanct</h3> -->
+									<%@include file="summary/groupByTeacher.jsp"%>
+                                    </div>
+                                </div>
+                            </div>
 							</div>
 						</div>
 
@@ -140,48 +119,6 @@ if (request.getAttribute("evaItem") != null) {
 				</div>
 			</div>
 		</footer>
-		<div class="am-modal am-modal-prompt " tabindex="-1" id="showEvaItem"
-			style="margin-top: 300px;">
-			<div class="am-modal-dialog">
-				<div class="form-group col-md-11">
-											<label for="cc-payment" class="control-label mb-1">分项评分</label>
-										<div><label> </label> </div>
-
-											<%
-												for (int i = 0; i < 10; i++) {
-													
-											%>
-											<div class="form-group input-group">
-												<!-- 											<label for="cc-payment" class="control-label mb-1 col-md-2" > -->
-												<input type="text" id="" name=""
-													class="form-control col-md-1" aria-required="true"
-													aria-invalid="false" value="<%=(i + 1)%>" disabled="disabled"></label>
-												<%-- 												<input name="ids" value="<%=(i+1)%>" type="hidden"/> --%>
-												<input type="text" id="" name="content" class="form-control"
-													aria-required="true" aria-invalid="false"
-													value="<%=evaItem.get(i).getIname()%>" disabled="disabled">
-												<div class="form-group">
-													<!-- 											<label for="cc-sex" class="control-label mb-1">评分</label>  -->
-													<!-- 											<br/>  -->
-													<select data-placeholder="请选择评分" disabled="disabled"
-														id="scores<%=evaItem.get(i).getIndexid()%>" name="scores" class="form-control" tabindex="1">
-														<% for(int j = 10 ; j>=1; j--){
-															%>
-														<option id="evaItem<%=i+""+j%>" value="<%=j==10?0:j%>"><%=j%></option>
-														<%} %>
-													</select>
-												</div>
-											</div>
-											<%
-												}
-											%>
-										</div>
-				<div class="am-modal-hd"></div>
-				<div class="am-modal-footer">
-					 <span class="am-modal-btn">返回</span>
-				</div>
-			</div>
-		</div>
 		
 		<div class="am-modal am-modal-prompt " tabindex="-1" id="deleteAd"
 			style="margin-top: 300px;">
@@ -236,7 +173,17 @@ if (request.getAttribute("evaItem") != null) {
      var data = "";
      $(document).ready(function() {
     	 $('#bootstrap-data-table-export').DataTable();
+//     	 $('#bootstrap-data-table-export').DataTable();
     	 
+    	 $('#bootstrap-data-table2').DataTable();
+    	 $("a[id^='pills']").on('click',function(){
+    		console.log($(this).prop("id"));
+    		var id = $(this).prop("id").replace("-tab","");
+    		console.log("id="+id);
+    		$("#"+id).addClass("show");
+//     		 $("#"+id).prop("class", $(this).prop("class")+" show")
+    		 
+    	 });
     	 
 //     	 $("#menu3").addClass("active");
     	 var updataMessId = "";
@@ -250,29 +197,6 @@ if (request.getAttribute("evaItem") != null) {
     		data = "evId="+id;
     		console.log("data="+data);
     	 });
-    	 
-    	 $("a[id^='spare']").on("click",function(){
-    		 resetEva();
-    		 var evaitem = $(this).prop("id").substring(5);
-    		 for(i=0;i<10;i++){
-    			 for(j = 10 ; j>=1; j--){
-    				 var x = Number(evaitem.charAt(i)+"");
-						x = (x==0?10:x);
-						if(x == j){
-							 $("#evaItem"+i+""+j).prop("selected","selected");
-						}
-    			 }
-    			 
-    		 }
-    		 
-    	 });
-    	 
-    	 function resetEva(){
-    		 for(i=0;i<10;i++){
-    			 $("#evaItem"+i).prop("selected","");
-    		 }
-    	 }
-    	 
     	 
     	 $("#makeSure").click(function(){
     		

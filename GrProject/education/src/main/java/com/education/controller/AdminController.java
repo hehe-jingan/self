@@ -4,6 +4,8 @@
  */
 package com.education.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,9 +65,9 @@ public class AdminController {
 
 	@Autowired
 	private CourseService courseService;
-	
+
 	@Autowired
-	private  SupervisorService supervisorService;
+	private SupervisorService supervisorService;
 
 	@Autowired
 	private CourseArrangeService courseArrangeService;
@@ -75,28 +77,42 @@ public class AdminController {
 
 	@Autowired
 	private EvaluationService elService;
-	
+
 	@Autowired
 	private EvaItemService evaItemService;
-	
-	//评价分项保存
-	@RequestMapping(value="/evaItem",method=RequestMethod.POST)
+
+	// 课程评价统计列表页面
+	@RequestMapping(value = "/evaSummary", method = RequestMethod.GET)
+	public ModelAndView showEvaluationByValList(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("admin/evaluate/evaSummaryList");
+		List<Evaluation> evLists = elService.getAllEvaByGroupBy(new ArrayList<>(Arrays.asList("t.indexId "," co.indexId")));
+		List<Evaluation> list2 = elService.getAllEvaByGroupBy(new ArrayList<>(Arrays.asList("t.indexId "," cl.indexId")));
+		List<Evaluation> listT = elService.getAllEvaByGroupBy(new ArrayList<>(Arrays.asList("t.indexId ")));
+		
+		mv.addObject("evLists", evLists);
+		mv.addObject("list2", list2);
+		mv.addObject("listT", listT);
+		return mv;
+	}
+
+	// 评价分项保存
+	@RequestMapping(value = "/evaItem", method = RequestMethod.POST)
 	@ResponseBody
-	public JSONObject editEvaItem(String[] ids,String[] content) {
+	public JSONObject editEvaItem(String[] ids, String[] content) {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("msg", evaItemService.editEvaItem(ids, content));
 		return jsonObject;
 	}
-	
-	//评价分项页面
-	@RequestMapping(value="/evaItem",method=RequestMethod.GET)
+
+	// 评价分项页面
+	@RequestMapping(value = "/evaItem", method = RequestMethod.GET)
 	public ModelAndView showEvaItem() {
 		ModelAndView mv = new ModelAndView("admin/evaluate/editEvaItem");
-		
+
 		mv.addObject("evaItem", evaItemService.getAllEvaItem());
 		return mv;
 	}
-	
+
 	// 评价删除
 	@RequestMapping(value = "/deleteEvaluation/{evId}", method = RequestMethod.POST)
 	@ResponseBody
@@ -114,7 +130,7 @@ public class AdminController {
 		List<Evaluation> evLists = elService.getAllEvalations();
 		mv.addObject("evaItem", evaItemService.getAllEvaItem());
 		mv.addObject("evLists", evLists);
-		
+
 		return mv;
 	}
 
@@ -304,7 +320,7 @@ public class AdminController {
 	public ModelAndView showCourseList() {
 		ModelAndView mv = new ModelAndView("admin/course/courseList");
 		mv.addObject("courseList", courseService.getAllCourses());
-//		classArrangeService.getAllCourseArranges();
+		// classArrangeService.getAllCourseArranges();
 		return mv;
 	}
 
@@ -664,7 +680,8 @@ public class AdminController {
 		Admin admin = (Admin) request.getSession().getAttribute("admin");
 		if (admin == null) {
 			msg = "用户未登录！";
-		} else {
+		}
+		else {
 			msg = adminService.changePass(admin, newPass, oldPass, request);
 		}
 		jsonObject.put("msg", msg);
@@ -694,7 +711,8 @@ public class AdminController {
 
 		if (request.getSession().getAttribute("admin") == null) {
 			return mv;
-		} else {
+		}
+		else {
 			if ("logout".equals(flag)) {
 				request.getSession().removeAttribute("admin");
 			}
