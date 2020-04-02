@@ -18,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.alibaba.fastjson.JSONObject;
 import com.education.pojo.Evaluation;
 import com.education.pojo.Supervisor;
+import com.education.service.EvaItemService;
 import com.education.service.EvaluationService;
 import com.education.service.SupervisorService;
 
@@ -35,6 +36,8 @@ public class SupervisorController {
 	@Autowired
 	private EvaluationService elService;
 	
+	@Autowired
+	private EvaItemService evaItemService;
 	
 
 
@@ -43,6 +46,8 @@ public class SupervisorController {
 	public ModelAndView showEvaluationList(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("supervisor/evaluate/evaluateList");
 		List<Evaluation> evLists = elService.getAllEvalations();
+		mv.addObject("evaItem", evaItemService.getAllEvaItem());
+		
 		mv.addObject("evLists", evLists);
 		return mv;
 	}

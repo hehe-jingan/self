@@ -92,6 +92,7 @@ public class AdminController {
 	@RequestMapping(value="/evaItem",method=RequestMethod.GET)
 	public ModelAndView showEvaItem() {
 		ModelAndView mv = new ModelAndView("admin/evaluate/editEvaItem");
+		
 		mv.addObject("evaItem", evaItemService.getAllEvaItem());
 		return mv;
 	}
@@ -111,6 +112,7 @@ public class AdminController {
 	public ModelAndView showEvaluationList(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("admin/evaluate/evaluateList");
 		List<Evaluation> evLists = elService.getAllEvalations();
+		mv.addObject("evaItem", evaItemService.getAllEvaItem());
 		mv.addObject("evLists", evLists);
 		
 		return mv;

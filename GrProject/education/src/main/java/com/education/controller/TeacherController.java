@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.alibaba.fastjson.JSONObject;
+import com.education.pojo.EvaItem;
 import com.education.pojo.Evaluation;
 import com.education.pojo.Teacher;
 import com.education.service.ClassesCourseArrangeService;
 import com.education.service.ClassesService;
+import com.education.service.EvaItemService;
 import com.education.service.EvaluationService;
 import com.education.service.TeacherService;
 
@@ -45,6 +47,8 @@ public class TeacherController {
 	private ClassesService classesService;
 	
 
+	@Autowired
+	private EvaItemService evaItemService;
 	// 课程页面
 	@RequestMapping(value = "/classList", method = RequestMethod.GET)
 	public ModelAndView showClassesList(HttpServletRequest request) {
@@ -66,6 +70,8 @@ public class TeacherController {
 			return mv;
 		}
 		Teacher teacher = (Teacher) request.getSession().getAttribute("teacher");
+		mv.addObject("evaItem", evaItemService.getAllEvaItem());
+		
 		List<Evaluation> evLists = elService.getAllEvaluationByTeacherId(teacher.getIndexid());
 		mv.addObject("evLists", evLists);
 		return mv;

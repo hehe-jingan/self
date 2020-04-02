@@ -1,3 +1,5 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="com.education.pojo.EvaItem"%>
 <%@page import="com.education.pojo.Evaluation"%>
 <%@page import="com.education.pojo.CourseArrange"%>
 <%@page import="com.education.pojo.Course"%>
@@ -9,6 +11,11 @@
 <%@taglib uri="/WEB-INF/fmt.tld" prefix="fmt"%>
 <%@taglib uri="/WEB-INF/fn.tld" prefix="fn"%>
 <%
+
+List<EvaItem> evaItem = new ArrayList<EvaItem>();
+if (request.getAttribute("evaItem") != null) {
+	evaItem = (List<EvaItem>) request.getAttribute("evaItem");
+}
 	List<Evaluation> list = null;
 	if (request.getAttribute("evLists") != null) {
 		list = (List<Evaluation>) request.getAttribute("evLists");
@@ -84,7 +91,7 @@
 												<td><%=list.get(i).getTeacher().getName()%></td>
 												<td><%=year.substring(0, 4) + "年度第" + year.substring(4, 6) + "学期"%></td>
 												<td><%=list.get(i).getStudent().getName()%></td>
-												<td><%=list.get(i).getScore()%></td>
+												<td><a  href="#" id="spare<%=list.get(i).getSpare1() %>" data-am-modal="{closeOnConfirm	: false,target: '#showEvaItem', closeViaDimmer: 0, width: 400, height: 125}"><%=list.get(i).getScore()%> </a></td>
 												<td><%=list.get(i).getContent()%></td>
 												<td><a href="<%=basePath%>admin/adminEvaluate/<%=list.get(i).getIndexid()%>" >编辑</a>
 												<a href="#" id="deleteEvaluationBtn<%=list.get(i).getIndexid() %>" data-am-modal="{closeOnConfirm	: false,target: '#deleteAd', closeViaDimmer: 0, width: 400, height: 125}">删除</a>
@@ -131,6 +138,49 @@
 				</div>
 			</div>
 		</footer>
+		<div class="am-modal am-modal-prompt " tabindex="-1" id="showEvaItem"
+			style="margin-top: 300px;">
+			<div class="am-modal-dialog">
+				<div class="form-group col-md-11">
+											<label for="cc-payment" class="control-label mb-1">分项评分</label>
+										<div><label> </label> </div>
+
+											<%
+												for (int i = 0; i < 10; i++) {
+													
+											%>
+											<div class="form-group input-group">
+												<!-- 											<label for="cc-payment" class="control-label mb-1 col-md-2" > -->
+												<input type="text" id="" name=""
+													class="form-control col-md-1" aria-required="true"
+													aria-invalid="false" value="<%=(i + 1)%>" disabled="disabled"></label>
+												<%-- 												<input name="ids" value="<%=(i+1)%>" type="hidden"/> --%>
+												<input type="text" id="" name="content" class="form-control"
+													aria-required="true" aria-invalid="false"
+													value="<%=evaItem.get(i).getIname()%>" disabled="disabled">
+												<div class="form-group">
+													<!-- 											<label for="cc-sex" class="control-label mb-1">评分</label>  -->
+													<!-- 											<br/>  -->
+													<select data-placeholder="请选择评分" disabled="disabled"
+														id="scores<%=evaItem.get(i).getIndexid()%>" name="scores" class="form-control" tabindex="1">
+														<% for(int j = 10 ; j>=1; j--){
+															%>
+														<option id="evaItem<%=i+""+j%>" value="<%=j==10?0:j%>"><%=j%></option>
+														<%} %>
+													</select>
+												</div>
+											</div>
+											<%
+												}
+											%>
+										</div>
+				<div class="am-modal-hd"></div>
+				<div class="am-modal-footer">
+					 <span class="am-modal-btn">返回</span>
+				</div>
+			</div>
+		</div>
+		
 		<div class="am-modal am-modal-prompt " tabindex="-1" id="deleteAd"
 			style="margin-top: 300px;">
 			<div class="am-modal-dialog">
@@ -198,6 +248,29 @@
     		data = "evId="+id;
     		console.log("data="+data);
     	 });
+    	 
+    	 $("a[id^='spare']").on("click",function(){
+    		 resetEva();
+    		 var evaitem = $(this).prop("id").substring(5);
+    		 for(i=0;i<10;i++){
+    			 for(j = 10 ; j>=1; j--){
+    				 var x = Number(evaitem.charAt(i)+"");
+						x = (x==0?10:x);
+						if(x == j){
+							 $("#evaItem"+i+""+j).prop("selected","selected");
+						}
+    			 }
+    			 
+    		 }
+    		 
+    	 });
+    	 
+    	 function resetEva(){
+    		 for(i=0;i<10;i++){
+    			 $("#evaItem"+i).prop("selected","");
+    		 }
+    	 }
+    	 
     	 
     	 $("#makeSure").click(function(){
     		

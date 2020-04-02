@@ -60,6 +60,8 @@ public class StudentController {
 			return mv;
 		}
 		Student student = (Student)request.getSession().getAttribute("student");
+		mv.addObject("evaItem", evaItemService.getAllEvaItem());
+		
 		List<Evaluation> evLists = elService.getAllEvalationsByStudentId(student.getIndexid());
 		mv.addObject("evLists", evLists);
 		return mv;
