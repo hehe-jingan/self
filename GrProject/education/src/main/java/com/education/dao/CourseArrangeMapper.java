@@ -19,6 +19,8 @@ public interface CourseArrangeMapper {
     List<CourseArrange> selectByExample(CourseArrangeExample example);
 
     CourseArrange selectByPrimaryKey(Integer indexid);
+    
+    List<CourseArrange> selectAllTeacherCourse (Integer tid);
 
     int updateByExampleSelective(@Param("record") CourseArrange record, @Param("example") CourseArrangeExample example);
 

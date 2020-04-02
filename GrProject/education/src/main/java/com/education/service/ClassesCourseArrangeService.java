@@ -127,12 +127,8 @@ public class ClassesCourseArrangeService {
 
 	//根据教师Id获取所有课程信息
 	public List<CourseArrange> getCourseByTeacherId(Teacher teacher){
-		CourseArrangeExample example = new CourseArrangeExample();
-		CourseArrangeExample.Criteria criteria = example.createCriteria();
-		criteria.andTidEqualTo(teacher.getIndexid());
-		List<CourseArrange> list = coaDao.selectByExample(example);
+		List<CourseArrange> list = coaDao.selectAllTeacherCourse(teacher.getIndexid());
 		return list;
-		
 	}
 	
 	// 根据学生ID获取所有课程信息

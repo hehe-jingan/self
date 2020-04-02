@@ -84,11 +84,7 @@
 												<td><%="0".equals(list.get(i).getIsuse()) ? "不开设" : "开设中"%></td>
 <%-- 												<td><%=list.get(i).getSiseva()==0?"未评价":"已评价"%></td> --%>
 												<td>
-												<% if(Integer.valueOf(0).equals(list.get(i).getSiseva())){%>
-												未评价
-												<%}else{ %>
-												已评价
-												<%} %>
+												<%=list.get(i).getStuhaseva()%>/<%=list.get(i).getStutotal() %>
 <%-- 													<a href="#" id="deleteCourseBtn<%=list.get(i).getIndexid()%>" --%>
 <!-- 													data-am-modal="{closeOnConfirm	: false,target: '#deleteAd', closeViaDimmer: 0, width: 400, height: 125}">删除</a> -->
 											</td></tr>

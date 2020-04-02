@@ -7,6 +7,8 @@
 		<result column="cid" property="cid" jdbcType="INTEGER" />
 		<result column="clCount" property="clcount" jdbcType="INTEGER" />
 		<result column="tid" property="tid" jdbcType="INTEGER" />
+		<result column="stuTotal" property="stutotal" jdbcType="INTEGER" />
+		<result column="stuHasEva" property="stuhaseva" jdbcType="INTEGER" />
 		<result column="year" property="year" jdbcType="VARCHAR" />
 		<result column="isUse" property="isuse" jdbcType="VARCHAR" />
 		<result column="clName" property="clname" jdbcType="VARCHAR" />
@@ -39,7 +41,6 @@
 				jdbcType="TIMESTAMP" />
 			<result column="tspare2" property="spare2" jdbcType="VARCHAR" />
 		</association>
-
 	</resultMap>
 	<sql id="Example_Where_Clause">
 		<where>
@@ -135,6 +136,25 @@
 			order by ${orderByClause}
 		</if>
 	</select>
+	<select id="selectAllTeacherCourse" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		
+select e.indexId as eId,count(s.indexId) as stuTotal,sum(if(e.indexId is null,0,1)) as stuHasEva,
+coa.indexId, coa.cid, coa.tid, coa.year, coa.isUse, coa.inputDate, coa.inputName, coa.modifyDate,coa.modifyName, coa.spare1,coa.spare2 ,t.name as
+		tName,t.email,t.sex,t.age,t.onjob,
+		co.name as cName,co.is_use as cIsUse, co.spare1 as cspare,co.spare2 as cspare2,
+		cl.name as clName
+from course_arrange coa
+left join class_arrange cla on cla.caId = coa.indexId
+left join course co on co.indexId = coa.cid
+left join classes cl on cl.indexId = cla.classId
+left join student s on s.classId = cl.indexId
+left join evaluation e on s.indexId = e.sid and e.caid = coa.indexId
+left join teacher t on t.indexId = coa.tid
+where coa.tid = #{tid,jdbcType=INTEGER}
+group by coa.indexId,cl.indexId
+		</select>
+	
+	
 	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
 		parameterType="java.lang.Integer">
 		select

@@ -35,7 +35,28 @@ public class CourseArrange {
     
     private String clname;
     
-    public Integer getIndexid() {
+    private Integer stutotal;
+    
+    private String stuhaseva;
+    
+    
+    public Integer getStutotal() {
+		return stutotal;
+	}
+
+	public void setStutotal(Integer stutotal) {
+		this.stutotal = stutotal;
+	}
+
+	public String getStuhaseva() {
+		return stuhaseva;
+	}
+
+	public void setStuhaseva(String stuhaseva) {
+		this.stuhaseva = stuhaseva;
+	}
+
+	public Integer getIndexid() {
         return indexid;
     }
 
