@@ -4,6 +4,7 @@
  */
 package com.education.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,20 +15,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.education.dao.AdminMapper;
+import com.education.dao.ClassArrangeMapper;
 import com.education.dao.ClassesMapper;
 import com.education.dao.CourseArrangeMapper;
 import com.education.dao.CourseMapper;
 import com.education.dao.StudentMapper;
+import com.education.dao.SupervisorMapper;
 import com.education.dao.TeacherMapper;
 import com.education.dao.UserMapper;
 import com.education.pojo.Admin;
 import com.education.pojo.AdminExample;
 import com.education.pojo.AdminExample.Criteria;
+import com.education.pojo.ClassArrangeExample;
 import com.education.pojo.Classes;
+import com.education.pojo.ClassesExample;
 import com.education.pojo.Course;
+import com.education.pojo.CourseExample;
 import com.education.pojo.Student;
 import com.education.pojo.StudentExample;
+import com.education.pojo.Supervisor;
+import com.education.pojo.SupervisorExample;
 import com.education.pojo.Teacher;
+import com.education.pojo.TeacherExample;
 import com.education.pojo.User;
 import com.education.pojo.UserExample;
 import com.mysql.jdbc.StringUtils;
@@ -59,9 +68,19 @@ public class AdminService {
 	
 	@Autowired
 	private CourseArrangeMapper courseArrangeDao;
+	
+	@Autowired
+	private SupervisorMapper superDao;
+	
+	@Autowired
+	private ClassArrangeMapper classArrangeDao;
 
 	// 删除课程安排信息
 	public String deleteCourseArrange(Integer indexid) {
+		
+		
+		
+		
 		return courseArrangeDao.deleteByPrimaryKey(indexid)==1?"SUCCESS":"ERROR";
 	}
 
@@ -83,7 +102,15 @@ public class AdminService {
 
 	// 新增课程
 	public String addCourse(Course course, String inputName) {
-
+		
+		CourseExample example = new CourseExample();
+		CourseExample.Criteria criteria = example.createCriteria();
+		criteria.andNameEqualTo(course.getName());
+		int count = courseDao.countByExample(example);
+		if(count != 0) {
+			return "课程名称已存在，请重新输入！！！";
+		}
+		
 		course.setIsUse("1");
 		course.setInputname(inputName);
 		course.setInputdate(new Date());
@@ -144,6 +171,12 @@ public class AdminService {
 
 	// 删除班级信息
 	public String deleteClasses(Integer indexid) {
+		
+		Classes classes = classesDao.selectByPrimaryKey(indexid);
+		if("1".equals(classes.getIsuse())) {
+			return "班级正在使用中，请修改班级使用状态再删除！！";
+		}
+		
 		int result = classesDao.deleteByPrimaryKey(indexid);
 		if (result != 1) {
 			return "ERROR";
@@ -153,6 +186,26 @@ public class AdminService {
 
 	// 修改班级信息
 	public String updateClasses(Classes classes, String inputName) {
+		//如果修改班级状态
+		if("0".equals(classes.getIsuse())) {
+			StudentExample example = new StudentExample();
+			StudentExample.Criteria criteria = example.createCriteria();
+			criteria.andClassidEqualTo(classes.getIndexid());
+			int count = studentDao.countByExample(example);
+			if(count != 0) {
+				return "班级还有学生，请移除班级内学生再修改班级状态！！！";
+			}
+			
+			ClassArrangeExample example2 = new ClassArrangeExample();
+			ClassArrangeExample.Criteria criteria2 = example2.createCriteria();
+			criteria2.andClassidEqualTo(classes.getIndexid());
+			int count2 = classArrangeDao.countByExample(example2);
+			if(count2 != 0) {
+				return "该班级还有课程安排，请删除课程安排再修改班级状态！！！";
+			}
+			
+		}
+		
 		classes.setModifydate(new Date());
 		classes.setModifyname(inputName);
 		int result = classesDao.updateByPrimaryKeySelective(classes);
@@ -165,6 +218,15 @@ public class AdminService {
 	// 新增班级
 	public String addClasses(Classes classes, String inputName) {
 
+		ClassesExample example = new ClassesExample();
+		ClassesExample.Criteria criteria = example.createCriteria();
+		criteria.andNameEqualTo(classes.getName());
+		int count = classesDao.countByExample(example);
+		if(count != 0) {
+			return "班级名字已存在，请重新输入！！";
+		}
+		
+		
 		classes.setInputname(inputName);
 		classes.setInputdate(new Date());
 
@@ -198,6 +260,15 @@ public class AdminService {
 	// 新增学生
 	public String addStudent(Student student, String inputName) {
 
+		//校验学号是否存在
+		StudentExample example = new StudentExample();
+		StudentExample.Criteria criteria = example.createCriteria();
+		criteria.andSpare1EqualTo(student.getSpare1());
+		int count = studentDao.countByExample(example);
+		if(count!=0) {
+			return "学号已存在，请刷新重试！！！";
+		}
+		
 		student.setInputname(inputName);
 		student.setClassid(0);
 		student.setInputdate(new Date());
@@ -231,6 +302,16 @@ public class AdminService {
 
 	// 新增教师
 	public String addTeacher(Teacher teacher, String inputName) {
+		
+		//校验教师号是否存在
+		TeacherExample example = new TeacherExample();
+		TeacherExample.Criteria criteria = example.createCriteria();
+		criteria.andSpare1EqualTo(teacher.getSpare1());
+		int count = teacherDao.countByExample(example);
+		if(count!=0) {
+			return "教师号已存在，请刷新重试！！";
+		}
+		
 		teacher.setOnjob("1");
 		teacher.setInputdate(new Date());
 		teacher.setInputname(inputName);
@@ -337,6 +418,61 @@ public class AdminService {
 		adminDao.updateByPrimaryKeySelective(admin);
 		request.getSession().setAttribute("admin", admin);
 		return "SUCCESS";
+	}
+	
+	
+	public  String getNewNo(String type) {
+
+		SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
+		switch (type) {
+		case "1":
+			StudentExample example = new StudentExample();
+			StudentExample.Criteria criteria = example.createCriteria();
+			criteria.andSpare1Like("1"+(sdf.format(new Date()))+"%");
+			example.setOrderByClause("spare1 desc");
+			List<Student> lists = studentDao.selectByExample(example);
+			if(lists==null||lists.size()==0) {
+				return "1"+sdf.format(new Date())+"01";
+			}else {
+				Student stu = lists.get(0);
+				String NO = stu.getSpare1().replace("1"+sdf.format(new Date()), "");
+				String result = "1"+sdf.format(new Date())+String.format("%02d", Integer.parseInt(NO)+1);
+				return result;
+			}
+		case "2":
+			TeacherExample example2 = new TeacherExample();
+			TeacherExample.Criteria criteria2 = example2.createCriteria();
+			criteria2.andSpare1Like("2"+(sdf.format(new Date()))+"%");
+			example2.setOrderByClause("spare1 desc");
+			List<Teacher> lists2 = teacherDao.selectByExample(example2);
+			if(lists2==null||lists2.size()==0) {
+				return "2"+sdf.format(new Date())+"01";
+			}else {
+				Teacher tea = lists2.get(0);
+				String NO = tea.getSpare1().replace("2"+sdf.format(new Date()), "");
+				String result = "2"+sdf.format(new Date())+String.format("%02d", Integer.parseInt(NO)+1);
+				return result;
+			}
+		case "3":
+			SupervisorExample example3 = new SupervisorExample();
+			 com.education.pojo.SupervisorExample.Criteria criteria3 = example3.createCriteria();
+			criteria3.andSpare1Like("3"+(sdf.format(new Date()))+"%");
+			example3.setOrderByClause("spare1 desc");
+			List<Supervisor> lists3 = superDao.selectByExample(example3);
+			if(lists3==null||lists3.size()==0) {
+				return "3"+sdf.format(new Date())+"01";
+			}else {
+				Supervisor super1 = lists3.get(0);
+				String NO = super1.getSpare1().replace("3"+sdf.format(new Date()), "");
+				String result = "3"+sdf.format(new Date())+String.format("%02d", Integer.parseInt(NO)+1);
+				return result;
+			}
+
+		default:
+			return "0";
+		}
+		
+		
 	}
 
 }

@@ -25,6 +25,7 @@ List<CourseArrange> list = null;
     <meta name="description" content="Ela Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
  <%@include file="../model/adminHeader.jsp" %>
+  <link rel="stylesheet" href="<%=basePath %>static/tooltip.css"/>
 </head>
 
 <body>
@@ -77,7 +78,9 @@ List<CourseArrange> list = null;
                                             	<td><%=list.get(i).getTeacher().getName() %></td>
                                              		<td><%=year.substring(0,4)+"年度第"+year.substring(4,6)+"学期" %></td>
                                              		 <td><%="0".equals(list.get(i).getIsuse())?"不开设":"开设中" %></td>
-                                             		  <td><%=list.get(i).getClcount() %></td>
+                                             		  <td>
+                                             		  <button type="button" class="btn btn-default" data-toggle="tooltip" 
+                                             		  data-placement="bottom" title="Tooltip on bottom"><%=list.get(i).getClcount() %></button></td>
                                              		 
                                              
                                              <td>
@@ -136,6 +139,8 @@ List<CourseArrange> list = null;
     <!-- /#right-panel -->
     <link rel="stylesheet" href="<%=basePath %>static/back/assets/css/lib/datatable/dataTables.bootstrap.min.css">
     <!--Local Stuff-->
+   
+    
     <script src="<%=basePath %>static/back/assets/js/vendor/jquery-2.1.4.min.js"></script>
     <script src="<%=basePath %>static/back/assets/js/popper.min.js"></script>
     <script src="<%=basePath %>static/back/assets/js/bootstrap.min.js"></script>
@@ -153,6 +158,7 @@ List<CourseArrange> list = null;
     <script src="<%=basePath %>static/back/assets/js/lib/data-table/buttons.print.min.js"></script>
     <script src="<%=basePath %>static/back/assets/js/lib/data-table/buttons.colVis.min.js"></script>
     <script src="<%=basePath %>static/back/assets/js/init/datatables-init.js"></script>
+ <script src="<%=basePath %>static/tooltip.js"></script>
 
 <script type="text/javascript">
      var isClick = 0 ;
@@ -161,7 +167,7 @@ List<CourseArrange> list = null;
      $(document).ready(function() {
     	 $('#bootstrap-data-table-export').DataTable();
     	 
-    	 
+    	 $('[data-toggle="tooltip"]').tooltip();
 //     	 $("#menu3").addClass("active");
     	 var updataMessId = "";
     	 

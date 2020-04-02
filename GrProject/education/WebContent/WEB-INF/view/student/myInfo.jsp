@@ -55,6 +55,7 @@ if(request.getAttribute("userInfo")!=null){
 									<form action="#" method="post" novalidate="novalidate"
 										id="form5">
 										<div class="form-group text-center"></div>
+										
 										<div class="form-group">
 											<label for="cc-payment" class="control-label mb-1">学号</label>
 											<input type="text" id="" name="" disabled

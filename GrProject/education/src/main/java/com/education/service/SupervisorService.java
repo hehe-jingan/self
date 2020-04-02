@@ -140,7 +140,18 @@ public class SupervisorService {
 	}
 
 	// 新增督导
-	public String addSupervisor(String supervisorName, String supervisorPass) {
+	public String addSupervisor(String supervisorName, String supervisorPass,String spare1) {
+		
+		SupervisorExample example = new SupervisorExample();
+		Criteria criteria = example.createCriteria();
+		criteria.andSpare1EqualTo(spare1);
+		int count = superDao.countByExample(example);
+		if(count != 0) {
+			return "督导号已存在，请重新输入！！！";
+			
+		}
+		
+		
 		Supervisor supervisor = new Supervisor();
 		supervisor.setName(supervisorName);
 		supervisor.setPass(supervisorPass);

@@ -55,6 +55,12 @@ if(request.getAttribute("studentInfo")!=null){
 										id="form5">
 										<div class="form-group text-center"></div>
 										<div class="form-group">
+											<label for="cc-payment" class="control-label mb-1">学号</label>
+											<input type="text" id="" name="" disabled="disabled"
+												class="form-control" aria-required="true"
+												aria-invalid="false" value="<%=student.getSpare1()%>">
+										</div>
+										<div class="form-group">
 											<label for="cc-payment" class="control-label mb-1">姓名</label>
 											<input type="text" id="studentName" name="name"
 												class="form-control" aria-required="true"

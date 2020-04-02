@@ -17,6 +17,11 @@
 <meta name="description" content="Ela Admin - HTML5 Admin Template">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <%@include file="../model/adminHeader.jsp"%>
+<%String teaNo = "";
+if(request.getAttribute("teaNo")!=null){
+	teaNo = (String)request.getAttribute("teaNo");
+}
+%>
 </head>
 
 <body>
@@ -44,6 +49,13 @@
 									<form action="#" method="post" novalidate="novalidate"
 										id="form5">
 										<div class="form-group text-center"></div>
+										<div class="form-group">
+											<label for="cc-payment" class="control-label mb-1">教师号</label>
+											<input type="text" id="" name="" disabled="disabled"
+												class="form-control" aria-required="true"
+												aria-invalid="false" value="<%=teaNo%>">
+												<input  type="hidden" name="spare1" value="<%=teaNo%>"/> 
+										</div>
 										<div class="form-group">
 											<label for="cc-payment" class="control-label mb-1">姓名</label>
 											<input type="text" id="teacherName" name="name"

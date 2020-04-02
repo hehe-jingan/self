@@ -39,6 +39,7 @@ public class CourseArrange {
     
     private String stuhaseva;
     
+    private String concatclname;
     
     public Integer getStutotal() {
 		return stutotal;
@@ -194,5 +195,13 @@ public class CourseArrange {
 
 	public void setClname(String clname) {
 		this.clname = clname;
+	}
+
+	public String getConcatclname() {
+		return concatclname;
+	}
+
+	public void setConcatclname(String concatclname) {
+		this.concatclname = concatclname;
 	}
 }

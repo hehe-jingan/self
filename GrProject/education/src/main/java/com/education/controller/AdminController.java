@@ -480,6 +480,7 @@ public class AdminController {
 	@ResponseBody
 	public ModelAndView showAddStudent() {
 		ModelAndView mv = new ModelAndView("admin/student/addStudent");
+		mv.addObject("stuNo", adminService.getNewNo("1"));
 		return mv;
 	}
 
@@ -552,18 +553,8 @@ public class AdminController {
 	@ResponseBody
 	public ModelAndView showAddTeacher() {
 		ModelAndView mv = new ModelAndView("admin/teacher/addTeacher");
+		mv.addObject("teaNo", adminService.getNewNo("2"));
 		return mv;
-	}
-	// ----------------------------------------------
-
-	// 获取最新卡号
-	@RequestMapping(value = "/getNewCertNo", method = RequestMethod.GET)
-	@ResponseBody
-	public JSONObject getNewCertNo() {
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("msg", "SUCCESS");
-		jsonObject.put("newCertNo", userService.getNewCertId());
-		return jsonObject;
 	}
 
 	// 删除督导
@@ -580,9 +571,9 @@ public class AdminController {
 	// 新增督导
 	@RequestMapping(value = "/addSupervisor", method = RequestMethod.POST)
 	@ResponseBody
-	public JSONObject addSupervisor(String supervisorName, String supervisorPass, String supervisorType) {
+	public JSONObject addSupervisor(String supervisorName, String supervisorPass, String supervisorType,String spare1) {
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("msg", supervisorService.addSupervisor(supervisorName, supervisorPass));
+		jsonObject.put("msg", supervisorService.addSupervisor(supervisorName, supervisorPass,spare1));
 		return jsonObject;
 	}
 
@@ -590,6 +581,8 @@ public class AdminController {
 	@RequestMapping(value = "/addSupervisor", method = RequestMethod.GET)
 	public ModelAndView showAddSupervisor() {
 		ModelAndView mv = new ModelAndView("admin/supervisor/addSupervisor");
+		mv.addObject("superNo", adminService.getNewNo("3"));
+		
 		return mv;
 	}
 
@@ -729,5 +722,8 @@ public class AdminController {
 		jsonObject.put("msg", str);
 		return jsonObject;
 	}
+	
+	
+	
 
 }
