@@ -120,7 +120,7 @@
 		coa.modifyDate as coaModifyDate,coa.modifyName as coaModifyName, coa.spare1 as coaspare1,coa.spare2 as coaspare2 ,
 		t.indexId as tId,t.name as tName,t.email,t.sex,t.age,t.onjob,
 		cl.indexId as clId,cl.name as clName,cl.isUse as clIsUse, cl.spare1 as clspare,cl.spare2 as clspare2,
-		co.indexId as coId,co.name as ciName,co.is_use as coIsUse, co.spare1 as cospare,co.spare2 as cospare2,
+		co.indexId as coId,co.name as coName,co.is_use as coIsUse, co.spare1 as cospare,co.spare2 as cospare2,
 		if(isnull(s.classId),0,count(cl.indexId)) as stuCount
 		
 		

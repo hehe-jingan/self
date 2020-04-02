@@ -33,6 +33,8 @@ public class CourseArrange {
     
     private Integer siseva;
     
+    private String clname;
+    
     public Integer getIndexid() {
         return indexid;
     }
@@ -163,5 +165,13 @@ public class CourseArrange {
 
 	public void setSiseva(Integer siseva) {
 		this.siseva = siseva;
+	}
+
+	public String getClname() {
+		return clname;
+	}
+
+	public void setClname(String clname) {
+		this.clname = clname;
 	}
 }

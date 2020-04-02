@@ -63,10 +63,10 @@
 											<tr>
 												<th>编号</th>
 												<th>课程名称</th>
-												<th>任课教师</th>
+												<th>班级名称</th>
 												<th>学年学期</th>
 												<th>是否开设中</th>
-												<th>是否评价</th>
+												<th>已评价/总人数</th>
 <!-- 												<th>操作</th> -->
 											</tr>
 										</thead>
@@ -79,7 +79,7 @@
 											<tr>
 												<td><%=i + 1%></td>
 												<td><%=list.get(i).getCourse().getName()%></td>
-												<td><%=list.get(i).getTeacher().getName()%></td>
+												<td><%=list.get(i).getClname()%></td>
 												<td><%=year.substring(0, 4) + "年度第" + year.substring(4, 6) + "学期"%></td>
 												<td><%="0".equals(list.get(i).getIsuse()) ? "不开设" : "开设中"%></td>
 <%-- 												<td><%=list.get(i).getSiseva()==0?"未评价":"已评价"%></td> --%>

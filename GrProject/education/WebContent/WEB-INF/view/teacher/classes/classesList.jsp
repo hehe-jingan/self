@@ -1,3 +1,4 @@
+<%@page import="com.education.pojo.ClassArrange"%>
 <%@page import="com.education.pojo.Classes"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.List"%>
@@ -7,9 +8,9 @@
 <%@taglib uri="/WEB-INF/fmt.tld" prefix="fmt"%>
 <%@taglib uri="/WEB-INF/fn.tld" prefix="fn"%>
 <%
-List<Classes> list = null;
+List<ClassArrange> list = null;
     if(request.getAttribute("classesList")!=null){
-    	list = (List<Classes>)request.getAttribute("classesList");
+    	list = (List<ClassArrange>)request.getAttribute("classesList");
     }
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");%>
 <!doctype html>
@@ -58,6 +59,7 @@ List<Classes> list = null;
                                         <tr>
                                             <th>编号</th>
                                             <th>班级名称</th>
+                                            <th>课程名称</th>
                                             <th>是否使用中</th>
                                             <th>班级人数</th>
                                             <th>操作</th>
@@ -69,9 +71,10 @@ List<Classes> list = null;
                   %>
                                         <tr>
                                             <td><%=i+1 %></td>
-                                            <td><%=list.get(i).getName() %></td>
-                                             <td><%="0".equals(list.get(i).getIsuse())?"不使用":"使用中" %></td>
-                                             	<td><%=list.get(i).getStucount() %></td>
+                                            <td><%=list.get(i).getClasses().getName() %></td>
+                                            <td><%=list.get(i).getCoursearrange().getCourse().getName() %></td>
+                                             <td><%="0".equals(list.get(i).getClasses().getIsuse())?"不使用":"使用中" %></td>
+                                             	<td><%=list.get(i).getClasses().getStucount() %></td>
 <%--                                              <td><%=("1".equals(list.get(i).getOnjob()))?"在职":"离职" %></td> --%>
 <%--                                             <td><%=list.get(i).getLastlogindate()==null?"暂未登录":sdf.format(list.get(i).getLastlogindate()) %></td> --%>
                                              <td>

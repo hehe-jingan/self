@@ -9,6 +9,7 @@
 		<result column="tid" property="tid" jdbcType="INTEGER" />
 		<result column="year" property="year" jdbcType="VARCHAR" />
 		<result column="isUse" property="isuse" jdbcType="VARCHAR" />
+		<result column="clName" property="clname" jdbcType="VARCHAR" />
 		<result column="inputDate" property="inputdate"
 			jdbcType="TIMESTAMP" />
 		<result column="inputName" property="inputname"
@@ -109,7 +110,8 @@
 		ca.modifyDate,
 		ca.modifyName, ca.spare1,ca.spare2 ,t.name as
 		tName,t.email,t.sex,t.age,t.onjob,c.name as cName,c.is_use as cIsUse,
-		c.spare1 as cspare,c.spare2 as cspare2
+		c.spare1 as cspare,c.spare2 as cspare2,
+		cl.name as clName
 	</sql>
 	<select id="selectByExample" resultMap="BaseResultMap"
 		parameterType="com.education.pojo.CourseArrangeExample">

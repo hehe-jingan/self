@@ -43,7 +43,7 @@ public class ClassesService {
 	}
 	
 	//根据教师Id获取所有班级
-	public List<Classes> getClassesByTeacherId(Integer teaId){
+	public List<ClassArrange> getClassesByTeacherId(Integer teaId){
 		CourseArrangeExample example = new CourseArrangeExample();
 		CourseArrangeExample.Criteria criteria = example.createCriteria();
 		criteria.andTidEqualTo(teaId);
@@ -59,7 +59,7 @@ public class ClassesService {
 		if(list == null || list.size() == 0) {
 			return null;
 		} 
-		return list.stream().map(ClassArrange::getClasses).collect(Collectors.toList());
+		return list;
 	}
 
 	// 根据coId获取所有class

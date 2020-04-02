@@ -64,7 +64,7 @@
 											<tr>
 												<th>编号</th>
 												<th>课程名称</th>
-												<th>任课教师</th>
+<!-- 												<th>任课教师</th> -->
 												<th>学年学期</th>
 												<th>评分</th>
 												<th>评价内容</th>
@@ -80,7 +80,7 @@
 											<tr>
 												<td><%=i + 1%></td>
 												<td><%=list.get(i).getCourse().getName()%></td>
-												<td><%=list.get(i).getTeacher().getName()%></td>
+<%-- 												<td><%=list.get(i).getTeacher().getName()%></td> --%>
 												<td><%=year.substring(0, 4) + "年度第" + year.substring(4, 6) + "学期"%></td>
 												<td><%=list.get(i).getScore()%></td>
 												<td><%=list.get(i).getContent()%></td>
