@@ -15,6 +15,8 @@
 <%-- 				<li><a href="<%=basePath%>supervisor/courseList"> <i class="menu-icon  fa-mail-forward (alias)"></i>我的课程 </a></li> --%>
 				<li class="menu-title">评价模块</li>
 				<li><a href="<%=basePath%>supervisor/evaluationList"> <i class="menu-icon fa-comments"></i>所有评价</a></li>
+					 <li><a href="<%=basePath%>supervisor/evaSummary">
+				 <i class="menu-icon fa-comments"></i>评价统计</a></li>
 				<li class="menu-title">个人模块</li>
 				<li><a href="<%=basePath%>supervisor/myInfo"> <i class="menu-icon   fa-archive"></i>我的信息 </a></li>
 				<li><a href="<%=basePath%>supervisor/changePass"> <i class="menu-icon fa-book"></i>修改密码 </a></li>

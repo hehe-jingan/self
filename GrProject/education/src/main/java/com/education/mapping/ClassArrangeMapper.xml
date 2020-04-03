@@ -168,7 +168,7 @@
 	</delete>
 	<delete id="deleteByExample"
 		parameterType="com.education.pojo.ClassArrangeExample">
-		delete from class_arrange cla
+		delete cla from class_arrange cla
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />
 		</if>

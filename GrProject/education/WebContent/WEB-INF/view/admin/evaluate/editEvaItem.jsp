@@ -49,7 +49,7 @@ if(request.getAttribute("evaItem")!=null){
 						<div class="card-body">
 							<!-- Credit Card -->
 							<div id="pay-invoice">
-								<div class="card-body col-md-4">
+								<div class="card-body col-md-8">
 									<form action="#" method="post" novalidate="novalidate"
 										id="form5">
 										<div class="form-group text-center"></div>
@@ -62,7 +62,7 @@ if(request.getAttribute("evaItem")!=null){
 												aria-invalid="false" value="<%=(i+1)%>" disabled="disabled"></label>
 												<input name="ids" value="<%=(i+1)%>" type="hidden"/>
 											<input type="text" id="" name="content"
-												class="form-control" aria-required="true"
+												class="form-control col-md-8" aria-required="true"
 												aria-invalid="false" value="<%=evaItem.get(i).getIname()%>">
 										</div>
 										<%} %>

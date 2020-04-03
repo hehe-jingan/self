@@ -28,17 +28,17 @@
 <title>教育后台管理</title>
 <meta name="description" content="Ela Admin - HTML5 Admin Template">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<%@include file="../model/adminHeader.jsp"%>
+<%@include file="../model/superHeader.jsp"%>
 </head>
 
 <body>
 	<!-- Left Panel -->
-	<%@include file="../model/adminMenu.jsp"%>
+	<%@include file="../model/superMenu.jsp"%>
 	<!-- /#left-panel -->
 	<!-- Right Panel -->
 	<div id="right-panel" class="right-panel">
 		<!-- Header-->
-		<%@include file="../model/adminTitle.jsp"%>
+		<%@include file="../model/superTitle.jsp"%>
 		<!-- /#header -->
 		<!-- Content -->
 		<div class="content">

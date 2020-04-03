@@ -104,7 +104,7 @@
     where indexId = #{indexid,jdbcType=INTEGER}
   </delete>
   <delete id="deleteByExample" parameterType="com.education.pojo.ClassesExample" >
-    delete from classes
+    delete c from classes c
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>

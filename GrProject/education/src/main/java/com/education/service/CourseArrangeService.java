@@ -6,7 +6,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.education.dao.ClassArrangeMapper;
 import com.education.dao.CourseArrangeMapper;
+import com.education.pojo.ClassArrangeExample;
+import com.education.pojo.ClassArrangeExample.Criteria;
 import com.education.pojo.CourseArrange;
 import com.education.pojo.CourseArrangeExample;
 
@@ -16,9 +19,22 @@ public class CourseArrangeService {
 	@Autowired
 	private CourseArrangeMapper dao;
 
+	@Autowired
+	private ClassArrangeMapper claDao;
 	
 	//编辑修改
 	public String editCourseArrange(CourseArrange courseArrange,String modifyName) {
+		//修改开设状态
+		if("0".equals(courseArrange.getIsuse())){
+			 ClassArrangeExample example = new ClassArrangeExample();
+			 Criteria criteria = example.createCriteria();
+			criteria.andCaidEqualTo(courseArrange.getIndexid());
+			int count = claDao.countByExample(example);
+			if(count != 0) {
+				return "该课程还有班级安排，请删除班级安排再改变开设状态！！！";
+			}
+		}
+		
 		
 		courseArrange.setModifydate(new Date());
 		courseArrange.setModifyname(modifyName);

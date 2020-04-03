@@ -78,14 +78,16 @@ List<CourseArrange> list = null;
                                             	<td><%=list.get(i).getTeacher().getName() %></td>
                                              		<td><%=year.substring(0,4)+"年度第"+year.substring(4,6)+"学期" %></td>
                                              		 <td><%="0".equals(list.get(i).getIsuse())?"不开设":"开设中" %></td>
-                                             		  <td>
-                                             		  <button type="button" class="btn btn-default" data-toggle="tooltip" 
-                                             		  data-placement="bottom" title="Tooltip on bottom"><%=list.get(i).getClcount() %></button></td>
-                                             		 
-                                             
+                                             		  <td><a href="#" id="hideClass<%=list.get(i).getIndexid() %>" ><%=list.get(i).getClcount() %></a>
+                                             		  <input id="hiddenClassName<%=list.get(i).getIndexid() %>" name="<%=list.get(i).getConcatclname() %>"  type="hidden" disabled="disabled"  />
+                                             		  </td>
                                              <td>
                                               <a href="<%=basePath%>admin/editCourseArrange/<%=list.get(i).getIndexid()%>" >编辑</a>
+                                              <%if("1".equals(list.get(i).getIsuse())){ %>
                                               <a href="<%=basePath%>admin/arrangeClasses/<%=list.get(i).getIndexid()%>" >安排班级</a>
+                                              <%}else{ %>
+                                              <a href="#">课程未开设</a>
+                                              <%} %>
                                              <a href="#" id="deleteCourseArrangeBtn<%=list.get(i).getIndexid() %>" data-am-modal="{closeOnConfirm	: false,target: '#deleteAd', closeViaDimmer: 0, width: 400, height: 125}">删除</a>
                                         </tr>
                                         <%}
@@ -99,6 +101,13 @@ List<CourseArrange> list = null;
 
                 </div>
             </div><!-- .animated -->
+             <div class="sufee-alert alert with-close alert-primary alert-dismissible fade" id="hideDiv">
+                                        <span class="badge badge-pill badge-primary"></span>
+                                        该课程包含班级:<span id="hideSpan" ></span>
+                                        <button type="button" class="close" id="hideBtn">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
         </div><!-- .content -->
         
         
@@ -134,6 +143,7 @@ List<CourseArrange> list = null;
 		</div>
 	</div>
 </div>
+ 
         <!-- /.site-footer -->
     </div>
     <!-- /#right-panel -->
@@ -158,16 +168,19 @@ List<CourseArrange> list = null;
     <script src="<%=basePath %>static/back/assets/js/lib/data-table/buttons.print.min.js"></script>
     <script src="<%=basePath %>static/back/assets/js/lib/data-table/buttons.colVis.min.js"></script>
     <script src="<%=basePath %>static/back/assets/js/init/datatables-init.js"></script>
- <script src="<%=basePath %>static/tooltip.js"></script>
+<%--  <script src="<%=basePath %>static/tooltip.js"></script> --%>
+<%--  <script src="<%=basePath %>static/jquery.min.js"></script> --%>
+ 
 
 <script type="text/javascript">
      var isClick = 0 ;
      var essayId = 0;
+     var clearFlag;
      var data = "";
      $(document).ready(function() {
     	 $('#bootstrap-data-table-export').DataTable();
     	 
-    	 $('[data-toggle="tooltip"]').tooltip();
+//     	 $('[data-toggle="tooltip"]').tooltip();
 //     	 $("#menu3").addClass("active");
     	 var updataMessId = "";
     	 
@@ -181,8 +194,31 @@ List<CourseArrange> list = null;
     		console.log("data="+data);
     	 });
     	 
+    	 
+    	 $("#hideBtn").click(function(){
+    		 closeHidden();
+    	 });
+    	
+    	 $("a[id^='hideClass']").click(function(){
+    		 clearTimeout(clearFlag);
+    		 var id = $(this).prop("id").substring(9);
+    		 var clname = $("#hiddenClassName"+id).prop("name");
+    		 $("#hideDiv").addClass("show");
+    		 if(clname=="null"){
+    			 clname="";
+    		 }
+    		 $("#hideSpan").html(clname);
+    		 clearFlag = setTimeout(closeHidden,2000);
+    		 
+    	 });
+    	 
+    	 function closeHidden(){
+    		 $("#hideDiv").removeClass("show");
+    	 }
+    	 
     	 $("#makeSure").click(function(){
     		
+    		 if(confirm("删除课程，已评价的评分、内容将会删除，确定要删除课程吗？")){
     		 var url = "<%=basePath%>admin/deleteCourseArrange";
     		 $.ajax({
     		       	type : "POST",
@@ -199,7 +235,7 @@ List<CourseArrange> list = null;
     		      	}
     		     			
     		 });
-    		 
+    		 }
     	 });
     	 
      });

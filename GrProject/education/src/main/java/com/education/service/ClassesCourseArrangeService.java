@@ -60,6 +60,7 @@ public class ClassesCourseArrangeService {
 				ca.setCaid(coaId);
 				ca.setInputdate(new Date());
 				ca.setInputname(inputName);
+				ca.setIsuse("1");
 				for (String id : ids) {
 					ca.setClassid(Integer.parseInt(id));
 					dao.insertSelective(ca);
@@ -76,8 +77,12 @@ public class ClassesCourseArrangeService {
 			if (ids == null || ids.length == 0) {
 				ClassArrangeExample example = new ClassArrangeExample();
 				Criteria criteria = example.createCriteria();
-				criteria.andIndexidIn(idsList);
+				criteria.andCaidEqualTo(coaId);
+				criteria.andClassidIn(idsList);
 				dao.deleteByExample(example);
+				
+				
+				
 				return "SUCCESS";
 				// 如果有新增的
 			} else {

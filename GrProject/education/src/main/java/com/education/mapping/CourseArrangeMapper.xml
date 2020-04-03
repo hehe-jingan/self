@@ -176,7 +176,7 @@ group by coa.indexId,cl.indexId
 	</delete>
 	<delete id="deleteByExample"
 		parameterType="com.education.pojo.CourseArrangeExample">
-		delete from course_arrange ca
+		delete ca from course_arrange ca
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />
 		</if>

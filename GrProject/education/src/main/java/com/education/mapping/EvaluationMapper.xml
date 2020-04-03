@@ -207,12 +207,12 @@
 
 	<delete id="deleteByPrimaryKey"
 		parameterType="java.lang.Integer">
-		delete from evaluation
-		where indexId = #{indexid,jdbcType=INTEGER}
+		delete e  from evaluation e
+		where e.indexId = #{indexid,jdbcType=INTEGER}
 	</delete>
 	<delete id="deleteByExample"
 		parameterType="com.education.pojo.EvaluationExample">
-		delete from evaluation
+		delete  e from evaluation e
 		<if test="_parameter != null">
 			<include refid="Example_Where_Clause" />
 		</if>

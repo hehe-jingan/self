@@ -4,6 +4,8 @@
  */
 package com.education.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,17 +31,29 @@ import com.education.service.SupervisorService;
 @Controller
 @RequestMapping(value = "/supervisor")
 public class SupervisorController {
-	
+
 	@Autowired
 	private SupervisorService superService;
 
 	@Autowired
 	private EvaluationService elService;
-	
+
 	@Autowired
 	private EvaItemService evaItemService;
-	
 
+	// 课程评价统计列表页面
+	@RequestMapping(value = "/evaSummary", method = RequestMethod.GET)
+	public ModelAndView showEvaluationByValList(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("supervisor/evaluate/evaSummaryList");
+		List<Evaluation> evLists = elService.getAllEvaByGroupBy(new ArrayList<>(Arrays.asList("t.indexId ", " co.indexId")));
+		List<Evaluation> list2 = elService.getAllEvaByGroupBy(new ArrayList<>(Arrays.asList("t.indexId ", " cl.indexId")));
+		List<Evaluation> listT = elService.getAllEvaByGroupBy(new ArrayList<>(Arrays.asList("t.indexId ")));
+
+		mv.addObject("evLists", evLists);
+		mv.addObject("list2", list2);
+		mv.addObject("listT", listT);
+		return mv;
+	}
 
 	// 课程评价列表页面
 	@RequestMapping(value = "/evaluationList", method = RequestMethod.GET)
@@ -47,22 +61,22 @@ public class SupervisorController {
 		ModelAndView mv = new ModelAndView("supervisor/evaluate/evaluateList");
 		List<Evaluation> evLists = elService.getAllEvalations();
 		mv.addObject("evaItem", evaItemService.getAllEvaItem());
-		
+
 		mv.addObject("evLists", evLists);
 		return mv;
 	}
 
-//	// 课程页面
-//	@RequestMapping(value = "/courseList", method = RequestMethod.GET)
-//	public ModelAndView showCourseList(HttpServletRequest request) {
-//		ModelAndView mv = new ModelAndView("teacher/course/courseList");
-//		if (request.getSession().getAttribute("teacher") == null) {
-//			return mv;
-//		}
-//		Teacher tea = (Teacher) request.getSession().getAttribute("teacher");
-//		mv.addObject("courseList", classArrangeService.getCourseByTeacherId(tea));
-//		return mv;
-//	}
+	// // 课程页面
+	// @RequestMapping(value = "/courseList", method = RequestMethod.GET)
+	// public ModelAndView showCourseList(HttpServletRequest request) {
+	// ModelAndView mv = new ModelAndView("teacher/course/courseList");
+	// if (request.getSession().getAttribute("teacher") == null) {
+	// return mv;
+	// }
+	// Teacher tea = (Teacher) request.getSession().getAttribute("teacher");
+	// mv.addObject("courseList", classArrangeService.getCourseByTeacherId(tea));
+	// return mv;
+	// }
 
 	// 个人信息页面
 	@RequestMapping(value = "/myInfo", method = RequestMethod.GET)
@@ -72,7 +86,8 @@ public class SupervisorController {
 		if (superv == null) {
 			mv.addObject("userInfo", null);
 			return mv;
-		} else {
+		}
+		else {
 			mv.addObject("userInfo", superService.getSupervisorById(superv.getIndexid()));
 			return mv;
 		}
@@ -84,10 +99,11 @@ public class SupervisorController {
 	public JSONObject changePass(HttpServletRequest request, String newPass, String oldPass) {
 		JSONObject jsonObject = new JSONObject();
 		String msg = "error";
-		Supervisor superv = (Supervisor)request.getSession().getAttribute("supervisor");
+		Supervisor superv = (Supervisor) request.getSession().getAttribute("supervisor");
 		if (superv == null) {
 			msg = "用户未登录！";
-		} else {
+		}
+		else {
 			msg = superService.changePass(superv, newPass, oldPass, request);
 		}
 		jsonObject.put("msg", msg);
@@ -117,7 +133,8 @@ public class SupervisorController {
 
 		if (request.getSession().getAttribute("supervisor") == null) {
 			return mv;
-		} else {
+		}
+		else {
 			if ("logout".equals(flag)) {
 				request.getSession().removeAttribute("supervisor");
 			}

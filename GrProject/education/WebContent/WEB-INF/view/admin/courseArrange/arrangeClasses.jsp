@@ -1,3 +1,5 @@
+<%@page import="java.util.HashSet"%>
+<%@page import="java.util.Set"%>
 <%@page import="com.education.pojo.CourseArrange"%>
 <%@page import="com.education.pojo.ClassArrange"%>
 <%@page import="com.education.pojo.Classes"%>
@@ -27,7 +29,9 @@
 </head>
 <%
 	String pageFlag = "false";
+	Set<String> exitsIds = new HashSet<String>();
 
+	
 	CourseArrange ca = new CourseArrange();
 	List<Classes> classList = new ArrayList<>();
 	List<Classes> classNoList = new ArrayList<>();
@@ -109,6 +113,7 @@
 												<%
 													if (classList != null) {
 														for (int i = 0; i < classList.size(); i++) {
+															exitsIds.add(classList.get(i).getIndexid()+"");
 												%>
 												<option selected value="<%=classList.get(i).getIndexid()%>"><%=classList.get(i).getName()%></option>
 												<%
@@ -188,12 +193,15 @@
 		
 		jQuery(document).ready(function() {
    	  
+			var pageFlag = "<%=pageFlag%>";	
+			
 		if(pageFlag == "false"){
 	    	alert("暂无此课程！！！");
 	    	window.history.go(-1);
 	   	}
-    	var pageFlag = "<%=pageFlag%>";
     	
+    	var exitsIds = <%=exitsIds%>;
+    	var setIds = new Set(exitsIds);
     	
     	jQuery(".standardSelect").chosen({
             disable_search_threshold: 1,
@@ -204,7 +212,23 @@
     	
     	
     	jQuery("#makeSure").click(function(){
+    		
+    		//判断是否减少了班级
    		 var caId = "<%=ca.getIndexid()%>";
+   		 var cids = jQuery("#cid").val();
+   		 var cidss =  new Set(cids);
+   		 var flag = true;
+   		 for(var id of setIds){
+   			 id = String(id);
+   			 if(!cidss.has(id)){
+   				 flag = false;
+   			 }
+   		 }
+   		 
+   		 
+   		 
+   		console.log("flag="+flag);
+   		 
 //    		var tid = jQuery("#tid").val();
 //    		var year = jQuery("#year").val();
 //   		var term = jQuery("#term").val();
@@ -220,7 +244,8 @@
 //    		 }else if(year<=1970||year>=2100){
 //    			alert("请填写正确的开课年度！范围1970~2100");
 //    		 }else{ 
-   			 if(confirm("确认要安排课程给该教师吗？")){
+   			 if(confirm("确认要安排课程所选班级么？")){
+   				if(flag||confirm("删除班级未评价的学生将不能评价，确定要删除排课的班级吗？")){
    			 var data = decodeURIComponent(jQuery("#form5").serialize(),true);
    			 data = data+"&coaId="+caId;
    			 console.log("data= "+data);
@@ -234,7 +259,7 @@
    			    	 traditional:true,
    			       	success : function(data){
    			       		if(data.msg=="SUCCESS"){
-   			       			alert("安排成功！！");
+   			       			alert("班级安排成功！！");
    			       			window.location = "<%=basePath%>admin/courseArrangeList";
    			       		}else{
    			       		 	alert(data.msg);
@@ -244,7 +269,7 @@
    			 });
    			 
    			 }
-//    		 }
+   		 }
    		 
    	 });
    	  

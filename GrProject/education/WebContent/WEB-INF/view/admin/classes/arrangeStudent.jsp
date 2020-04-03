@@ -86,7 +86,7 @@ if(request.getAttribute("ids")!=null){
 	 <% if(noClassStudentList!=null){
                   	for(int i = 0;i<noClassStudentList.size();i++){
                   %>
-                  <li id="idsL<%=noClassStudentList.get(i).getIndexid() %>"><%=noClassStudentList.get(i).getName() %> <%=noClassStudentList.get(i).getSex() %> <%=noClassStudentList.get(i).getAge() %>岁 </li> 
+                  <li id="idsL<%=noClassStudentList.get(i).getIndexid() %>"><%=noClassStudentList.get(i).getSpare1() %> <%=noClassStudentList.get(i).getName() %> <%=noClassStudentList.get(i).getSex() %> <%=noClassStudentList.get(i).getAge() %>岁 </li> 
                   <%}}
                   	%>
 	 
@@ -101,7 +101,7 @@ if(request.getAttribute("ids")!=null){
 	 <% if(inClassStudentList!=null){
                   	for(int i = 0;i<inClassStudentList.size();i++){
                   %>
-                  <li id="idsR<%=inClassStudentList.get(i).getIndexid() %>" value=""><%=inClassStudentList.get(i).getName() %> <%=inClassStudentList.get(i).getSex() %> <%=inClassStudentList.get(i).getAge() %>岁</li> 
+                  <li id="idsR<%=inClassStudentList.get(i).getIndexid() %>" value=""><%=inClassStudentList.get(i).getSpare1() %>  <%=inClassStudentList.get(i).getName() %> <%=inClassStudentList.get(i).getSex() %> <%=inClassStudentList.get(i).getAge() %>岁</li> 
                   <%}}
                   	%>
 	</div>
@@ -244,7 +244,7 @@ if(request.getAttribute("ids")!=null){
     		if(className == "r"){
     			console.log("right double click");
     			$(this).prop("id","idsI"+id);
-    			//如果之前在未分配中
+    			//如果之前在未分配中 
     			console.log("noClassIdsSet.has(id)="+noClassIdsSet.has(id)); 
     			if(noClassIdsSet.has(id)){
     				console.log("之前已存在左边 所以不变更");

@@ -19,6 +19,7 @@ import com.education.dao.ClassArrangeMapper;
 import com.education.dao.ClassesMapper;
 import com.education.dao.CourseArrangeMapper;
 import com.education.dao.CourseMapper;
+import com.education.dao.EvaluationMapper;
 import com.education.dao.StudentMapper;
 import com.education.dao.SupervisorMapper;
 import com.education.dao.TeacherMapper;
@@ -30,7 +31,10 @@ import com.education.pojo.ClassArrangeExample;
 import com.education.pojo.Classes;
 import com.education.pojo.ClassesExample;
 import com.education.pojo.Course;
+import com.education.pojo.CourseArrange;
+import com.education.pojo.CourseArrangeExample;
 import com.education.pojo.CourseExample;
+import com.education.pojo.EvaluationExample;
 import com.education.pojo.Student;
 import com.education.pojo.StudentExample;
 import com.education.pojo.Supervisor;
@@ -40,6 +44,8 @@ import com.education.pojo.TeacherExample;
 import com.education.pojo.User;
 import com.education.pojo.UserExample;
 import com.mysql.jdbc.StringUtils;
+
+import tk.mybatis.mapper.util.StringUtil;
 
 /**
  * @author joy_zheng
@@ -74,23 +80,55 @@ public class AdminService {
 	
 	@Autowired
 	private ClassArrangeMapper classArrangeDao;
+	
+	@Autowired
+	private EvaluationMapper evaDao;
 
 	// 删除课程安排信息
 	public String deleteCourseArrange(Integer indexid) {
 		
+		CourseArrange coa = courseArrangeDao.selectByPrimaryKey(indexid);
 		
+		if("1".equals(coa.getIsuse())) {
+			return "该课程安排还在开设中，请修改开设状态再删除！！！";
+		}
 		
+		EvaluationExample example = new EvaluationExample();
+		com.education.pojo.EvaluationExample.Criteria criteria = example.createCriteria();
+		criteria.andCaidEqualTo(indexid);
+		evaDao.deleteByExample(example);
 		
 		return courseArrangeDao.deleteByPrimaryKey(indexid)==1?"SUCCESS":"ERROR";
 	}
 
 	// 删除课程信息
 	public String deleteCourse(Integer indexid) {
+		
+		Course c = courseDao.selectByPrimaryKey(indexid);
+		if("1".equals(c.getIsUse())) {
+			return "课程开设中，请修改开设状态再删除！！！";
+		}
+		
+		CourseArrangeExample example = new CourseArrangeExample();
+		com.education.pojo.CourseArrangeExample.Criteria criteria = example.createCriteria();
+		criteria.andCidEqualTo(indexid);
+		int count = courseArrangeDao.countByExample(example);
+		if(count != 0) {
+			return "该课程存在课程编排，请先删除课程编排再删除该课程！！";
+		}
+		
 		return courseDao.deleteByPrimaryKey(indexid)==1?"SUCCESS":"ERROR";
 	}
 
 	// 修改课程信息
 	public String updateCourse(Course course, String inputName) {
+		if("0".equals(course.getIsUse())) {
+			if((new Integer(0)).equals(course.gettCount())) {
+				return "课程还有教师安排，请先取消教师安排再修改课程状态！！！";
+			}
+			
+		}
+		
 		course.setModifydate(new Date());
 		course.setModifyname(inputName);
 		int result = courseDao.updateByPrimaryKeySelective(course);
@@ -474,5 +512,12 @@ public class AdminService {
 		
 		
 	}
-
+	public static boolean isEmpty(Object value) {
+		return value == null ? true : value.toString().trim().isEmpty();
+	}
+	
+	public static void main(String[] ssss) {
+		String str = " ";
+		System.out.println(isEmpty(str));
+	}
 }
