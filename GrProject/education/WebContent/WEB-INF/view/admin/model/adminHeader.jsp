@@ -106,33 +106,6 @@
  var userIsLoginFlag = "<%=userLoginFlag%>"; 
  var adminId = "<%=adminId%>";
  
- function getMessageCount(){
-	
-	 var url = "<%=basePath%>admin/getMessageCount";
-	 var data = "adminId="+adminId;
-	 $.ajax({
-	       	type : "POST",
-	       	url : url,
-	       	data : data,
-	       	dataType : "json",
-	       	success : function(data){
-	       		if(data.msg=="success"){
-	       				var count = data.data;
-	       				console.log("cont="+count);
-	       				if(count>0){
-	       					$("#messageCount").html(count);
-	       					$("#messageCount").addClass("count bg-danger");
-	       				}else{
-	       					$("#messageCount").html("");
-	       					$("#messageCount").removeClass("count bg-danger");
-	       				}
-	       				
-	       		}
-	       		}
-	     			
-	 });
-	 
- }
   $(document).ready(function() {
 // 	  getMessageCount();
 	  if(userIsLoginFlag=="false"){

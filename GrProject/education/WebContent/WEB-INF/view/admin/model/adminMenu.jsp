@@ -32,7 +32,7 @@
 				<i class="menu-icon fa-comments"></i>评价管理 </a></li>
 				<li><a href="<%=basePath%>admin/evaItem">
 				 <i class="menu-icon fa-comments"></i>评价分项 </a></li>
-				 <li><a href="<%=basePath%>admin/evaSummary">
+				 <li><a href="<%=basePath%>admin/evaSummary/1/all/0/0/0">
 				 <i class="menu-icon fa-comments"></i>评价统计</a></li>
 				<li class="menu-title">个人模块</li>
 				<li><a href="<%=basePath%>admin/changePass"> 

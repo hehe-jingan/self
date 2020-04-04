@@ -1,5 +1,7 @@
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.education.pojo.EvaItem"%>
+<%@page import="com.education.pojo.Classes"%>
+<%@page import="com.education.pojo.Teacher"%>
 <%@page import="com.education.pojo.Evaluation"%>
 <%@page import="com.education.pojo.CourseArrange"%>
 <%@page import="com.education.pojo.Course"%>
@@ -12,7 +14,50 @@
 <%@taglib uri="/WEB-INF/fn.tld" prefix="fn"%>
 <%
 
-	
+String type = "";
+if (request.getAttribute("type") != null) {
+	type = (String) request.getAttribute("type");
+}
+
+String chooseYear = "all";
+Integer chooseCourse = 0;
+Integer chooseClass = 0;
+Integer chooseTea = 0;
+
+if (request.getAttribute("chooseCourse") != null) {
+	chooseCourse = (Integer) request.getAttribute("chooseCourse");
+}
+if (request.getAttribute("chooseYear") != null) {
+	chooseYear = (String) request.getAttribute("chooseYear");
+}
+if (request.getAttribute("chooseCl") != null) {
+	chooseClass = (Integer) request.getAttribute("chooseCl");
+}
+if (request.getAttribute("chooseTea") != null) {
+	chooseTea = (Integer) request.getAttribute("chooseTea");
+}
+List<Classes> classLists = new ArrayList<Classes>();
+if (request.getAttribute("classLists") != null) {
+	classLists = (List<Classes>) request.getAttribute("classLists");
+}
+List<Teacher> teaLists = new ArrayList<Teacher>();
+if (request.getAttribute("teaLists") != null) {
+	teaLists = (List<Teacher>) request.getAttribute("teaLists");
+}
+List<String> yearLists = new ArrayList<String>();
+if (request.getAttribute("yearLists") != null) {
+	yearLists = (List<String>) request.getAttribute("yearLists");
+}
+List<Course> courseLists = new ArrayList<Course>();
+if (request.getAttribute("courseLists") != null) {
+	courseLists = (List<Course>) request.getAttribute("courseLists");
+}
+// List<Evaluation> list = null;
+// if (request.getAttribute("evLists") != null) {
+// 	list = (List<Evaluation>) request.getAttribute("evLists");
+// }
+
+
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 %>
 <!doctype html>
@@ -42,11 +87,11 @@
 		<!-- /#header -->
 		<!-- Content -->
 		<div class="content">
-
+ 
 
 			<div class="content">
 
-				<div class="animated fadeIn">
+				<div class="animated fadeIn" >
 
 					<div class="row">
 
@@ -60,37 +105,24 @@
 								<div class="card-body">
                                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                                     <li class="nav-item">
-                                        <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">
-                                        按教师-课程</a>
+                                        <a class="nav-link active" id="pills-home-tab"  data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">
+                                        年度学期-课程-教师</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">
-                                        按教师-班级</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">
-                                        按教师</a>
+                                        年度学期-教师</a>
                                     </li>
                                 </ul>
-                                <div class="tab-content" id="pills-tabContent">
+                               
                                     <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-<!--                                         <h3>Home</h3> -->
                                         <%@include file="summary/groupByTeaAndCourse.jsp"%>
                                      </div>
                                     <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-<!--                                         <h3>Profile</h3> -->
 									<%@include file="summary/groupByTeaAndClass.jsp"%>
                                     </div>
-                                    <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
-<!--                                         <h3>Cotanct</h3> -->
-									<%@include file="summary/groupByTeacher.jsp"%>
-                                    </div>
-                                </div>
-                            </div>
 							</div>
 						</div>
-
-
+						</div>
 					</div>
 				</div>
 				<!-- .animated -->
@@ -177,17 +209,88 @@
     	 
     	 $('#bootstrap-data-table2').DataTable();
     	 $('#bootstrap-data-table3').DataTable();
+    	 
+    	 var type = "<%=type%>";
+    	 
+    	 if(type=="1"){
+    		 $("#pills-profile").css("visibility","hidden")
+				$("#pills-profile").css("display","none")
+				
+				$("#pills-home").css("visibility","visible")
+				$("#pills-home").css("display","block")
+//     		 $("#pills-tabContent div:first").tab("show");
+<%--     		 window.location.href = "<%=basePath%>admin/evaSummary/1"; --%>
+// 				$("#pills-home-tab").addClass("active");
+    	 }else if(type == "2"){
+//     		 console.log($("#pills-tabContent div:last").prop("id"));
+//     		 $("#pills-tabContent div:last").tab("show");
+				$("#pills-home").removeClass("show");
+				$("#pills-home").removeClass("active");
+				$("#pills-home").removeClass("in");
+				$("#pills-home").css("visibility","hidden")
+				$("#pills-home").css("display","none")
+				
+				$("#pills-profile").css("visibility","visible")
+				$("#pills-profile").css("display","block")
+				$("#pills-profile").addClass("show");
+				$("#pills-profile").addClass("active");
+				$("#pills-profile").addClass("in");
+				$("#pills-profile").tab("show");
+				$("#pills-home-tab").removeClass("active");
+				$("#pills-home-tab").removeClass("in");
+				$("#pills-home-tab").removeClass("show");
+				$("#pills-profile-tab").addClass("show");
+				$("#pills-profile-tab").addClass("active");
+				$("#pills-profile-tab").addClass("in");
+<%--     		 window.location.href = "<%=basePath%>admin/evaSummary/2"; --%>
+    	 }
+    	 
+    	 
     	 $("a[id^='pills']").on('click',function(){
     		console.log($(this).prop("id"));
     		var id = $(this).prop("id").replace("-tab","");
     		console.log("id="+id);
-    		$("#"+id).addClass("show");
+//     		$("#"+id).addClass("show");
+    		if(id=="pills-home"){
+    			window.location.href = "<%=basePath%>admin/evaSummary/1/all/0/0/0";
+    		}else{
+    			window.location.href = "<%=basePath%>admin/evaSummary/2/all/0/0/0";
+    		}
 //     		 $("#"+id).prop("class", $(this).prop("class")+" show")
     		 
     	 });
     	 
 //     	 $("#menu3").addClass("active");
     	 var updataMessId = "";
+    	 
+    	 var coYear = "<%=chooseYear%>";
+    	 var coCourse = "<%=chooseCourse%>";
+    	 var chooseTea = "<%=chooseTea%>";
+    	 var chooseClass = "<%=chooseClass%>";
+    	 
+    	 $("#chooseYear").on('change',function(){
+     		var val = $(this).val();
+     		console.log("val="+val);
+     		window.location = "<%=basePath%>admin/evaSummary/"+type+"/"+val+"/"+coCourse+"/"+chooseClass+"/"+chooseTea;
+     	 });
+     	 
+     	 $("#chooseCourse").on('change',function(){
+      		var val = $(this).val();
+      		console.log("val="+val);
+      		window.location = "<%=basePath%>admin/evaSummary/"+type+"/"+coYear+"/"+val+"/"+chooseClass+"/"+chooseTea;
+      	 });
+     	 $("#chooseClass").on('change',function(){
+       		var val = $(this).val();
+       		console.log("val="+val);
+       		window.location = "<%=basePath%>admin/evaSummary/"+type+"/"+coYear+"/"+coCourse+"/"+val+"/"+chooseTea;
+       	 });
+     	$("#chooseTea").on('change',function(){
+       		var val = $(this).val();
+       		console.log("val="+val);
+       		window.location = "<%=basePath%>admin/evaSummary/"+type+"/"+coYear+"/"+coCourse+"/"+chooseClass+"/"+val;
+       	 });
+    	 
+    	 
     	 
     	 $("#addCourseBtn").click(function(){
     		 window.location.href = "<%=basePath%>admin/addCourse";

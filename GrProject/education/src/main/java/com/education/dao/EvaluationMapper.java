@@ -28,7 +28,7 @@ public interface EvaluationMapper {
 
     int updateByPrimaryKey(Evaluation record);
     
-    List<Evaluation> selectAllEvaGroupBy(List<String> val);
+    List<Evaluation> selectAllEvaGroupBy(List<String> val,String year,Integer coId,Integer clId,Integer tId);
     
     List<Evaluation> selectAllEvaGroupByWithTid(List<String> val,Integer tid);
     

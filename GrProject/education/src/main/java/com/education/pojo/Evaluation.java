@@ -22,6 +22,10 @@ public class Evaluation {
 
 	private String clName;
 
+	private String coName;
+
+	private String tname;
+
 	
 	private String year;
 
@@ -44,6 +48,8 @@ public class Evaluation {
 	private Course course;
 
 	private Student student;
+	
+	private Classes classes;
 
 	public Integer getCaid() {
 		return caid;
@@ -209,5 +215,29 @@ public class Evaluation {
 	 */
 	public void setClName(String clName) {
 		this.clName = clName;
+	}
+
+	public String getCoName() {
+		return coName;
+	}
+
+	public void setCoName(String coName) {
+		this.coName = coName;
+	}
+
+	public String getTname() {
+		return tname;
+	}
+
+	public void setTname(String tname) {
+		this.tname = tname;
+	}
+
+	public Classes getClasses() {
+		return classes;
+	}
+
+	public void setClasses(Classes classes) {
+		this.classes = classes;
 	}
 }

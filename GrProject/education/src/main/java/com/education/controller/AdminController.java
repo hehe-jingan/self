@@ -6,7 +6,9 @@ package com.education.controller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -80,18 +82,78 @@ public class AdminController {
 
 	@Autowired
 	private EvaItemService evaItemService;
+//
+//	// 课程评价统计列表页面
+//	@RequestMapping(value = "/evaSummary/{chooseYear}/{chooseCourse}", method = RequestMethod.GET)
+//	public ModelAndView showEvaluationByValListaa(@PathVariable String chooseYear, @PathVariable Integer chooseCourse,HttpServletRequest request) {
+//		ModelAndView mv = new ModelAndView("admin/evaluate/evaSummaryList");
+//		List<Evaluation> evLists = elService.getAllEvaByGroupBy(
+//				new ArrayList<>(Arrays.asList("t.indexId ", " co.indexId", "cl.indexId", "e.year")));
+//		List<Evaluation> list2 = elService
+//				.getAllEvaByGroupBy(new ArrayList<>(Arrays.asList("t.indexId ", " cl.indexId")));
+//		List<Evaluation> listT = elService.getAllEvaByGroupBy(new ArrayList<>(Arrays.asList("t.indexId ")));
+//
+////		List<Evaluation> evLists = elService.getAllEvalationsByFilter(chooseYear, chooseCourse);
+//
+//		List<Evaluation> courseList = evLists.stream()
+//				.collect(Collectors.collectingAndThen(
+//						Collectors.toCollection(
+//								() -> new TreeSet<Evaluation>(Comparator.comparing(Evaluation::getCoName))),
+//						ArrayList::new));
+//		mv.addObject("courseLists", courseList.stream().map(Evaluation::getCourse).collect(Collectors.toList()));
+//		mv.addObject("chooseYear", chooseYear);
+//		mv.addObject("chooseCourse", chooseCourse);
+//		mv.addObject("yearLists", evLists.stream().map(Evaluation::getYear).distinct().collect(Collectors.toList()));
+//
+//		mv.addObject("evLists", evLists);
+//		mv.addObject("list2", list2);
+//		mv.addObject("listT", listT);
+//		return mv;
+//	}
 
 	// 课程评价统计列表页面
-	@RequestMapping(value = "/evaSummary", method = RequestMethod.GET)
-	public ModelAndView showEvaluationByValList(HttpServletRequest request) {
+	@RequestMapping(value = "/evaSummary/{type}/{chooseYear}/{chooseCo}/{chooseCl}/{chooseTea}", method = RequestMethod.GET)
+	public ModelAndView showEvaluationByValList(@PathVariable String type,@PathVariable String chooseYear,@PathVariable Integer chooseCo,@PathVariable Integer chooseCl,
+			@PathVariable Integer chooseTea,HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("admin/evaluate/evaSummaryList");
-		List<Evaluation> evLists = elService.getAllEvaByGroupBy(new ArrayList<>(Arrays.asList("t.indexId "," co.indexId")));
-		List<Evaluation> list2 = elService.getAllEvaByGroupBy(new ArrayList<>(Arrays.asList("t.indexId "," cl.indexId")));
-		List<Evaluation> listT = elService.getAllEvaByGroupBy(new ArrayList<>(Arrays.asList("t.indexId ")));
+		List<Evaluation> evLists = new ArrayList<Evaluation>();
+		if("1".equals(type)) {
+			evLists = elService.getAllEvaByGroupBy(
+					new ArrayList<>(Arrays.asList("t.indexId ", " co.indexId", "cl.indexId", "e.year")),chooseYear,chooseCo,chooseCl,chooseTea);
+		}else if("2".equals(type)) {
+			evLists = elService.getAllEvaByGroupBy(
+					new ArrayList<>(Arrays.asList("t.indexId ",  "cl.indexId", "e.year")),chooseYear,chooseCo,chooseCl,chooseTea);
+		}
 		
+
+//		List<Evaluation> evLists = elService.getAllEvalationsByFilter(chooseYear, chooseCourse);
+
+		List<Evaluation> courseList = evLists.stream()
+				.collect(Collectors.collectingAndThen(
+						Collectors.toCollection(
+								() -> new TreeSet<Evaluation>(Comparator.comparing(Evaluation::getCoName))),
+						ArrayList::new));
+		List<Evaluation> classList = evLists.stream()
+				.collect(Collectors.collectingAndThen(
+						Collectors.toCollection(
+								() -> new TreeSet<Evaluation>(Comparator.comparing(Evaluation::getClName))),
+						ArrayList::new));
+		List<Evaluation> tesList = evLists.stream()
+				.collect(Collectors.collectingAndThen(
+						Collectors.toCollection(
+								() -> new TreeSet<Evaluation>(Comparator.comparing(Evaluation::getTname))),
+						ArrayList::new));
+		mv.addObject("courseLists", courseList.stream().map(Evaluation::getCourse).collect(Collectors.toList()));
+		mv.addObject("chooseYear", chooseYear);
+		mv.addObject("chooseCourse", chooseCo);
+		mv.addObject("chooseCl", chooseCl);
+		mv.addObject("chooseTea", chooseTea);
+		mv.addObject("yearLists", evLists.stream().map(Evaluation::getYear).distinct().collect(Collectors.toList()));
+		mv.addObject("classLists", classList.stream().map(Evaluation::getClasses).collect(Collectors.toList()));
+		mv.addObject("teaLists", tesList.stream().map(Evaluation::getTeacher).collect(Collectors.toList()));
+
+		mv.addObject("type", type);
 		mv.addObject("evLists", evLists);
-		mv.addObject("list2", list2);
-		mv.addObject("listT", listT);
 		return mv;
 	}
 
@@ -125,9 +187,44 @@ public class AdminController {
 
 	// 课程评价列表页面
 	@RequestMapping(value = "/evaluationList", method = RequestMethod.GET)
-	public ModelAndView showEvaluationList(HttpServletRequest request) {
+	public ModelAndView showEvaluationAllList(HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView("admin/evaluate/evaluateList");
-		List<Evaluation> evLists = elService.getAllEvalations();
+		String chooseYear = "all";
+		Integer chooseCourse = 0;
+		List<Evaluation> evLists = elService.getAllEvalationsByFilter(chooseYear, chooseCourse);
+
+		List<Evaluation> courseList = evLists.stream()
+				.collect(Collectors.collectingAndThen(
+						Collectors.toCollection(
+								() -> new TreeSet<Evaluation>(Comparator.comparing(Evaluation::getCoName))),
+						ArrayList::new));
+		mv.addObject("courseLists", courseList.stream().map(Evaluation::getCourse).collect(Collectors.toList()));
+		mv.addObject("chooseYear", chooseYear);
+		mv.addObject("chooseCourse", chooseCourse);
+		mv.addObject("yearLists", evLists.stream().map(Evaluation::getYear).distinct().collect(Collectors.toList()));
+
+		mv.addObject("evaItem", evaItemService.getAllEvaItem());
+		mv.addObject("evLists", evLists);
+
+		return mv;
+	}
+
+	// 课程评价列表页面
+	@RequestMapping(value = "/evaluationList/{chooseYear}/{chooseCourse}", method = RequestMethod.GET)
+	public ModelAndView showEvaluationList(@PathVariable String chooseYear, @PathVariable Integer chooseCourse,
+			HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView("admin/evaluate/evaluateList");
+		List<Evaluation> evLists = elService.getAllEvalationsByFilter(chooseYear, chooseCourse);
+		List<Evaluation> courseList = evLists.stream()
+				.collect(Collectors.collectingAndThen(
+						Collectors.toCollection(
+								() -> new TreeSet<Evaluation>(Comparator.comparing(Evaluation::getCoName))),
+						ArrayList::new));
+
+		mv.addObject("yearLists", evLists.stream().map(Evaluation::getYear).distinct().collect(Collectors.toList()));
+		mv.addObject("courseLists", courseList.stream().map(Evaluation::getCourse).collect(Collectors.toList()));
+		mv.addObject("chooseYear", chooseYear);
+		mv.addObject("chooseCourse", chooseCourse);
 		mv.addObject("evaItem", evaItemService.getAllEvaItem());
 		mv.addObject("evLists", evLists);
 
@@ -571,9 +668,10 @@ public class AdminController {
 	// 新增督导
 	@RequestMapping(value = "/addSupervisor", method = RequestMethod.POST)
 	@ResponseBody
-	public JSONObject addSupervisor(String supervisorName, String supervisorPass, String supervisorType,String spare1) {
+	public JSONObject addSupervisor(String supervisorName, String supervisorPass, String supervisorType,
+			String spare1) {
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("msg", supervisorService.addSupervisor(supervisorName, supervisorPass,spare1));
+		jsonObject.put("msg", supervisorService.addSupervisor(supervisorName, supervisorPass, spare1));
 		return jsonObject;
 	}
 
@@ -582,7 +680,7 @@ public class AdminController {
 	public ModelAndView showAddSupervisor() {
 		ModelAndView mv = new ModelAndView("admin/supervisor/addSupervisor");
 		mv.addObject("superNo", adminService.getNewNo("3"));
-		
+
 		return mv;
 	}
 
@@ -673,8 +771,7 @@ public class AdminController {
 		Admin admin = (Admin) request.getSession().getAttribute("admin");
 		if (admin == null) {
 			msg = "用户未登录！";
-		}
-		else {
+		} else {
 			msg = adminService.changePass(admin, newPass, oldPass, request);
 		}
 		jsonObject.put("msg", msg);
@@ -704,8 +801,7 @@ public class AdminController {
 
 		if (request.getSession().getAttribute("admin") == null) {
 			return mv;
-		}
-		else {
+		} else {
 			if ("logout".equals(flag)) {
 				request.getSession().removeAttribute("admin");
 			}
@@ -722,8 +818,5 @@ public class AdminController {
 		jsonObject.put("msg", str);
 		return jsonObject;
 	}
-	
-	
-	
 
 }

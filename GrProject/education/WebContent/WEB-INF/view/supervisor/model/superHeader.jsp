@@ -1,7 +1,4 @@
 <%@page import="com.education.pojo.Supervisor"%>
-<%@page import="com.education.pojo.Teacher"%>
-<%@page import="com.education.pojo.Student"%>
-<%@page import="com.education.pojo.Admin"%>
 <%@page import="java.util.Calendar"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
@@ -109,33 +106,6 @@
  var userIsLoginFlag = "<%=userLoginFlag%>"; 
  var userId = "<%=userId%>";
  
- function getMessageCount(){
-	
-<%-- 	 var url = "<%=basePath%>admin/getMessageCount"; --%>
-// 	 var data = "adminId="+adminId;
-// 	 $.ajax({
-// 	       	type : "POST",
-// 	       	url : url,
-// 	       	data : data,
-// 	       	dataType : "json",
-// 	       	success : function(data){
-// 	       		if(data.msg=="success"){
-// 	       				var count = data.data;
-// 	       				console.log("cont="+count);
-// 	       				if(count>0){
-// 	       					$("#messageCount").html(count);
-// 	       					$("#messageCount").addClass("count bg-danger");
-// 	       				}else{
-// 	       					$("#messageCount").html("");
-// 	       					$("#messageCount").removeClass("count bg-danger");
-// 	       				}
-	       				
-// 	       		}
-// 	       		}
-	     			
-// 	 });
-	 
- }
   $(document).ready(function() {
 // 	  getMessageCount();
 	  if(userIsLoginFlag=="false"){

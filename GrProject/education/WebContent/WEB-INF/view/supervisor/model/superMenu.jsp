@@ -15,7 +15,7 @@
 <%-- 				<li><a href="<%=basePath%>supervisor/courseList"> <i class="menu-icon  fa-mail-forward (alias)"></i>我的课程 </a></li> --%>
 				<li class="menu-title">评价模块</li>
 				<li><a href="<%=basePath%>supervisor/evaluationList"> <i class="menu-icon fa-comments"></i>所有评价</a></li>
-					 <li><a href="<%=basePath%>supervisor/evaSummary">
+					 <li><a href="<%=basePath%>supervisor/evaSummary/1/all/0/0/0">
 				 <i class="menu-icon fa-comments"></i>评价统计</a></li>
 				<li class="menu-title">个人模块</li>
 				<li><a href="<%=basePath%>supervisor/myInfo"> <i class="menu-icon   fa-archive"></i>我的信息 </a></li>

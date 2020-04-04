@@ -12,6 +12,24 @@
 <%@taglib uri="/WEB-INF/fn.tld" prefix="fn"%>
 <%
 
+String chooseYear = "all";
+Integer chooseCourse = 0;
+
+if (request.getAttribute("chooseCourse") != null) {
+	chooseCourse = (Integer) request.getAttribute("chooseCourse");
+}
+if (request.getAttribute("chooseYear") != null) {
+	chooseYear = (String) request.getAttribute("chooseYear");
+}
+
+List<String> yearLists = new ArrayList<String>();
+if (request.getAttribute("yearLists") != null) {
+	yearLists = (List<String>) request.getAttribute("yearLists");
+}
+List<Course> courseLists = new ArrayList<Course>();
+if (request.getAttribute("courseLists") != null) {
+	courseLists = (List<Course>) request.getAttribute("courseLists");
+}
 List<EvaItem> evaItem = new ArrayList<EvaItem>();
 if (request.getAttribute("evaItem") != null) {
 	evaItem = (List<EvaItem>) request.getAttribute("evaItem");
@@ -65,6 +83,45 @@ if (request.getAttribute("evaItem") != null) {
 									<!--                                   <span class="btn btn-lg btn-outline-secondary float-right" id="addCourseBtn">新增课程</span>  -->
 								</div>
 								<div class="card-body">
+								<div> 
+								<div class="form-group col-md-10  input-group" >
+								<label for="cc-year" class="control-label mb-1 col-md-2">搜索条件</label> 
+											<label for="cc-year" class="control-label mb-1 col-md-1">年度学期</label> 
+<!-- 										style="font-size: 15px;" -->
+											<select  data-placeholder="Choose a year" id="chooseYear" name="chooseYear" class="col-md-2" tabindex="1">
+												<option value="all">所有</option>
+												<%
+												if(yearLists!=null||yearLists.size()!=0){
+													for(int i=0;i<yearLists.size();i++){
+														String temp = yearLists.get(i);
+														if(temp.equals(chooseYear)){
+												%>
+												<option selected="selected" value="<%=temp %>"><%=temp %></option>
+												<%}else{ %>
+												<option value="<%=temp %>"><%=temp %></option>
+												<%	
+												}}}
+												%>
+												
+											</select>
+											<label for="cc-course" class="control-label mb-1 col-md-1 offset-md-1">课程</label> 
+											<select data-placeholder="Choose a course" id="chooseCourse" name="chooseCourse" class=" col-md-2" tabindex="1">
+												<option value="0">所有</option>
+												<%
+												if(courseLists!=null||courseLists.size()!=0){
+													for(int i=0;i<courseLists.size();i++){
+														Course temp = courseLists.get(i);
+												if(chooseCourse.equals(temp.getIndexid())){
+												%>
+												<option selected="selected" value="<%=temp.getIndexid() %>"><%=temp.getName() %></option>
+												<%}else{ %>
+												<option value="<%=temp.getIndexid() %>"><%=temp.getName() %></option>
+												<%	
+												}}}
+												%>
+											</select>
+										</div>
+								</div>
 									<table id="bootstrap-data-table"
 										class="table table-striped table-bordered">
 										<thead>
@@ -153,11 +210,11 @@ if (request.getAttribute("evaItem") != null) {
 											%>
 											<div class="form-group input-group">
 												<!-- 											<label for="cc-payment" class="control-label mb-1 col-md-2" > -->
-												<input type="text" id="" name=""
+												<input type="text"  name=""
 													class="form-control col-md-1" aria-required="true"
 													aria-invalid="false" value="<%=(i + 1)%>" disabled="disabled"></label>
 												<%-- 												<input name="ids" value="<%=(i+1)%>" type="hidden"/> --%>
-												<input type="text" id="" name="content" class="form-control"
+												<input type="text" name="content" class="form-control"
 													aria-required="true" aria-invalid="false"
 													value="<%=evaItem.get(i).getIname()%>" disabled="disabled">
 												<div class="form-group">
@@ -272,6 +329,20 @@ if (request.getAttribute("evaItem") != null) {
     			 $("#evaItem"+i).prop("selected","");
     		 }
     	 }
+    	 var coYear = "<%=chooseYear%>";
+    	 var coCourse = "<%=chooseCourse%>";
+    	 
+    	 $("#chooseYear").on('change',function(){
+    		var val = $(this).val();
+    		console.log("val="+val);
+    		window.location = "<%=basePath%>admin/evaluationList/"+val+"/"+coCourse+"";
+    	 });
+    	 
+    	 $("#chooseCourse").on('change',function(){
+     		var val = $(this).val();
+     		console.log("val="+val);
+     		window.location = "<%=basePath%>admin/evaluationList/"+coYear+"/"+val;
+     	 });
     	 
     	 
     	 $("#makeSure").click(function(){

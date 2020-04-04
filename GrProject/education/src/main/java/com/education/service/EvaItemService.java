@@ -15,6 +15,7 @@ public class EvaItemService {
 	@Autowired
 	private EvaItemMapper dao;
 	
+	
 	//获取所有分项
 	public List<EvaItem> getAllEvaItem() {
 		return dao.selectByExample(new EvaItemExample());

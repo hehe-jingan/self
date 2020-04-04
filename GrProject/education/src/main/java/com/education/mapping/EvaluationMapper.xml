@@ -12,6 +12,9 @@
 		<result column="evaAvg" property="evaavg" jdbcType="DECIMAL" />
 		<result column="content" property="content" jdbcType="VARCHAR" />
 		<result column="clName" property="clName" jdbcType="VARCHAR" />
+		<result column="coName" property="coName" jdbcType="VARCHAR" />
+		<result column="tName" property="tname" jdbcType="VARCHAR" />
+		
 		<result column="year" property="year" jdbcType="VARCHAR" />
 		<result column="is_delete" property="isDelete"
 			jdbcType="VARCHAR" />
@@ -48,6 +51,10 @@
 			<result column="tspare1" property="spare1"
 				jdbcType="TIMESTAMP" />
 			<result column="tspare2" property="spare2" jdbcType="VARCHAR" />
+		</association>
+		<association property="classes" column="clid" javaType="com.education.pojo.Classes">
+			<id property="indexid" column="clid" />
+			<result column="clName" property="name" jdbcType="VARCHAR" />
 		</association>
 	</resultMap>
 	<sql id="Example_Where_Clause">
@@ -118,9 +125,9 @@
 		e.indexId, e.sid, e.caid, e.score, e.content, e.year, e.is_delete, e.inputDate,
 		e.inputName, e.modifyDate,
 		e.modifyName, e.spare1, e.spare2,t.name as tName,t.email,t.sex,t.age,t.onjob,c.name
-		as cName,c.is_use as cIsUse,
+		as cName,c.is_use as cIsUse,c.name as coName ,
 		c.spare1 as cspare,c.spare2 as
-		cspare2,s.name as stuName,cl.name as clName
+		cspare2,s.name as stuName,cl.name as clName,c.indexId as cid
 	</sql>
 	<select id="selectByExample" resultMap="BaseResultMap"
 		parameterType="com.education.pojo.EvaluationExample">
@@ -161,10 +168,10 @@
 		e.indexId, e.sid, e.caid, e.score, e.content, e.year, e.is_delete, e.inputDate,
 		e.inputName, e.modifyDate,
 		e.modifyName, e.spare1, e.spare2,t.name as tName,t.email,t.sex,t.age,t.onjob,co.name
-		as cName,co.is_use as cIsUse,
+		as cName,co.is_use as cIsUse,co.indexId as cid,
 		co.spare1 as cspare,co.spare2 as
 		cspare2,s.name as stuName,sum(e.score) as evaTotal,count(e.score)as evaCount,
-		round(sum(e.score)/count(e.score),2) as evaAvg,cl.name as clName
+		round(sum(e.score)/count(e.score),2) as evaAvg,cl.name as clName,co.name as coName,cl.indexId as clid
 		from evaluation e
 		left join course_arrange coa on coa.indexId = e.caid
 		left join course co on coa.cid = co.indexId
@@ -186,21 +193,34 @@
 		e.indexId, e.sid, e.caid, e.score, e.content, e.year, e.is_delete, e.inputDate,
 		e.inputName, e.modifyDate,
 		e.modifyName, e.spare1, e.spare2,t.name as tName,t.email,t.sex,t.age,t.onjob,co.name
-		as cName,co.is_use as cIsUse,
+		as cName,co.is_use as cIsUse,t.indexId as tid,
 		co.spare1 as cspare,co.spare2 as
 		cspare2,s.name as stuName,sum(e.score) as evaTotal,count(e.score)as evaCount,
-		round(sum(e.score)/count(e.score),2) as evaAvg,cl.name as clName
+		round(sum(e.score)/count(e.score),2) as evaAvg,cl.name as clName,co.indexId as cid ,co.name as coName,cl.indexId as clid
 		from evaluation e
 		left join course_arrange coa on coa.indexId = e.caid
 		left join course co on coa.cid = co.indexId
 		left join teacher t on t.indexId = coa.tid
 		left join student s on s.indexId = e.sid
 		left join classes cl on cl.indexId = s.classId
+		where 1 = 1 
+		<if test="param2 != null and param2 != 'all'">
+			and e.year =  ${param2} 
+		</if>
+		<if test="param3 != null and param3 != 0">
+			and co.indexId =  ${param3} 
+		</if>
+		<if test="param4 != null and param4 != 0">
+			and cl.indexId =  ${param4} 
+		</if>
+		<if test="param5 != null and param5 != 0">
+			and t.indexId =  ${param5} 
+		</if>
 <!-- 		group by ${0,jdbcType=VARCHAR},${1,jdbcType=VARCHAR} -->
 		group by 
 <!-- 		group by #{0,jdbcType=VARCHAR},#{1,jdbcType=VARCHAR} -->
 <!-- 		t.indexId,cl.indexId -->
-		<foreach collection="list" item="listItem" separator=",">
+		<foreach collection="param1" item="listItem" separator=",">
 									 ${listItem}
 									</foreach>
 	</select>
