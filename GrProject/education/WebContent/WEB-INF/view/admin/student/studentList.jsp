@@ -58,7 +58,7 @@ List<Student> list = null;
                                     <thead>
                                         <tr>
                                             <th>编号</th>
-                                            <th>学号</th>
+<!--                                             <th>学号</th> -->
                                             <th>姓名</th>
                                             <th>性别</th>
                                             <th>年龄</th>
@@ -72,7 +72,7 @@ List<Student> list = null;
                   %>
                                         <tr>
                                             <td><%=i+1 %></td>
-                                            <td><%=list.get(i).getSpare1() %></td>
+<%--                                             <td><%=list.get(i).getSpare1() %></td> --%>
                                             <td><%=list.get(i).getName() %></td>
                                              <td><%=list.get(i).getSex() %></td>
                                              <td><%=list.get(i).getAge() %></td> 

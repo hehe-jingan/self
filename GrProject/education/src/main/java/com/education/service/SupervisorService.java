@@ -110,7 +110,15 @@ public class SupervisorService {
 		criteria.andNameEqualTo(loginAccount);
 		List<Supervisor> sup = superDao.selectByExample(example);
 		if (sup.size() != 1) {
-			return "用户名错误！！！";
+			if (sup.size() != 1) {
+				SupervisorExample example2 = new SupervisorExample();
+				Criteria criteria2 = example2.createCriteria();
+				criteria2.andSpare1EqualTo(loginAccount);
+				sup = superDao.selectByExample(example2);
+				if(sup.size() != 1) {
+					return "用户名错误！！！";
+				}
+			}		
 		}
 
 		if (!sup.get(0).getPass().equals(loginPass)) {

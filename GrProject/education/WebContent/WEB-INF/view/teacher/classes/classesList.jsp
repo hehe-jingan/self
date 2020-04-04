@@ -62,7 +62,7 @@ List<ClassArrange> list = null;
                                             <th>课程名称</th>
                                             <th>是否使用中</th>
                                             <th>班级人数</th>
-                                            <th>操作</th>
+<!--                                             <th>操作</th> -->
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -78,7 +78,7 @@ List<ClassArrange> list = null;
 <%--                                              <td><%=("1".equals(list.get(i).getOnjob()))?"在职":"离职" %></td> --%>
 <%--                                             <td><%=list.get(i).getLastlogindate()==null?"暂未登录":sdf.format(list.get(i).getLastlogindate()) %></td> --%>
                                              <td>
-                                              <a href="<%=basePath%>teacher/studentList/<%=list.get(i).getIndexid()%>" >详情</a>
+<%--                                               <a href="<%=basePath%>teacher/studentList/<%=list.get(i).getIndexid()%>" >详情</a> --%>
 <%--                                               <a href="<%=basePath%>admin/arrangeStudent/<%=list.get(i).getIndexid()%>" >学生安排</a> --%>
 <%--                                              <a href="#" id="deleteClassesBtn<%=list.get(i).getIndexid() %>" data-am-modal="{closeOnConfirm	: false,target: '#deleteAd', closeViaDimmer: 0, width: 400, height: 125}">删除</a> --%>
                                         </td>

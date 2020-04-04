@@ -82,7 +82,13 @@ public class StudentService {
 			List<Student> stus = stuDao.selectByExample(example);
 			System.out.println("studentSize=" + stus.size());
 			if (stus.size() != 1) {
-				return "用户名错误！！！";
+				StudentExample example2 = new StudentExample();
+				Criteria criteria2 = example2.createCriteria();
+				criteria2.andSpare1EqualTo(loginAccount);
+				stus = stuDao.selectByExample(example2);
+				if(stus.size() != 1) {
+					return "用户名错误！！！";
+				}
 			}
 
 			if (!stus.get(0).getPass().equals(loginPass)) {

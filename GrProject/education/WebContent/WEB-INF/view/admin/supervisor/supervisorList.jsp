@@ -56,8 +56,8 @@ List<Supervisor> list = null;
                                 <table id="bootstrap-data-table" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>编号</th>
-                                            <th>督导号</th>
+<!--                                             <th>编号</th> -->
+<!--                                             <th>督导号</th> -->
                                             <th>账号</th>
                                             <th>最后登录时间</th>
                                             <th>操作</th>
@@ -68,8 +68,8 @@ List<Supervisor> list = null;
                   	for(int i = 0;i<list.size();i++){
                   %>
                                         <tr>
-                                            <td><%=i+1 %></td>
-                                             <td><%=list.get(i).getSpare1() %></td>
+<%--                                             <td><%=i+1 %></td> --%>
+<%--                                              <td><%=list.get(i).getSpare1() %></td> --%>
                                             <td><%=list.get(i).getName() %></td>
                                             <td><%=list.get(i).getLastlogindate()==null?"暂未登录":sdf.format(list.get(i).getLastlogindate()) %></td>
                                              <td><a href="#" id="deleteSupervisorBtn<%=list.get(i).getIndexid() %>" data-am-modal="{closeOnConfirm	: false,target: '#deleteAd', closeViaDimmer: 0, width: 400, height: 125}">删除</a>

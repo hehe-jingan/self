@@ -53,6 +53,17 @@
                             <label>密码</label>
                             <input type="password" class="form-control" placeholder="请输入密码" name="pass" id="pass" value="123">
                         </div>
+                         <div class="form-group">
+											<label for="cc-sex" class="control-label mb-1">登录角色</label> 
+											<br/> 
+											<select data-placeholder="Choose a Sex..." id="loginType"
+												name="loginType" class="form-control" tabindex="1">
+												<option value="<%=basePath%>admin/login" >管理员</option>
+												<option value="<%=basePath%>teacher/login" selected="selected">教师</option>
+												<option value="<%=basePath%>supervisor/login">督导</option>
+												<option value="<%=basePath%>student/login">学生</option>
+											</select>
+										</div>
                         <div class="checkbox">
 
                         </div>
@@ -82,6 +93,10 @@
 
 $(document).ready(function(){
 	 
+	//切换登录角色
+	$("#loginType").on('change',function(){
+		window.location.href= $(this).val();
+	});
 	//登录
 	$("#login").click(function(e){
 		e.preventDefault();
