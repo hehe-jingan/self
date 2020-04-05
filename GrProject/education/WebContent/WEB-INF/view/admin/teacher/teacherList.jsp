@@ -56,8 +56,8 @@ List<Teacher> list = null;
                                 <table id="bootstrap-data-table" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>编号</th>
-<!--                                             <th>教师号</th> -->
+<!--                                             <th>编号</th> -->
+                                            <th>教师号</th>
                                             <th>姓名</th>
                                             <th>性别</th>
                                             <th>年龄</th>
@@ -71,9 +71,10 @@ List<Teacher> list = null;
                   	for(int i = 0;i<list.size();i++){
                   %>
                                         <tr>
-                                            <td><%=i+1 %></td>
+<%--                                             <td><%=i+1 %></td> --%>
+					<td><%=list.get(i).getSpare1() %></td>
                                             <td><%=list.get(i).getName() %></td>
-<%--                                             <td><%=list.get(i).getSpare1() %></td> --%>
+                                            
                                              <td><%=list.get(i).getSex() %></td>
                                              <td><%=list.get(i).getAge() %></td>
                                              <td><%=list.get(i).getEmail() %></td>
