@@ -47,11 +47,11 @@
                     <form id="studentLoginForm">
                         <div class="form-group">
                             <label>教师账号</label>
-                            <input type="text" class="form-control" placeholder="请输入账号" name="name" id="name"  value="张兰花">
+                            <input type="text" class="form-control" placeholder="请输入账号" name="name" id="name"  value="">
                         </div>
                         <div class="form-group">
                             <label>密码</label>
-                            <input type="password" class="form-control" placeholder="请输入密码" name="pass" id="pass" value="123">
+                            <input type="password" class="form-control" placeholder="请输入密码" name="pass" id="pass" value="">
                         </div>
                          <div class="form-group">
 											<label for="cc-sex" class="control-label mb-1">登录角色</label> 
