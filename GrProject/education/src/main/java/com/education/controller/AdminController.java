@@ -39,7 +39,6 @@ import com.education.service.EvaluationService;
 import com.education.service.StudentService;
 import com.education.service.SupervisorService;
 import com.education.service.TeacherService;
-import com.education.service.UserService;
 import com.mysql.jdbc.StringUtils;
 
 /**
@@ -50,8 +49,6 @@ import com.mysql.jdbc.StringUtils;
 @RequestMapping(value = "/admin")
 public class AdminController {
 
-	@Autowired
-	private UserService userService;
 
 	@Autowired
 	private AdminService adminService;
@@ -122,7 +119,7 @@ public class AdminController {
 					new ArrayList<>(Arrays.asList("t.indexId ", " co.indexId", "cl.indexId", "e.year")),chooseYear,chooseCo,chooseCl,chooseTea);
 		}else if("2".equals(type)) {
 			evLists = elService.getAllEvaByGroupBy(
-					new ArrayList<>(Arrays.asList("t.indexId ",  "cl.indexId", "e.year")),chooseYear,chooseCo,chooseCl,chooseTea);
+					new ArrayList<>(Arrays.asList("t.indexId ", "e.year")),chooseYear,chooseCo,chooseCl,chooseTea);
 		}
 		
 
@@ -726,40 +723,7 @@ public class AdminController {
 		return mv;
 	}
 
-	// 新增用户页面
-	@RequestMapping(value = "/addUser", method = RequestMethod.GET)
-	public ModelAndView showAddUser() {
-		ModelAndView mv = new ModelAndView("admin/addUser");
-		mv.addObject("newCertId", userService.getNewCertId());
-		return mv;
-	}
 
-	// 删除用户
-	@RequestMapping(value = "/deleteUser", method = RequestMethod.POST)
-	@ResponseBody
-	public JSONObject deleteUser(Integer userId) {
-		JSONObject jsonObject = new JSONObject();
-		String msg = adminService.deleteUser(userId);
-		jsonObject.put("msg", msg);
-		return jsonObject;
-	}
-
-	// 用户管理页面
-	@RequestMapping(value = "/userList", method = RequestMethod.GET)
-	public ModelAndView showUserList() {
-		ModelAndView mv = new ModelAndView("admin/userList");
-		mv.addObject("userList", adminService.getAllUser());
-		return mv;
-	}
-
-	// 新增用户
-	@RequestMapping(value = "/addUser", method = RequestMethod.POST)
-	@ResponseBody
-	public JSONObject addUser(String name, String idcard, String pass, String certNo, String age, String sex) {
-		JSONObject jsonObject = new JSONObject();
-		jsonObject.put("msg", userService.addUser(name, idcard, pass, certNo, age, sex));
-		return jsonObject;
-	}
 
 	// 修改密码
 	@RequestMapping(value = "/changePass", method = RequestMethod.POST)

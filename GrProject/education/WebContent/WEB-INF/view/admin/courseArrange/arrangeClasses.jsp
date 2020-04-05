@@ -107,7 +107,7 @@
 
 										<div class="form-group">
 											<label for="cc-sex" class="control-label mb-1">排课班级</label> <br />
-											<select data-placeholder="请选择一个课室" id="cid" multiple
+											<select data-placeholder="请选择一个班级" id="cid" multiple
 												name="cid" class="form-control standardSelect " tabindex="1">
 												<option value="" label="default"></option>
 												<%

@@ -77,11 +77,11 @@ List<ClassArrange> list = null;
                                              	<td><%=list.get(i).getClasses().getStucount() %></td>
 <%--                                              <td><%=("1".equals(list.get(i).getOnjob()))?"在职":"离职" %></td> --%>
 <%--                                             <td><%=list.get(i).getLastlogindate()==null?"暂未登录":sdf.format(list.get(i).getLastlogindate()) %></td> --%>
-                                             <td>
+<!--                                              <td> -->
 <%--                                               <a href="<%=basePath%>teacher/studentList/<%=list.get(i).getIndexid()%>" >详情</a> --%>
 <%--                                               <a href="<%=basePath%>admin/arrangeStudent/<%=list.get(i).getIndexid()%>" >学生安排</a> --%>
 <%--                                              <a href="#" id="deleteClassesBtn<%=list.get(i).getIndexid() %>" data-am-modal="{closeOnConfirm	: false,target: '#deleteAd', closeViaDimmer: 0, width: 400, height: 125}">删除</a> --%>
-                                        </td>
+<!--                                         </td> -->
                                         </tr>
                                         <%}
                   	} %>
@@ -112,7 +112,7 @@ List<ClassArrange> list = null;
             <div class="footer-inner bg-white">
                 <div class="row">
                     <div class="col-sm-6">
-                        Copyright &copy; 2020 Library. </a>
+                        Copyright &copy; 2020 Education. </a>
                     </div>
                     <div class="col-sm-6 text-right"> Designed by ZhiYong
                     </div>

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.education.dao.CourseMapper;
 import com.education.pojo.Course;
 import com.education.pojo.CourseExample;
-import com.education.pojo.CourseExample.Criteria;
 
 @Service
 public class CourseService {

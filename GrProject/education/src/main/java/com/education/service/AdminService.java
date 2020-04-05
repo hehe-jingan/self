@@ -23,7 +23,6 @@ import com.education.dao.EvaluationMapper;
 import com.education.dao.StudentMapper;
 import com.education.dao.SupervisorMapper;
 import com.education.dao.TeacherMapper;
-import com.education.dao.UserMapper;
 import com.education.pojo.Admin;
 import com.education.pojo.AdminExample;
 import com.education.pojo.AdminExample.Criteria;
@@ -41,11 +40,7 @@ import com.education.pojo.Supervisor;
 import com.education.pojo.SupervisorExample;
 import com.education.pojo.Teacher;
 import com.education.pojo.TeacherExample;
-import com.education.pojo.User;
-import com.education.pojo.UserExample;
 import com.mysql.jdbc.StringUtils;
-
-import tk.mybatis.mapper.util.StringUtil;
 
 /**
  * @author joy_zheng
@@ -57,8 +52,6 @@ public class AdminService {
 	@Autowired
 	private AdminMapper adminDao;
 
-	@Autowired
-	private UserMapper userDao;
 
 	@Autowired
 	private TeacherMapper teacherDao;
@@ -320,6 +313,12 @@ public class AdminService {
 
 	// 删除教师信息
 	public String deleteTeacher(Integer indexid) {
+		Teacher tea = teacherDao.selectByPrimaryKey(indexid);
+		if("1".equals(tea.getOnjob())) {
+			return "删除失败，该教师还在职中，请修改教室状态再删除！！！";
+		}
+		
+		
 		int result = teacherDao.deleteByPrimaryKey(indexid);
 		if (result != 1) {
 			return "ERROR";
@@ -329,6 +328,17 @@ public class AdminService {
 
 	// 修改教师信息
 	public String updateTeacher(Teacher teacher, String inputName) {
+		if("0".equals(teacher.getOnjob())) {
+			CourseArrangeExample example = new CourseArrangeExample();
+			com.education.pojo.CourseArrangeExample.Criteria criteria = example.createCriteria();
+			criteria.andCidEqualTo(teacher.getIndexid());
+			int count = courseArrangeDao.countByExample(example);
+			if(count != 0) {
+				return "修改状态失败，该教师还有课程安排，请先删除课程安排再修改教师在职状态！！！";
+			}
+		}
+		
+		
 		teacher.setModifydate(new Date());
 		teacher.setModifyname(inputName);
 		int result = teacherDao.updateByPrimaryKeySelective(teacher);
@@ -395,21 +405,6 @@ public class AdminService {
 		return result;
 	}
 
-	// 删除用户
-	public String deleteUser(Integer userId) {
-
-		int result = userDao.deleteByPrimaryKey(userId);
-		if (result == 1) {
-			return "SUCCESS";
-		}
-		return "删除用户失败，请重试！！";
-	}
-
-	// 获取所有用户
-	public List<User> getAllUser() {
-		UserExample example = new UserExample();
-		return userDao.selectByExample(example);
-	}
 
 	// 修改密码
 	public String changePass(Admin user, String newPass, String oldPass, HttpServletRequest request) {

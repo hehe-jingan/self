@@ -88,7 +88,7 @@ if (request.getAttribute("evaItem") != null) {
 								<div class="card-body">
 								<div class="form-group col-md-10  input-group" >
 								<label for="cc-year" class="control-label mb-1 col-md-2">搜索条件</label> 
-											<label for="cc-year" class="control-label mb-1 col-md-1">年度学期</label> 
+											<label for="cc-year" class="control-label mb-1 col-md-2">年度学期</label> 
 <!-- 										style="font-size: 15px;" -->
 											<select  data-placeholder="Choose a year" id="chooseYear" name="chooseYear" class="col-md-2" tabindex="1">
 												<option value="all">所有</option>
@@ -190,7 +190,7 @@ if (request.getAttribute("evaItem") != null) {
 			<div class="footer-inner bg-white">
 				<div class="row">
 					<div class="col-sm-6">
-						Copyright &copy; 2020 Library. </a>
+						Copyright &copy; 2020 Education. </a>
 					</div>
 					<div class="col-sm-6 text-right">Designed by ZhiYong</div>
 				</div>

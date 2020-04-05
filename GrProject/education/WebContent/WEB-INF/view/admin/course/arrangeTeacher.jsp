@@ -90,7 +90,7 @@ if(request.getAttribute("teacherNoCourseList")!=null){
                                 if(teacherNoCourseList!=null){
                                 	for(int i = 0;i<teacherNoCourseList.size();i++){
                                 	%>
-                                	<option value="<%=teacherNoCourseList.get(i).getIndexid() %>" ><%=teacherNoCourseList.get(i).getName() %></option>
+                                	<option value="<%=teacherNoCourseList.get(i).getIndexid() %>" ><%=teacherNoCourseList.get(i).getSpare1() %>  <%=teacherNoCourseList.get(i).getName() %></option>
                                 	<%
                                 	}
                                 }

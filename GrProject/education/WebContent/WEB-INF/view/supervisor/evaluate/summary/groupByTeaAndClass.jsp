@@ -34,21 +34,6 @@
 <!-- 											<label for="cc-course" class="control-label mb-1 col-md-1 offset-md-1">课程</label>  -->
 											
 <!-- 											<label for="cc-course" class="control-label mb-1 col-md-1 offset-md-1">班级</label>  -->
-											<select data-placeholder="Choose a course" id="chooseClass" name="chooseClass" class=" col-md-2" tabindex="1">
-												<option value="0">所有班级</option>
-												<%
-												if(classLists!=null||classLists.size()!=0){
-													for(int i=0;i<classLists.size();i++){
-														Classes temp = classLists.get(i);
-												if(chooseClass.equals(temp.getIndexid())){
-												%>
-												<option selected="selected" value="<%=temp.getIndexid() %>"><%=temp.getName() %></option>
-												<%}else{ %>
-												<option value="<%=temp.getIndexid() %>"><%=temp.getName() %></option>
-												<%	
-												}}}
-												%>
-											</select>
 <!-- 											<label for="cc-course" class="control-label mb-1 col-md-1 offset-md-1">教师</label>  -->
 											<select data-placeholder="Choose a course" id="chooseTea" name="chooseTea" class=" col-md-2" tabindex="1">
 												<option value="0">所有教师</option>
@@ -89,7 +74,7 @@
 			<td><%=i + 1%></td>
 			
 			<td><%=year.substring(0, 4) + "年度第" + year.substring(4, 6) + "学期"%></td>
-			<td><%=list2.get(i).getClName()%></td>
+<%-- 			<td><%=list2.get(i).getClName()%></td> --%>
 			<td><%=list2.get(i).getTeacher().getName()%></td>
 			<td><%=list2.get(i).getEvacount()%></td>
 			<td><%=list2.get(i).getEvaavg()%></td>

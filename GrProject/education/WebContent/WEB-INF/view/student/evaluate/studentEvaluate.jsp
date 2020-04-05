@@ -255,9 +255,12 @@
     	$("#makeSure").click(function(){
    		 var courseId = "<%=courseArrange.getIndexid()%>";
    		 var year =  "<%=courseArrange.getYear()%>";
+   		 var contentval = $("#content").val();
    			 if(!checkCal()){
-   				alert("还有评分未完成，请评分！");
-   			 }else if(confirm("确认要评价吗？")){
+   				alert("请认真耐心对待教师评价！");
+   			 }else if(contentval==""){
+   				 alert("请填写教师评价！！");
+   			 } else if(confirm("确认要评价吗？")){
    			 var data = decodeURIComponent($("#form5").serialize(),true);
 				data = data+"&caid= "+courseId+"&year="+year;
    			 console.log("data= "+data);

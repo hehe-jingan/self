@@ -56,7 +56,7 @@ public class SupervisorController {
 					new ArrayList<>(Arrays.asList("t.indexId ", " co.indexId", "cl.indexId", "e.year")),chooseYear,chooseCo,chooseCl,chooseTea);
 		}else if("2".equals(type)) {
 			evLists = elService.getAllEvaByGroupBy(
-					new ArrayList<>(Arrays.asList("t.indexId ",  "cl.indexId", "e.year")),chooseYear,chooseCo,chooseCl,chooseTea);
+					new ArrayList<>(Arrays.asList("t.indexId ", "e.year")),chooseYear,chooseCo,chooseCl,chooseTea);
 		}
 		List<Evaluation> courseList = evLists.stream()
 				.collect(Collectors.collectingAndThen(

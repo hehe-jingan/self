@@ -78,17 +78,11 @@ public class StudentService {
 			}
 			StudentExample example = new StudentExample();
 			Criteria criteria = example.createCriteria();
-			criteria.andNameEqualTo(loginAccount);
+			criteria.andSpare1EqualTo(loginAccount);
 			List<Student> stus = stuDao.selectByExample(example);
 			System.out.println("studentSize=" + stus.size());
 			if (stus.size() != 1) {
-				StudentExample example2 = new StudentExample();
-				Criteria criteria2 = example2.createCriteria();
-				criteria2.andSpare1EqualTo(loginAccount);
-				stus = stuDao.selectByExample(example2);
-				if(stus.size() != 1) {
-					return "用户名错误！！！";
-				}
+				return "学号错误！！！";
 			}
 
 			if (!stus.get(0).getPass().equals(loginPass)) {

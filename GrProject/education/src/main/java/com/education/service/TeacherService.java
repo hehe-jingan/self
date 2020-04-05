@@ -107,19 +107,11 @@ public class TeacherService {
 		}
 		TeacherExample example = new TeacherExample();
 		Criteria criteria = example.createCriteria();
-		criteria.andNameEqualTo(loginAccount);
+		criteria.andSpare1EqualTo(loginAccount);
 		List<Teacher> teas = teaDao.selectByExample(example);
 		System.out.println("studentSize=" + teas.size());
 		if (teas.size() != 1) {
-			if (teas.size() != 1) {
-				TeacherExample example2 = new TeacherExample();
-				Criteria criteria2 = example2.createCriteria();
-				criteria2.andSpare1EqualTo(loginAccount);
-				teas = teaDao.selectByExample(example2);
-				if(teas.size() != 1) {
-					return "用户名错误！！！";
-				}
-			}
+			return "教师号错误！！！";
 		}
 
 		if (!teas.get(0).getPass().equals(loginPass)) {
