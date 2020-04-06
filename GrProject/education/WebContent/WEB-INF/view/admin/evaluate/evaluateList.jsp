@@ -331,14 +331,14 @@ if (request.getAttribute("evaItem") != null) {
     	 }
     	 var coYear = "<%=chooseYear%>";
     	 var coCourse = "<%=chooseCourse%>";
-    	 
-    	 $("#chooseYear").on('change',function(){
+    	 $("body").delegate("#chooseYear",'change',function(){
+//     	 $("#chooseYear").on('change',function(){
     		var val = $(this).val();
     		console.log("val="+val);
     		window.location = "<%=basePath%>admin/evaluationList/"+val+"/"+coCourse+"";
     	 });
-    	 
-    	 $("#chooseCourse").on('change',function(){
+    	 $("body").delegate("#chooseCourse",'change',function(){
+//     	 $("#chooseCourse").on('change',function(){
      		var val = $(this).val();
      		console.log("val="+val);
      		window.location = "<%=basePath%>admin/evaluationList/"+coYear+"/"+val;

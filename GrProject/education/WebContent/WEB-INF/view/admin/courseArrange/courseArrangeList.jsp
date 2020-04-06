@@ -188,7 +188,7 @@ List<CourseArrange> list = null;
     		 window.location.href = "<%=basePath%>admin/addCourse";
     	 });
     	 
-    	 $("a[id^='deleteCourseArrangeBtn']").click(function(){
+    	 $("body").delegate("a[id^='deleteCourseArrangeBtn']",'click',function(){
     		var id = $(this).prop("id").substring(22);
     		data = "courseArrangeId="+id;
     		console.log("data="+data);

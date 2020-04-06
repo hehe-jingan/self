@@ -317,7 +317,6 @@ public class AdminController {
 
 	// 课程安排教师页面
 	@RequestMapping(value = "/courseArrangeList", method = RequestMethod.GET)
-	@ResponseBody
 	public ModelAndView showcourseArrangeList() {
 		ModelAndView mv = new ModelAndView("admin/courseArrange/courseArrangeList");
 		mv.addObject("courseArrangeList", courseArrangeService.getAllCourseArranges());

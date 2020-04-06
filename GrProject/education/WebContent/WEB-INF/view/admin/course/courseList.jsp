@@ -162,8 +162,8 @@ List<Course> list = null;
     	 $("#addCourseBtn").click(function(){
     		 window.location.href = "<%=basePath%>admin/addCourse";
     	 });
-    	 
-    	 $("a[id^='deleteCourseBtn']").click(function(){
+    	 $("body").delegate("a[id^='deleteCourseBtn']",'click',function(){
+//     	 $("a[id^='deleteCourseBtn']").click(function(){
     		var id = $(this).prop("id").substring(15);
     		data = "courseId="+id;
     		console.log("data="+data);

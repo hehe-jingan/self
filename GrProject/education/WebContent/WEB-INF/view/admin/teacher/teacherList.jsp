@@ -168,8 +168,8 @@ List<Teacher> list = null;
     	 $("#addTeacherBtn").click(function(){
     		 window.location.href = "<%=basePath%>admin/addTeacher";
     	 });
-    	 
-    	 $("a[id^='deleteTeacherBtn']").click(function(){
+    	 $("body").delegate("a[id^='deleteTeacherBtn']",'click',function(){
+//     	 $("a[id^='deleteTeacherBtn']").click(function(){
     		var id = $(this).prop("id").substring(16);
     		data = "teacherId="+id;
     		console.log("data="+data);

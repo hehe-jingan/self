@@ -262,23 +262,26 @@ if (request.getAttribute("courseLists") != null) {
     	 var chooseTea = "<%=chooseTea%>";
     	 var chooseClass = "<%=chooseClass%>";
     	 
-    	 $("#chooseYear").on('change',function(){
+    	 $("body").delegate("#chooseYear",'change',function(){
+//     	 $("#chooseYear").on('change',function(){
       		var val = $(this).val();
       		console.log("val="+val);
       		window.location = "<%=basePath%>supervisor/evaSummary/"+type+"/"+val+"/"+coCourse+"/"+chooseClass+"/"+chooseTea;
       	 });
-      	 
-      	 $("#chooseCourse").on('change',function(){
+      	$("body").delegate("#chooseCourse",'change',function(){
+//       	 $("#chooseCourse").on('change',function(){
        		var val = $(this).val();
        		console.log("val="+val);
        		window.location = "<%=basePath%>supervisor/evaSummary/"+type+"/"+coYear+"/"+val+"/"+chooseClass+"/"+chooseTea;
        	 });
-      	 $("#chooseClass").on('change',function(){
+       	$("body").delegate("#chooseClass",'change',function(){
+//       	 $("#chooseClass").on('change',function(){
         		var val = $(this).val();
         		console.log("val="+val);
         		window.location = "<%=basePath%>supervisor/evaSummary/"+type+"/"+coYear+"/"+coCourse+"/"+val+"/"+chooseTea;
         	 });
-      	$("#chooseTea").on('change',function(){
+        	 $("body").delegate("#chooseTea",'change',function(){
+//       	$("#chooseTea").on('change',function(){
         		var val = $(this).val();
         		console.log("val="+val);
         		window.location = "<%=basePath%>supervisor/evaSummary/"+type+"/"+coYear+"/"+coCourse+"/"+chooseClass+"/"+val;

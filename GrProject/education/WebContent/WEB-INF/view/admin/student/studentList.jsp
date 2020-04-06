@@ -167,8 +167,8 @@ List<Student> list = null;
     	 $("#addStudentBtn").click(function(){
     		 window.location.href = "<%=basePath%>admin/addStudent";
     	 });
-    	 
-    	 $("a[id^='deleteStudentBtn']").click(function(){
+    	 $("body").delegate("a[id^='deleteStudentBtn']",'click',function(){
+//     	 $("a[id^='deleteStudentBtn']").click(function(){
     		var id = $(this).prop("id").substring(16);
     		data = "studentId="+id;
     		console.log("data="+data);

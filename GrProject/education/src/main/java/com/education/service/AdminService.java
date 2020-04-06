@@ -331,7 +331,7 @@ public class AdminService {
 		if("0".equals(teacher.getOnjob())) {
 			CourseArrangeExample example = new CourseArrangeExample();
 			com.education.pojo.CourseArrangeExample.Criteria criteria = example.createCriteria();
-			criteria.andCidEqualTo(teacher.getIndexid());
+			criteria.andTidEqualTo(teacher.getIndexid());
 			int count = courseArrangeDao.countByExample(example);
 			if(count != 0) {
 				return "修改状态失败，该教师还有课程安排，请先删除课程安排再修改教师在职状态！！！";
